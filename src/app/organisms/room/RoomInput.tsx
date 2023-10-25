@@ -403,7 +403,7 @@ export const RoomInput = forwardRef<HTMLDivElement, RoomInputProps>(
             )}
           </UploadBoard>
         )}
-        <Overlay
+        {/* <Overlay
           open={dropZoneVisible}
           backdrop={<OverlayBackdrop />}
           style={{ pointerEvents: 'none' }}
@@ -425,7 +425,7 @@ export const RoomInput = forwardRef<HTMLDivElement, RoomInputProps>(
               </Box>
             </Dialog>
           </OverlayCenter>
-        </Overlay>
+        </Overlay> */}
         {autocompleteQuery?.prefix === AutocompletePrefix.RoomMention && (
           <RoomMentionAutocomplete
             roomId={roomId}
@@ -491,25 +491,26 @@ export const RoomInput = forwardRef<HTMLDivElement, RoomInputProps>(
             )
           }
           before={
-            <IconButton
-              onClick={() => pickFile('*')}
-              variant="SurfaceVariant"
-              size="300"
-              radii="300"
-            >
-              <Icon src={Icons.PlusCircle} />
-            </IconButton>
+            <></>
+            // <IconButton
+            //   onClick={() => pickFile('*')}
+            //   variant="SurfaceVariant"
+            //   size="300"
+            //   radii="300"
+            // >
+            //   <Icon src={Icons.PlusCircle} />
+            // </IconButton>
           }
           after={
             <>
-              <IconButton
+              {/* <IconButton
                 variant="SurfaceVariant"
                 size="300"
                 radii="300"
                 onClick={() => setToolbar(!toolbar)}
               >
                 <Icon src={toolbar ? Icons.AlphabetUnderline : Icons.Alphabet} />
-              </IconButton>
+              </IconButton> */}
               <UseStateProvider initial={undefined}>
                 {(emojiBoardTab: EmojiBoardTab | undefined, setEmojiBoardTab) => (
                   <PopOut
@@ -537,18 +538,19 @@ export const RoomInput = forwardRef<HTMLDivElement, RoomInputProps>(
                     {(anchorRef) => (
                       <>
                         {!hideStickerBtn && (
-                          <IconButton
-                            aria-pressed={emojiBoardTab === EmojiBoardTab.Sticker}
-                            onClick={() => setEmojiBoardTab(EmojiBoardTab.Sticker)}
-                            variant="SurfaceVariant"
-                            size="300"
-                            radii="300"
-                          >
-                            <Icon
-                              src={Icons.Sticker}
-                              filled={emojiBoardTab === EmojiBoardTab.Sticker}
-                            />
-                          </IconButton>
+                          <></>
+                          // <IconButton
+                          //   aria-pressed={emojiBoardTab === EmojiBoardTab.Sticker}
+                          //   onClick={() => setEmojiBoardTab(EmojiBoardTab.Sticker)}
+                          //   variant="SurfaceVariant"
+                          //   size="300"
+                          //   radii="300"
+                          // >
+                          //   <Icon
+                          //     src={Icons.Sticker}
+                          //     filled={emojiBoardTab === EmojiBoardTab.Sticker}
+                          //   />
+                          // </IconButton>
                         )}
                         <IconButton
                           ref={anchorRef}

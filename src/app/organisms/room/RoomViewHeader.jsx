@@ -88,40 +88,40 @@ function RoomViewHeader({ roomId }) {
       <button
         ref={roomHeaderBtnRef}
         className="room-header__btn"
-        onClick={() => toggleRoomSettings()}
+        // onClick={() => toggleRoomSettings()}
         type="button"
         onMouseUp={(e) => blurOnBubbling(e, '.room-header__btn')}
       >
-        <Avatar imageSrc={avatarSrc} text={roomName} bgColor={colorMXID(roomId)} size="small" />
+        {/* <Avatar imageSrc={avatarSrc} text={roomName} bgColor={colorMXID(roomId)} size="small" /> */}
         <TitleWrapper>
           <Text variant="h2" weight="medium" primary>
-            {twemojify(roomName)}
+            Room name: {twemojify(roomName)}
           </Text>
         </TitleWrapper>
-        <RawIcon src={ChevronBottomIC} />
+        {/* <RawIcon src={ChevronBottomIC} /> */}
       </button>
-      {mx.isRoomEncrypted(roomId) === false && (
+      {/* {mx.isRoomEncrypted(roomId) === false && (
         <IconButton
           onClick={() => toggleRoomSettings(tabText.SEARCH)}
           tooltip="Search"
           src={SearchIC}
         />
-      )}
-      <IconButton
+      )} */}
+      {/* <IconButton
         className="room-header__drawer-btn"
         onClick={() => {
           setPeopleDrawer((t) => !t);
         }}
         tooltip="People"
         src={UserIC}
-      />
-      <IconButton
+      /> */}
+      {/* <IconButton
         className="room-header__members-btn"
         onClick={() => toggleRoomSettings(tabText.MEMBERS)}
         tooltip="Members"
         src={UserIC}
-      />
-      <IconButton onClick={openRoomOptions} tooltip="Options" src={VerticalMenuIC} />
+      /> */}
+      {/* <IconButton onClick={openRoomOptions} tooltip="Options" src={VerticalMenuIC} /> */}
     </Header>
   );
 }

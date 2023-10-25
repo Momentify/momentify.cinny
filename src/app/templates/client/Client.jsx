@@ -120,7 +120,7 @@ function Client() {
   return (
     <MatrixClientProvider value={initMatrix.matrixClient}>
       <div className="client-container">
-        <div className="navigation__wrapper" ref={navWrapperRef}>
+        <div className="navigation__wrapper" ref={navWrapperRef} style={{width: 0}}>
           <Navigation />
         </div>
         <div className={`room__wrapper ${classNameHidden}`} ref={roomWrapperRef}>

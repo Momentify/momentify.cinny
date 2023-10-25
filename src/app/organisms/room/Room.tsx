@@ -30,14 +30,14 @@ export function RoomBaseView({ room, eventId }: RoomBaseViewProps) {
     <PowerLevelsContextProvider value={powerLevelAPI}>
       <div className="room">
         <div className="room__content">
-          <RoomSettings roomId={room.roomId} />
+          {/* <RoomSettings roomId={room.roomId} /> */}
           <RoomView room={room} eventId={eventId} />
         </div>
 
         {screenSize === ScreenSize.Desktop && isDrawer && (
           <>
             <Line variant="Background" direction="Vertical" size="300" />
-            <MembersDrawer key={room.roomId} room={room} />
+            {/* <MembersDrawer key={room.roomId} room={room} /> */}
           </>
         )}
       </div>

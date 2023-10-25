@@ -65,7 +65,7 @@ function Drawer() {
   return (
     <div className="drawer">
       <DrawerHeader selectedTab={selectedTab} spaceId={spaceId} />
-      <div className="drawer__content-wrapper">
+      {/* <div className="drawer__content-wrapper">
         {navigation.selectedSpacePath.length > 1 && selectedTab !== cons.tabs.DIRECTS && (
           <DrawerBreadcrumb spaceId={spaceId} />
         )}
@@ -80,7 +80,7 @@ function Drawer() {
             </div>
           </ScrollView>
         </div>
-      </div>
+      </div> */}
       { systemState !== null && (
         <div className="drawer__state">
           <Text>{systemState.status}</Text>
