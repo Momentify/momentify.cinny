@@ -19,7 +19,8 @@ import cons from '../../../client/state/cons';
 
 import VerticalMenuIC from '../../../../public/res/ic/outlined/vertical-menu.svg';
 import { MatrixClientProvider } from '../../hooks/useMatrixClient';
-import { ClientContent } from './ClientContent';
+// import { ClientContent } from './ClientContent';
+import HardCodedClientContent from './HardCodedClientContent';
 import { useSetting } from '../../state/hooks/settings';
 import { settingsAtom } from '../../state/settings';
 
@@ -120,11 +121,12 @@ function Client() {
   return (
     <MatrixClientProvider value={initMatrix.matrixClient}>
       <div className="client-container">
-        <div className="navigation__wrapper" ref={navWrapperRef} style={{width: 0}}>
+        <div className="navigation__wrapper" ref={navWrapperRef} style={{ width: 0 }}>
           <Navigation />
         </div>
         <div className={`room__wrapper `}>
-          <ClientContent />
+          {/* <ClientContent /> */}
+          <HardCodedClientContent />
         </div>
         <Windows />
         <Dialogs />
