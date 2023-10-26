@@ -110,7 +110,7 @@ function Client() {
 
         <div className="loading__appname">
           <Text variant="h2" weight="medium">
-            Cinny
+            Momentify
           </Text>
         </div>
       </div>
@@ -123,7 +123,7 @@ function Client() {
         <div className="navigation__wrapper" ref={navWrapperRef} style={{width: 0}}>
           <Navigation />
         </div>
-        <div className={`room__wrapper ${classNameHidden}`} ref={roomWrapperRef}>
+        <div className={`room__wrapper `}>
           <ClientContent />
         </div>
         <Windows />
