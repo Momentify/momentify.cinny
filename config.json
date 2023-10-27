@@ -1,7 +1,12 @@
 {
   "defaultHomeserver": 0,
-  "homeserverList": [
-    "matrix.mbot.gg"
+  "homeserverList": ["matrix.mbot.gg"],
+  "credentials": [
+    {
+      "label": "test1",
+      "username": "test1",
+      "password": "Password123."
+    }
   ],
   "allowCustomHomeservers": true
 }
