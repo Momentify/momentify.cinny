@@ -91,22 +91,42 @@ function Homeserver({ onChange }) {
     setupHsConfig(hs.selected);
   }, [hs]);
 
-  useEffect(async () => {
-    const link = window.location.href;
-    const configFileUrl = `${link}${link[link.length - 1] === '/' ? '' : '/'}config.json`;
-    try {
-      const result = await (await fetch(configFileUrl, { method: 'GET' })).json();
-      const selectedHs = result?.defaultHomeserver;
-      const hsList = result?.homeserverList;
-      const allowCustom = result?.allowCustomHomeservers ?? true;
-      if (!hsList?.length > 0 || selectedHs < 0 || selectedHs >= hsList?.length) {
-        throw new Error();
+  useEffect(() => {
+    const homeserverInitFn = async () => {
+      const link = window.location.href;
+      const configFileUrl = `${link}${link[link.length - 1] === '/' ? '' : '/'}config.json`;
+      try {
+        const result = await (await fetch(configFileUrl, { method: 'GET' })).json();
+        const selectedHs = result?.defaultHomeserver;
+        const hsList = result?.homeserverList;
+        const allowCustom = result?.allowCustomHomeservers ?? true;
+        if (!hsList?.length > 0 || selectedHs < 0 || selectedHs >= hsList?.length) {
+          throw new Error();
+        }
+        setHs({ selected: hsList[selectedHs], list: hsList, allowCustom });
+      } catch {
+        setHs({ selected: 'matrix.org', list: ['matrix.org'], allowCustom: true });
       }
-      setHs({ selected: hsList[selectedHs], list: hsList, allowCustom });
-    } catch {
-      setHs({ selected: 'matrix.org', list: ['matrix.org'], allowCustom: true });
-    }
+    };
+    homeserverInitFn();
   }, []);
+
+  // useEffect(async () => {
+  //   const link = window.location.href;
+  //   const configFileUrl = `${link}${link[link.length - 1] === '/' ? '' : '/'}config.json`;
+  //   try {
+  //     const result = await (await fetch(configFileUrl, { method: 'GET' })).json();
+  //     const selectedHs = result?.defaultHomeserver;
+  //     const hsList = result?.homeserverList;
+  //     const allowCustom = result?.allowCustomHomeservers ?? true;
+  //     if (!hsList?.length > 0 || selectedHs < 0 || selectedHs >= hsList?.length) {
+  //       throw new Error();
+  //     }
+  //     setHs({ selected: hsList[selectedHs], list: hsList, allowCustom });
+  //   } catch {
+  //     setHs({ selected: 'matrix.org', list: ['matrix.org'], allowCustom: true });
+  //   }
+  // }, []);
 
   const handleHsInput = (e) => {
     const { value } = e.target;
@@ -702,22 +722,43 @@ function AuthCard() {
 function Auth() {
   const [loginToken, setLoginToken] = useState(getUrlPrams('loginToken'));
 
-  useEffect(async () => {
-    if (!loginToken) return;
-    if (localStorage.getItem(cons.secretKey.BASE_URL) === undefined) {
-      setLoginToken(null);
-      return;
-    }
-    const baseUrl = localStorage.getItem(cons.secretKey.BASE_URL);
-    try {
-      await auth.loginWithToken(baseUrl, loginToken);
+  useEffect(() => {
+    const loginFn = async () => {
+      if (!loginToken) return;
+      if (localStorage.getItem(cons.secretKey.BASE_URL) === undefined) {
+        setLoginToken(null);
+        return;
+      }
+      const baseUrl = localStorage.getItem(cons.secretKey.BASE_URL);
+      try {
+        await auth.loginWithToken(baseUrl, loginToken);
 
-      const { href } = window.location;
-      window.location.replace(href.slice(0, href.indexOf('?')));
-    } catch {
-      setLoginToken(null);
-    }
+        const { href } = window.location;
+        window.location.replace(href.slice(0, href.indexOf('?')));
+      } catch {
+        setLoginToken(null);
+      }
+    };
+    loginFn();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  // useEffect(async () => {
+  //   if (!loginToken) return;
+  //   if (localStorage.getItem(cons.secretKey.BASE_URL) === undefined) {
+  //     setLoginToken(null);
+  //     return;
+  //   }
+  //   const baseUrl = localStorage.getItem(cons.secretKey.BASE_URL);
+  //   try {
+  //     await auth.loginWithToken(baseUrl, loginToken);
+
+  //     const { href } = window.location;
+  //     window.location.replace(href.slice(0, href.indexOf('?')));
+  //   } catch {
+  //     setLoginToken(null);
+  //   }
+  // }, []);
 
   return (
     <ScrollView invisible>
