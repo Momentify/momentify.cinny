@@ -229,28 +229,14 @@ function Login({ loginFlow, baseUrl }) {
 
   const formikRef = useRef();
 
-  const readCredsFromConfig = async () => {
-    let res = null;
-
-    const link = window.location.href;
-    const configFileUrl = `${link}${link[link.length - 1] === '/' ? '' : '/'}config.json`;
-    try {
-      const result = await (await fetch(configFileUrl, { method: 'GET' })).json();
-      res = result?.credentials;
-    } catch (error) {
-      console.error({ error });
-    }
-
-    return res;
-  };
+  const CONFIGURABLE_USERNAME = import.meta.env.VITE_USERNAME
+  const CONFIGURABLE_PASSWORD = import.meta.env.VITE_PASSWORD
 
   useEffect(() => {
-    const res = readCredsFromConfig();
-    console.log({ res });
     if (isPassword && formikRef && formikRef.current) {
       formikRef.current?.setValues({
-        username: 'test1',
-        password: 'Password123.',
+        username: CONFIGURABLE_USERNAME,
+        password: CONFIGURABLE_PASSWORD,
         email: '',
         other: ''
       });

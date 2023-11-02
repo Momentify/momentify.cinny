@@ -1,12 +1,5 @@
 {
   "defaultHomeserver": 0,
-  "homeserverList": ["matrix.mbot.gg"],
-  "credentials": [
-    {
-      "label": "test1",
-      "username": "test1",
-      "password": "Password123."
-    }
-  ],
+  "homeserverList": ["matrix.momentify.xyz"],
   "allowCustomHomeservers": true
 }

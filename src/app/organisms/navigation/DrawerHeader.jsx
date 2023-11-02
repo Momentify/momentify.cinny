@@ -28,6 +28,10 @@ import HashGlobeIC from '../../../../public/res/ic/outlined/hash-globe.svg';
 import HashSearchIC from '../../../../public/res/ic/outlined/hash-search.svg';
 import SpacePlusIC from '../../../../public/res/ic/outlined/space-plus.svg';
 import ChevronBottomIC from '../../../../public/res/ic/outlined/chevron-bottom.svg';
+import SidebarAvatar from '../../molecules/sidebar-avatar/SidebarAvatar';
+import Avatar from '../../atoms/avatar/Avatar';
+import colorMXID from '../../../util/colorMXID';
+import UserIC from '../../../../public/res/ic/outlined/user.svg'
 
 export function HomeSpaceOptions({ spaceId, afterOptionSelect }) {
   const mx = initMatrix.matrixClient;
@@ -147,6 +151,19 @@ function DrawerHeader({ selectedTab, spaceId }) {
       <div style={{display: "flex"}}>
         { !isDMTab && <IconButton onClick={openHomeSpaceOptions} tooltip="Add rooms/spaces" src={PlusIC} size="small" /> }
         { !isDMTab && <IconButton tooltip="Sign out" src={LockIC} size="small" /> }
+        { !isDMTab && <IconButton tooltip="Profile" src={UserIC} size="small" /> }                
+        {/* <SidebarAvatar
+          // onClick={openSettings}
+          tooltip="Profile"
+          avatar={(
+            <Avatar
+              text={mx.getUserId()}
+              bgColor={colorMXID(mx.getUserId())}
+              size="normal"
+              imageSrc={UserIC}
+            />
+          )}
+        /> */}
       </div>
     </Header>
   );

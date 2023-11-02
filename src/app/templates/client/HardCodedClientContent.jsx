@@ -5,7 +5,9 @@ import { RoomBaseView } from '../../organisms/room/Room';
 import Welcome from '../../organisms/welcome/Welcome';
 
 export default function ClientContent() {
+
   const HARDCODED_ROOM_ID = '!kYMqhwuFgsgHDtLxcN:matrix.mbot.gg';
+  const CONFIGURABLE_TEST_ROOM = import.meta.env.VITE_TEST_ROOM
 
   const [roomInfo, setRoomInfo] = useState({
     room: null,
@@ -14,8 +16,8 @@ export default function ClientContent() {
 
   const mx = initMatrix.matrixClient;
 
-  useEffect(() => {
-    const r = mx.getRoom(HARDCODED_ROOM_ID);
+  useEffect(() => {    
+    const r = mx.getRoom(CONFIGURABLE_TEST_ROOM ?? HARDCODED_ROOM_ID);    
     if (r) {
       setRoomInfo({
         room: r,
