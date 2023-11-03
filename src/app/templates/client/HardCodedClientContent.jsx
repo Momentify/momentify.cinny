@@ -5,7 +5,7 @@ import { RoomBaseView } from '../../organisms/room/Room';
 import Welcome from '../../organisms/welcome/Welcome';
 
 export default function ClientContent() {
-  const HARDCODED_ROOM_ID = '!kYMqhwuFgsgHDtLxcN:matrix.mbot.gg';
+  const HARDCODED_ROOM_ID = '!gdNJledVMXQrXoHlxg:matrix.momentify.xyz';
 
   const [roomInfo, setRoomInfo] = useState({
     room: null,
