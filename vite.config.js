@@ -73,6 +73,7 @@ export default defineConfig({
         '@fontsource/inter/variable.css',
         'katex',
         'katex/dist/katex.min.css',
+        'emojibase',
       ],
     }),
   ],
