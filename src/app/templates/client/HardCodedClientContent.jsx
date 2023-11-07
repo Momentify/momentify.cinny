@@ -7,7 +7,7 @@ import Welcome from '../../organisms/welcome/Welcome';
 export default function ClientContent() {
 
   const HARDCODED_ROOM_ID = '!kYMqhwuFgsgHDtLxcN:matrix.mbot.gg';
-  const CONFIGURABLE_TEST_ROOM = import.meta.env.VITE_TEST_ROOM
+  const CONFIGURABLE_TEST_ROOM = import.meta.env.VITE_SUPPORT_ROOM
 
   const [roomInfo, setRoomInfo] = useState({
     room: null,
