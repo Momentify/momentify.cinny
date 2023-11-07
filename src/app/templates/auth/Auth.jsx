@@ -89,11 +89,15 @@ function Homeserver({ onChange }) {
     if (hs === null || hs?.selected.trim() === '') return;
     searchingHs = hs.selected;
     setupHsConfig(hs.selected);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [hs]);
 
   useEffect(() => {
     const homeserverInitFn = async () => {
-      const link = window.location.href;
+      // const link = window.location.href;
+      const [protocol, , href] = window.location.href.split('/');
+      const link = `${protocol}//${href}/`;
+      console.log({ link });
       const configFileUrl = `${link}${link[link.length - 1] === '/' ? '' : '/'}config.json`;
       try {
         const result = await (await fetch(configFileUrl, { method: 'GET' })).json();
@@ -194,10 +198,6 @@ function Login({ loginFlow, baseUrl }) {
   const isPassword = loginFlow?.filter((flow) => flow.type === 'm.login.password')[0];
   const ssoProviders = loginFlow?.filter((flow) => flow.type === 'm.login.sso')[0];
 
-  // const initialValues = {
-  //   username: '', password: '', email: '', other: '',
-  // };
-
   const initialValues = {
     username: 'test1',
     password: 'Password123.',
@@ -249,8 +249,22 @@ function Login({ loginFlow, baseUrl }) {
 
   const formikRef = useRef();
 
-  const CONFIGURABLE_USERNAME = import.meta.env.VITE_USERNAME
-  const CONFIGURABLE_PASSWORD = import.meta.env.VITE_PASSWORD
+  const readCredsFromConfig = async () => {
+    let res = null;
+
+    const [protocol, , href] = window.location.href.split('/');
+    const link = `${protocol}//${href}/`;
+    const configFileUrl = `${link}${link[link.length - 1] === '/' ? '' : '/'}config.json`;
+
+    try {
+      const result = await (await fetch(configFileUrl, { method: 'GET' })).json();
+      res = result?.credentials;
+    } catch (error) {
+      console.error({ error });
+    }
+
+    return res;
+  };
 
   useEffect(() => {
     if (isPassword && formikRef && formikRef.current) {
