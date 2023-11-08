@@ -24,7 +24,7 @@ class InitMatrix extends EventEmitter {
 
   async init() {
     if (this.matrixClient) {
-      console.warn('Client is already initialized!')
+      console.warn('Client is already initialized!');
       return;
     }
 
@@ -50,9 +50,7 @@ class InitMatrix extends EventEmitter {
       deviceId: secret.deviceId,
       timelineSupport: true,
       cryptoCallbacks,
-      verificationMethods: [
-        'm.sas.v1',
-      ],
+      verificationMethods: ['m.sas.v1'],
     });
 
     await this.matrixClient.initCrypto();
@@ -112,7 +110,7 @@ class InitMatrix extends EventEmitter {
     });
   }
 
-  async logout() {
+  async logout({ reloadOnLogout = true, clearCinnyKeysOnly = false }) {
     this.matrixClient.stopClient();
     try {
       await this.matrixClient.logout();
@@ -120,8 +118,18 @@ class InitMatrix extends EventEmitter {
       // ignore if failed to logout
     }
     await this.matrixClient.clearStores();
-    window.localStorage.clear();
-    window.location.reload();
+
+    if (clearCinnyKeysOnly) {
+      ['cinny_user_id', 'cinny_hs_base_url', 'cinny_device_id', 'cinny_access_token'].forEach(
+        (key) => {
+          window.localStorage.removeItem(key);
+        }
+      );
+    } else {
+      window.localStorage.clear();
+    }
+
+    if (reloadOnLogout) window.location.reload();
   }
 
   clearCacheAndReload() {

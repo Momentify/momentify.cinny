@@ -31,7 +31,6 @@ export default function ClientContent() {
   }, [mx]);
 
   const { room, eventId } = roomInfo;
-  console.log({ room });
 
   if (!room) {
     return <Welcome />;

@@ -57,6 +57,7 @@ export default defineConfig({
       exposes: {
         './App': './src/app/pages/App',
         './CinnySettings': './src/client/state/settings',
+        './InitMatrixFn': './src/client/initMatrix',
       },
       shared: [
         'react',
