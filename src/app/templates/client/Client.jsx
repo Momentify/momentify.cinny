@@ -125,8 +125,8 @@ function Client() {
           <Navigation />
         </div>
         <div className={`room__wrapper `}>
-          <ClientContent />
-          {/* <HardCodedClientContent /> */}
+          {/* <ClientContent /> */}
+          <HardCodedClientContent />
         </div>
         <Windows />
         <Dialogs />

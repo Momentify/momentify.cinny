@@ -249,28 +249,33 @@ function Login({ loginFlow, baseUrl }) {
 
   const formikRef = useRef();
 
-  const readCredsFromConfig = async () => {
-    let res = null;
+  // const readCredsFromConfig = async () => {
+  //   let res = null;
 
-    const [protocol, , href] = window.location.href.split('/');
-    const link = `${protocol}//${href}/`;
-    const configFileUrl = `${link}${link[link.length - 1] === '/' ? '' : '/'}config.json`;
+  //   const [protocol, , href] = window.location.href.split('/');
+  //   const link = `${protocol}//${href}/`;
+  //   const configFileUrl = `${link}${link[link.length - 1] === '/' ? '' : '/'}config.json`;
 
-    try {
-      const result = await (await fetch(configFileUrl, { method: 'GET' })).json();
-      res = result?.credentials;
-    } catch (error) {
-      console.error({ error });
-    }
+  //   try {
+  //     const result = await (await fetch(configFileUrl, { method: 'GET' })).json();
+  //     res = result?.credentials;
+  //   } catch (error) {
+  //     console.error({ error });
+  //   }
 
-    return res;
-  };
+  //   return res;
+  // };
 
   useEffect(() => {
     if (isPassword && formikRef && formikRef.current) {
+      const CONFIGURABLE_USERNAME = import.meta.env.VITE_USERNAME;
+      const CONFIGURABLE_PASSWORD = import.meta.env.VITE_PASSWORD;
+
       formikRef.current?.setValues({
         username: CONFIGURABLE_USERNAME,
         password: CONFIGURABLE_PASSWORD,
+        // username: 'test1',
+        // password: 'Password123.',
         email: '',
         other: ''
       });

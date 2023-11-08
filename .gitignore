@@ -2,5 +2,5 @@ experiment
 dist
 node_modules
 devAssets
-
+.env
 .DS_Store
