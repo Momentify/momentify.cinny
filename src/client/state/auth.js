@@ -1,9 +1,7 @@
 import cons from './cons';
 
 function getSecret(key) {
-  const get = localStorage.getItem(key);
-  console.log({ get, key });
-  return get;
+  return localStorage.getItem(key);
 }
 
 const isAuthenticated = () => getSecret(cons.secretKey.ACCESS_TOKEN) !== null;
