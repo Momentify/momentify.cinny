@@ -996,7 +996,7 @@ export const Event = as<'div', EventProps>(
         {...focusWithinProps}
         ref={ref}
       >
-        {(hover || menu) && (
+        {/* {(hover || menu) && (
           <div className={css.MessageOptionsBase}>
             <Menu className={css.MessageOptionsBar} variant="SurfaceVariant">
               <Box gap="100">
@@ -1066,7 +1066,7 @@ export const Event = as<'div', EventProps>(
               </Box>
             </Menu>
           </div>
-        )}
+        )} */}
         <div onContextMenu={handleContextMenu}>{children}</div>
       </MessageBase>
     );
