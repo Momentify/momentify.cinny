@@ -512,7 +512,7 @@ export const RoomInput = forwardRef<HTMLDivElement, RoomInputProps>(
               >
                 <Icon src={toolbar ? Icons.AlphabetUnderline : Icons.Alphabet} />
               </IconButton> */}
-              <UseStateProvider initial={undefined}>
+              {/* <UseStateProvider initial={undefined}>
                 {(emojiBoardTab: EmojiBoardTab | undefined, setEmojiBoardTab) => (
                   <div className="emoji-board">
                     <PopOut
@@ -579,7 +579,7 @@ export const RoomInput = forwardRef<HTMLDivElement, RoomInputProps>(
                     </PopOut>
                   </div>
                 )}
-              </UseStateProvider>
+              </UseStateProvider> */}
               <IconButton onClick={submit} variant="SurfaceVariant" size="300" radii="300">
                 <Icon src={Icons.Send} />
               </IconButton>
