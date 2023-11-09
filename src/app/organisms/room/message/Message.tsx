@@ -660,7 +660,7 @@ export const Message = as<'div', MessageProps>(
           as="button"
           size="300"
           data-user-id={senderId}
-          onClick={onUserClick}
+          // onClick={onUserClick}
         >
           {senderAvatarMxc ? (
             <AvatarImage
