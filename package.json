@@ -14,7 +14,8 @@
     "check:eslint": "eslint src/*",
     "check:prettier": "prettier --check .",
     "fix:prettier": "prettier --write .",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "aws:deploy:staging": "aws s3 sync dist/ s3://staging-chat.momentify.xyz --delete && aws cloudfront create-invalidation --distribution-id E3QE0AZ8DO2N3M --paths \"/*\""
   },
   "keywords": [],
   "author": "Ajay Bura",
