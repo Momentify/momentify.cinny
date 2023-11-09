@@ -1,7 +1,9 @@
 import cons from './cons';
 
 function getSecret(key) {
-  return localStorage.getItem(key);
+  const get = localStorage.getItem(key);
+  console.log({ get, key });
+  return get;
 }
 
 const isAuthenticated = () => getSecret(cons.secretKey.ACCESS_TOKEN) !== null;
@@ -13,7 +15,4 @@ const secret = {
   baseUrl: getSecret(cons.secretKey.BASE_URL),
 };
 
-export {
-  isAuthenticated,
-  secret,
-};
+export { isAuthenticated, secret, getSecret };

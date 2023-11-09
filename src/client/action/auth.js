@@ -20,6 +20,7 @@ async function startSsoLogin(baseUrl, type, idpId) {
 
 async function login(baseUrl, username, email, password) {
   const identifier = {};
+
   if (username) {
     identifier.type = 'm.id.user';
     identifier.user = username;
@@ -43,13 +44,23 @@ async function login(baseUrl, username, email, password) {
 async function loginWithToken(baseUrl, token) {
   const client = createTemporaryClient(baseUrl);
 
-  const res = await client.login('m.login.token', {
-    token,
-    initial_device_display_name: cons.DEVICE_DISPLAY_NAME,
-  });
+  let result = null;
 
-  const myBaseUrl = res?.well_known?.['m.homeserver']?.base_url || client.baseUrl;
-  updateLocalStore(res.access_token, res.device_id, res.user_id, myBaseUrl);
+  try {
+    const res = await client.login('org.matrix.login.jwt', {
+      token,
+      initial_device_display_name: cons.DEVICE_DISPLAY_NAME,
+    });
+
+    const myBaseUrl = res?.well_known?.['m.homeserver']?.base_url || client.baseUrl;
+    updateLocalStore(res.access_token, res.device_id, res.user_id, myBaseUrl);
+
+    result = res;
+  } catch (error) {
+    console.error({ loginWithTokenError: error });
+  }
+
+  return result;
 }
 
 // eslint-disable-next-line camelcase
@@ -57,7 +68,10 @@ async function verifyEmail(baseUrl, email, client_secret, send_attempt, next_lin
   const res = await fetch(`${baseUrl}/_matrix/client/r0/register/email/requestToken`, {
     method: 'POST',
     body: JSON.stringify({
-      email, client_secret, send_attempt, next_link,
+      email,
+      client_secret,
+      send_attempt,
+      next_link,
     }),
     headers: {
       'Content-Type': 'application/json; charset=utf-8',
@@ -68,9 +82,7 @@ async function verifyEmail(baseUrl, email, client_secret, send_attempt, next_lin
   return data;
 }
 
-async function completeRegisterStage(
-  baseUrl, username, password, auth,
-) {
+async function completeRegisterStage(baseUrl, username, password, auth) {
   const tempClient = createTemporaryClient(baseUrl);
 
   try {
@@ -98,7 +110,12 @@ async function completeRegisterStage(
 }
 
 export {
-  createTemporaryClient, login, verifyEmail,
-  loginWithToken, startSsoLogin,
+  createTemporaryClient,
+  login,
+  verifyEmail,
+  loginWithToken,
+  startSsoLogin,
   completeRegisterStage,
 };
+
+export default loginWithToken;

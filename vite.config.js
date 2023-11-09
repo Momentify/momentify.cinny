@@ -58,6 +58,7 @@ export default defineConfig({
         './App': './src/app/pages/App',
         './CinnySettings': './src/client/state/settings',
         './InitMatrixFn': './src/client/initMatrix',
+        './CinnyAuthUtils': './src/client/action/auth.js',
       },
       shared: [
         'react',

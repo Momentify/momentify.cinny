@@ -23,6 +23,7 @@ import { ClientContent } from './ClientContent';
 import HardCodedClientContent from './HardCodedClientContent';
 import { useSetting } from '../../state/hooks/settings';
 import { settingsAtom } from '../../state/settings';
+import { isAuthenticated, secret, getSecret } from '../../../client/state/auth';
 
 function SystemEmojiFeature() {
   const [systemEmoji] = useSetting(settingsAtom, 'useSystemEmoji');
@@ -82,6 +83,7 @@ function Client() {
       initRoomListListener(initMatrix.roomList);
       changeLoading(false);
     });
+
     initMatrix.init();
   }, []);
 
