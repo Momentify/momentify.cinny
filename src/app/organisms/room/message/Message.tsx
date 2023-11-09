@@ -653,6 +653,7 @@ export const Message = as<'div', MessageProps>(
     );
 
     const avatarJSX = !collapse && messageLayout !== 1 && (
+      // TODO: uate user avatar to use momentify avatar
       <AvatarBase>
         <Avatar
           className={css.MessageAvatar}
@@ -730,7 +731,7 @@ export const Message = as<'div', MessageProps>(
           <div className={css.MessageOptionsBase}>
             <Menu className={css.MessageOptionsBar} variant="SurfaceVariant">
               <Box gap="100">
-                {canSendReaction && (
+                {/* {canSendReaction && (
                   <PopOut
                     alignOffset={-65}
                     position="Bottom"
@@ -768,7 +769,7 @@ export const Message = as<'div', MessageProps>(
                       </IconButton>
                     )}
                   </PopOut>
-                )}
+                )} */}
                 <IconButton
                   onClick={onReplyClick}
                   data-event-id={mEvent.getId()}
@@ -788,7 +789,7 @@ export const Message = as<'div', MessageProps>(
                     <Icon src={Icons.Pencil} size="100" />
                   </IconButton>
                 )}
-                <PopOut
+                {/* <PopOut
                   open={menu}
                   alignOffset={-5}
                   position="Bottom"
@@ -927,7 +928,7 @@ export const Message = as<'div', MessageProps>(
                       <Icon src={Icons.VerticalDots} size="100" />
                     </IconButton>
                   )}
-                </PopOut>
+                </PopOut> */}
               </Box>
             </Menu>
           </div>
