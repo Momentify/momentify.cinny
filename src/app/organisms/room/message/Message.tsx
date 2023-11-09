@@ -637,7 +637,7 @@ export const Message = as<'div', MessageProps>(
           </Text>
         </Username>
         <Box shrink="No" gap="100">
-          {messageLayout !== 1 && hover && (
+          {/* {messageLayout !== 1 && hover && (
             <>
               <Text as="span" size="T200" priority="300">
                 {senderId}
@@ -646,7 +646,7 @@ export const Message = as<'div', MessageProps>(
                 |
               </Text>
             </>
-          )}
+          )} */}
           <Time ts={mEvent.getTs()} compact={messageLayout === 1} />
         </Box>
       </Box>
@@ -723,7 +723,7 @@ export const Message = as<'div', MessageProps>(
         highlight={highlight}
         selected={menu || emojiBoard}
         {...props}
-        {...hoverProps}
+        {...hoverProps} // TODO: momentify disable hover props
         {...focusWithinProps}
         ref={ref}
       >
