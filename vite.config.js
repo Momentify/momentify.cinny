@@ -44,12 +44,7 @@ export default defineConfig({
   server: {
     port: 8080,
     host: true,
-    cors: {
-      origin: '*',
-      methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
-      preflightContinue: false,
-      optionsSuccessStatus: 204,
-    },
+    cors: false,
   },
   plugins: [
     viteStaticCopy(copyFiles),
