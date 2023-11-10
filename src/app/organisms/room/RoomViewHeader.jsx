@@ -11,7 +11,7 @@ import navigation from '../../../client/state/navigation';
 import {
   toggleRoomSettings,
   openReusableContextMenu,
-  openNavigation,
+  openNavigation
 } from '../../../client/action/navigation';
 import colorMXID from '../../../util/colorMXID';
 import { getEventCords } from '../../../util/common';
@@ -79,12 +79,12 @@ function RoomViewHeader({ roomId }) {
 
   return (
     <Header>
-      <IconButton
+      {/* <IconButton
         src={BackArrowIC}
         className="room-header__back-btn"
         tooltip="Return to navigation"
         onClick={() => openNavigation()}
-      />
+      /> */}
       <button
         ref={roomHeaderBtnRef}
         className="room-header__btn"
@@ -126,7 +126,7 @@ function RoomViewHeader({ roomId }) {
   );
 }
 RoomViewHeader.propTypes = {
-  roomId: PropTypes.string.isRequired,
+  roomId: PropTypes.string.isRequired
 };
 
 export default RoomViewHeader;
