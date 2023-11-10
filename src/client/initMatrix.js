@@ -3,7 +3,7 @@ import * as sdk from 'matrix-js-sdk';
 import Olm from '@matrix-org/olm';
 // import { logger } from 'matrix-js-sdk/lib/logger';
 
-import { secret, getSecret } from './state/auth';
+import { getSecret } from './state/auth';
 import cons from './state/cons';
 import RoomList from './state/RoomList';
 import AccountData from './state/AccountData';
@@ -24,7 +24,6 @@ class InitMatrix extends EventEmitter {
   }
 
   async init() {
-    console.log('INIT');
     if (this.matrixClient) {
       console.warn('Client is already initialized!');
       return;
@@ -52,24 +51,17 @@ class InitMatrix extends EventEmitter {
       baseUrl: getSecret(BASE_URL),
     };
 
-    if (theSecrets.baseUrl && theSecrets.accessToken && theSecrets.userId && theSecrets.deviceId) {
-      console.log({
-        theSecrets,
-        secret,
-      });
-
-      this.matrixClient = sdk.createClient({
-        baseUrl: theSecrets.baseUrl,
-        accessToken: theSecrets.accessToken,
-        userId: theSecrets.userId,
-        store: indexedDBStore,
-        cryptoStore: new sdk.IndexedDBCryptoStore(global.indexedDB, 'crypto-store'),
-        deviceId: theSecrets.deviceId,
-        timelineSupport: true,
-        cryptoCallbacks,
-        verificationMethods: ['m.sas.v1'],
-      });
-    }
+    this.matrixClient = sdk.createClient({
+      baseUrl: theSecrets.baseUrl,
+      accessToken: theSecrets.accessToken,
+      userId: theSecrets.userId,
+      store: indexedDBStore,
+      cryptoStore: new sdk.IndexedDBCryptoStore(global.indexedDB, 'crypto-store'),
+      deviceId: theSecrets.deviceId,
+      timelineSupport: true,
+      cryptoCallbacks,
+      verificationMethods: ['m.sas.v1'],
+    });
 
     await this.matrixClient.initCrypto();
 
@@ -123,8 +115,11 @@ class InitMatrix extends EventEmitter {
     this.matrixClient.on('Session.logged_out', async () => {
       this.matrixClient.stopClient();
       await this.matrixClient.clearStores();
-      window.localStorage.clear();
-      window.location.reload();
+      ['cinny_user_id', 'cinny_hs_base_url', 'cinny_device_id', 'cinny_access_token'].forEach(
+        (key) => {
+          window.localStorage.removeItem(key);
+        }
+      );
     });
   }
 

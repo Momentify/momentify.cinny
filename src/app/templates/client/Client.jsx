@@ -77,7 +77,7 @@ function Client() {
       setLoadingMsg(msgList[counter]);
       counter += 1;
       window.location.reload();
-    }, 2500);
+    }, 3000);
     initMatrix.once('init_loading_finished', () => {
       clearInterval(iId);
       initHotkeys();
