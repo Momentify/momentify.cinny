@@ -20,8 +20,10 @@ import cons from '../../../client/state/cons';
 import VerticalMenuIC from '../../../../public/res/ic/outlined/vertical-menu.svg';
 import { MatrixClientProvider } from '../../hooks/useMatrixClient';
 import { ClientContent } from './ClientContent';
+import HardCodedClientContent from './HardCodedClientContent';
 import { useSetting } from '../../state/hooks/settings';
 import { settingsAtom } from '../../state/settings';
+import { isAuthenticated, secret, getSecret } from '../../../client/state/auth';
 
 function SystemEmojiFeature() {
   const [systemEmoji] = useSetting(settingsAtom, 'useSystemEmoji');
@@ -74,13 +76,15 @@ function Client() {
       }
       setLoadingMsg(msgList[counter]);
       counter += 1;
-    }, 15000);
+      window.location.reload();
+    }, 3000);
     initMatrix.once('init_loading_finished', () => {
       clearInterval(iId);
       initHotkeys();
       initRoomListListener(initMatrix.roomList);
       changeLoading(false);
     });
+
     initMatrix.init();
   }, []);
 
@@ -110,7 +114,7 @@ function Client() {
 
         <div className="loading__appname">
           <Text variant="h2" weight="medium">
-            Cinny
+            Momentify
           </Text>
         </div>
       </div>
@@ -120,11 +124,12 @@ function Client() {
   return (
     <MatrixClientProvider value={initMatrix.matrixClient}>
       <div className="client-container">
-        <div className="navigation__wrapper" ref={navWrapperRef}>
+        <div className="navigation__wrapper" ref={navWrapperRef} style={{ width: 0 }}>
           <Navigation />
         </div>
-        <div className={`room__wrapper ${classNameHidden}`} ref={roomWrapperRef}>
-          <ClientContent />
+        <div className={`room__wrapper `}>
+          {/* <ClientContent /> */}
+          <HardCodedClientContent />
         </div>
         <Windows />
         <Dialogs />

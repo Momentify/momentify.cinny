@@ -249,15 +249,16 @@ export const MessageEditor = as<'div', MessageEditorProps>(
                   </Chip>
                 </Box>
                 <Box gap="Inherit">
-                  <IconButton
+                  <></>
+                  {/* <IconButton
                     variant="SurfaceVariant"
                     size="300"
                     radii="300"
                     onClick={() => setToolbar(!toolbar)}
                   >
                     <Icon size="400" src={toolbar ? Icons.AlphabetUnderline : Icons.Alphabet} />
-                  </IconButton>
-                  <UseStateProvider initial={false}>
+                  </IconButton> */}
+                  {/* <UseStateProvider initial={false}>
                     {(emojiBoard: boolean, setEmojiBoard) => (
                       <PopOut
                         alignOffset={-8}
@@ -291,7 +292,7 @@ export const MessageEditor = as<'div', MessageEditorProps>(
                         )}
                       </PopOut>
                     )}
-                  </UseStateProvider>
+                  </UseStateProvider> */}
                 </Box>
               </Box>
               {toolbar && (

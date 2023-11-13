@@ -7,7 +7,7 @@ import Drawer from './Drawer';
 function Navigation() {
   return (
     <div className="navigation">
-      <SideBar />
+      {/* <SideBar /> */}
       <Drawer />
     </div>
   );

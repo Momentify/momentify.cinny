@@ -22,11 +22,16 @@ import { MenuItem, MenuHeader } from '../../atoms/context-menu/ContextMenu';
 import SpaceOptions from '../../molecules/space-options/SpaceOptions';
 
 import PlusIC from '../../../../public/res/ic/outlined/plus.svg';
+import LockIC from '../../../../public/res/ic/outlined/lock.svg';
 import HashPlusIC from '../../../../public/res/ic/outlined/hash-plus.svg';
 import HashGlobeIC from '../../../../public/res/ic/outlined/hash-globe.svg';
 import HashSearchIC from '../../../../public/res/ic/outlined/hash-search.svg';
 import SpacePlusIC from '../../../../public/res/ic/outlined/space-plus.svg';
 import ChevronBottomIC from '../../../../public/res/ic/outlined/chevron-bottom.svg';
+import SidebarAvatar from '../../molecules/sidebar-avatar/SidebarAvatar';
+import Avatar from '../../atoms/avatar/Avatar';
+import colorMXID from '../../../util/colorMXID';
+import UserIC from '../../../../public/res/ic/outlined/user.svg'
 
 export function HomeSpaceOptions({ spaceId, afterOptionSelect }) {
   const mx = initMatrix.matrixClient;
@@ -37,8 +42,8 @@ export function HomeSpaceOptions({ spaceId, afterOptionSelect }) {
 
   return (
     <>
-      <MenuHeader>Add rooms or spaces</MenuHeader>
-      <MenuItem
+      <MenuHeader>Join a room</MenuHeader>
+      {/* <MenuItem
         iconSrc={SpacePlusIC}
         onClick={() => { afterOptionSelect(); openCreateRoom(true, spaceId); }}
         disabled={!canManage}
@@ -59,7 +64,7 @@ export function HomeSpaceOptions({ spaceId, afterOptionSelect }) {
         >
           Explore public rooms
         </MenuItem>
-      )}
+      )} */}
       { !spaceId && (
         <MenuItem
           iconSrc={PlusIC}
@@ -68,7 +73,7 @@ export function HomeSpaceOptions({ spaceId, afterOptionSelect }) {
           Join with address
         </MenuItem>
       )}
-      { spaceId && (
+      {/* { spaceId && (
         <MenuItem
           iconSrc={PlusIC}
           onClick={() => { afterOptionSelect(); openSpaceAddExisting(spaceId); }}
@@ -84,7 +89,7 @@ export function HomeSpaceOptions({ spaceId, afterOptionSelect }) {
         >
           Manage rooms
         </MenuItem>
-      )}
+      )} */}
     </>
   );
 }
@@ -138,12 +143,28 @@ function DrawerHeader({ selectedTab, spaceId }) {
         </button>
       ) : (
         <TitleWrapper>
-          <Text variant="s1" weight="medium" primary>{tabName}</Text>
+          {/* <Text variant="s1" weight="medium" primary>{tabName}</Text> */}
         </TitleWrapper>
       )}
 
-      { isDMTab && <IconButton onClick={() => openInviteUser()} tooltip="Start DM" src={PlusIC} size="small" /> }
-      { !isDMTab && <IconButton onClick={openHomeSpaceOptions} tooltip="Add rooms/spaces" src={PlusIC} size="small" /> }
+      {/* { isDMTab && <IconButton onClick={() => openInviteUser()} tooltip="Start DM" src={PlusIC} size="small" /> } */}
+      <div style={{display: "flex"}}>
+        { !isDMTab && <IconButton onClick={openHomeSpaceOptions} tooltip="Add rooms/spaces" src={PlusIC} size="small" /> }
+        { !isDMTab && <IconButton tooltip="Sign out" src={LockIC} size="small" /> }
+        { !isDMTab && <IconButton tooltip="Profile" src={UserIC} size="small" /> }                
+        {/* <SidebarAvatar
+          // onClick={openSettings}
+          tooltip="Profile"
+          avatar={(
+            <Avatar
+              text={mx.getUserId()}
+              bgColor={colorMXID(mx.getUserId())}
+              size="normal"
+              imageSrc={UserIC}
+            />
+          )}
+        /> */}
+      </div>
     </Header>
   );
 }

@@ -173,7 +173,8 @@ export const RoomInput = forwardRef<HTMLDivElement, RoomInputProps>(
     const dropZoneVisible = useFileDropZone(roomViewRef, handleFiles);
 
     const [, screenWidth] = useScreenSize();
-    const hideStickerBtn = screenWidth < 500;
+    // const hideStickerBtn = screenWidth < 500; // original code
+    const hideStickerBtn = true; // for momentify
 
     useEffect(() => {
       Transforms.insertFragment(editor, msgDraft);
@@ -403,7 +404,7 @@ export const RoomInput = forwardRef<HTMLDivElement, RoomInputProps>(
             )}
           </UploadBoard>
         )}
-        <Overlay
+        {/* <Overlay
           open={dropZoneVisible}
           backdrop={<OverlayBackdrop />}
           style={{ pointerEvents: 'none' }}
@@ -425,7 +426,7 @@ export const RoomInput = forwardRef<HTMLDivElement, RoomInputProps>(
               </Box>
             </Dialog>
           </OverlayCenter>
-        </Overlay>
+        </Overlay> */}
         {autocompleteQuery?.prefix === AutocompletePrefix.RoomMention && (
           <RoomMentionAutocomplete
             roomId={roomId}
@@ -491,89 +492,94 @@ export const RoomInput = forwardRef<HTMLDivElement, RoomInputProps>(
             )
           }
           before={
-            <IconButton
-              onClick={() => pickFile('*')}
-              variant="SurfaceVariant"
-              size="300"
-              radii="300"
-            >
-              <Icon src={Icons.PlusCircle} />
-            </IconButton>
+            <></>
+            // <IconButton
+            //   onClick={() => pickFile('*')}
+            //   variant="SurfaceVariant"
+            //   size="300"
+            //   radii="300"
+            // >
+            //   <Icon src={Icons.PlusCircle} />
+            // </IconButton>
           }
           after={
             <>
-              <IconButton
+              {/* <IconButton
                 variant="SurfaceVariant"
                 size="300"
                 radii="300"
                 onClick={() => setToolbar(!toolbar)}
               >
                 <Icon src={toolbar ? Icons.AlphabetUnderline : Icons.Alphabet} />
-              </IconButton>
-              <UseStateProvider initial={undefined}>
+              </IconButton> */}
+              {/* <UseStateProvider initial={undefined}>
                 {(emojiBoardTab: EmojiBoardTab | undefined, setEmojiBoardTab) => (
-                  <PopOut
-                    offset={16}
-                    alignOffset={-44}
-                    position="Top"
-                    align="End"
-                    open={!!emojiBoardTab}
-                    content={
-                      <EmojiBoard
-                        tab={emojiBoardTab}
-                        onTabChange={setEmojiBoardTab}
-                        imagePackRooms={imagePackRooms}
-                        returnFocusOnDeactivate={false}
-                        onEmojiSelect={handleEmoticonSelect}
-                        onCustomEmojiSelect={handleEmoticonSelect}
-                        onStickerSelect={handleStickerSelect}
-                        requestClose={() => {
-                          setEmojiBoardTab(undefined);
-                          if (!mobileOrTablet()) ReactEditor.focus(editor);
-                        }}
-                      />
-                    }
-                  >
-                    {(anchorRef) => (
-                      <>
-                        {!hideStickerBtn && (
+                  <div className="emoji-board">
+                    <PopOut
+                      offset={16}
+                      alignOffset={-44}
+                      position="Top"
+                      align="End"
+                      open={!!emojiBoardTab}
+                      content={
+                        <EmojiBoard
+                          tab={emojiBoardTab}
+                          onTabChange={setEmojiBoardTab}
+                          imagePackRooms={imagePackRooms}
+                          returnFocusOnDeactivate={false}
+                          onEmojiSelect={handleEmoticonSelect}
+                          onCustomEmojiSelect={handleEmoticonSelect}
+                          onStickerSelect={handleStickerSelect}
+                          requestClose={() => {
+                            setEmojiBoardTab(undefined);
+                            if (!mobileOrTablet()) ReactEditor.focus(editor);
+                          }}
+                        />
+                      }
+                    >
+                      {(anchorRef) => (
+                        <>
+                          {!hideStickerBtn && (
+                            <IconButton
+                              aria-pressed={emojiBoardTab === EmojiBoardTab.Sticker}
+                              onClick={() => setEmojiBoardTab(EmojiBoardTab.Sticker)}
+                              variant="SurfaceVariant"
+                              size="300"
+                              radii="300"
+                            >
+                              <Icon
+                                src={Icons.Sticker}
+                                filled={emojiBoardTab === EmojiBoardTab.Sticker}
+                              />
+                            </IconButton>
+                          )}
                           <IconButton
-                            aria-pressed={emojiBoardTab === EmojiBoardTab.Sticker}
-                            onClick={() => setEmojiBoardTab(EmojiBoardTab.Sticker)}
+                            ref={anchorRef}
+                            aria-pressed={
+                              hideStickerBtn
+                                ? !!emojiBoardTab
+                                : emojiBoardTab === EmojiBoardTab.Emoji
+                            }
+                            onClick={() => setEmojiBoardTab(EmojiBoardTab.Emoji)}
                             variant="SurfaceVariant"
                             size="300"
                             radii="300"
                           >
                             <Icon
-                              src={Icons.Sticker}
-                              filled={emojiBoardTab === EmojiBoardTab.Sticker}
+                              src={Icons.Smile}
+                              filled={
+                                hideStickerBtn
+                                  ? !!emojiBoardTab
+                                  : emojiBoardTab === EmojiBoardTab.Emoji
+                              }
                             />
                           </IconButton>
-                        )}
-                        <IconButton
-                          ref={anchorRef}
-                          aria-pressed={
-                            hideStickerBtn ? !!emojiBoardTab : emojiBoardTab === EmojiBoardTab.Emoji
-                          }
-                          onClick={() => setEmojiBoardTab(EmojiBoardTab.Emoji)}
-                          variant="SurfaceVariant"
-                          size="300"
-                          radii="300"
-                        >
-                          <Icon
-                            src={Icons.Smile}
-                            filled={
-                              hideStickerBtn
-                                ? !!emojiBoardTab
-                                : emojiBoardTab === EmojiBoardTab.Emoji
-                            }
-                          />
-                        </IconButton>
-                      </>
-                    )}
-                  </PopOut>
+                        </>
+                      )}
+                    </PopOut>
+                  </div>
                 )}
-              </UseStateProvider>
+              </UseStateProvider> */}
               <IconButton onClick={submit} variant="SurfaceVariant" size="300" radii="300">
                 <Icon src={Icons.Send} />
               </IconButton>

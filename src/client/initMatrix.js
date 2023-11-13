@@ -3,7 +3,8 @@ import * as sdk from 'matrix-js-sdk';
 import Olm from '@matrix-org/olm';
 // import { logger } from 'matrix-js-sdk/lib/logger';
 
-import { secret } from './state/auth';
+import { getSecret } from './state/auth';
+import cons from './state/cons';
 import RoomList from './state/RoomList';
 import AccountData from './state/AccountData';
 import RoomsInput from './state/RoomsInput';
@@ -24,7 +25,7 @@ class InitMatrix extends EventEmitter {
 
   async init() {
     if (this.matrixClient) {
-      console.warn('Client is already initialized!')
+      console.warn('Client is already initialized!');
       return;
     }
 
@@ -41,18 +42,25 @@ class InitMatrix extends EventEmitter {
     });
     await indexedDBStore.startup();
 
+    const { ACCESS_TOKEN, DEVICE_ID, USER_ID, BASE_URL } = cons.secretKey;
+
+    const theSecrets = {
+      accessToken: getSecret(ACCESS_TOKEN),
+      deviceId: getSecret(DEVICE_ID),
+      userId: getSecret(USER_ID),
+      baseUrl: getSecret(BASE_URL),
+    };
+
     this.matrixClient = sdk.createClient({
-      baseUrl: secret.baseUrl,
-      accessToken: secret.accessToken,
-      userId: secret.userId,
+      baseUrl: theSecrets.baseUrl,
+      accessToken: theSecrets.accessToken,
+      userId: theSecrets.userId,
       store: indexedDBStore,
       cryptoStore: new sdk.IndexedDBCryptoStore(global.indexedDB, 'crypto-store'),
-      deviceId: secret.deviceId,
+      deviceId: theSecrets.deviceId,
       timelineSupport: true,
       cryptoCallbacks,
-      verificationMethods: [
-        'm.sas.v1',
-      ],
+      verificationMethods: ['m.sas.v1'],
     });
 
     await this.matrixClient.initCrypto();
@@ -107,12 +115,15 @@ class InitMatrix extends EventEmitter {
     this.matrixClient.on('Session.logged_out', async () => {
       this.matrixClient.stopClient();
       await this.matrixClient.clearStores();
-      window.localStorage.clear();
-      window.location.reload();
+      ['cinny_user_id', 'cinny_hs_base_url', 'cinny_device_id', 'cinny_access_token'].forEach(
+        (key) => {
+          window.localStorage.removeItem(key);
+        }
+      );
     });
   }
 
-  async logout() {
+  async logout({ reloadOnLogout = true, clearCinnyKeysOnly = false }) {
     this.matrixClient.stopClient();
     try {
       await this.matrixClient.logout();
@@ -120,8 +131,18 @@ class InitMatrix extends EventEmitter {
       // ignore if failed to logout
     }
     await this.matrixClient.clearStores();
-    window.localStorage.clear();
-    window.location.reload();
+
+    if (clearCinnyKeysOnly) {
+      ['cinny_user_id', 'cinny_hs_base_url', 'cinny_device_id', 'cinny_access_token'].forEach(
+        (key) => {
+          window.localStorage.removeItem(key);
+        }
+      );
+    } else {
+      window.localStorage.clear();
+    }
+
+    if (reloadOnLogout) window.location.reload();
   }
 
   clearCacheAndReload() {

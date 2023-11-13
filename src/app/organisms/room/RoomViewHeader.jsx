@@ -11,7 +11,7 @@ import navigation from '../../../client/state/navigation';
 import {
   toggleRoomSettings,
   openReusableContextMenu,
-  openNavigation,
+  openNavigation
 } from '../../../client/action/navigation';
 import colorMXID from '../../../util/colorMXID';
 import { getEventCords } from '../../../util/common';
@@ -79,54 +79,54 @@ function RoomViewHeader({ roomId }) {
 
   return (
     <Header>
-      <IconButton
+      {/* <IconButton
         src={BackArrowIC}
         className="room-header__back-btn"
         tooltip="Return to navigation"
         onClick={() => openNavigation()}
-      />
+      /> */}
       <button
         ref={roomHeaderBtnRef}
         className="room-header__btn"
-        onClick={() => toggleRoomSettings()}
+        // onClick={() => toggleRoomSettings()}
         type="button"
         onMouseUp={(e) => blurOnBubbling(e, '.room-header__btn')}
       >
-        <Avatar imageSrc={avatarSrc} text={roomName} bgColor={colorMXID(roomId)} size="small" />
+        {/* <Avatar imageSrc={avatarSrc} text={roomName} bgColor={colorMXID(roomId)} size="small" /> */}
         <TitleWrapper>
           <Text variant="h2" weight="medium" primary>
-            {twemojify(roomName)}
+            Room name: {twemojify(roomName)}
           </Text>
         </TitleWrapper>
-        <RawIcon src={ChevronBottomIC} />
+        {/* <RawIcon src={ChevronBottomIC} /> */}
       </button>
-      {mx.isRoomEncrypted(roomId) === false && (
+      {/* {mx.isRoomEncrypted(roomId) === false && (
         <IconButton
           onClick={() => toggleRoomSettings(tabText.SEARCH)}
           tooltip="Search"
           src={SearchIC}
         />
-      )}
-      <IconButton
+      )} */}
+      {/* <IconButton
         className="room-header__drawer-btn"
         onClick={() => {
           setPeopleDrawer((t) => !t);
         }}
         tooltip="People"
         src={UserIC}
-      />
-      <IconButton
+      /> */}
+      {/* <IconButton
         className="room-header__members-btn"
         onClick={() => toggleRoomSettings(tabText.MEMBERS)}
         tooltip="Members"
         src={UserIC}
-      />
-      <IconButton onClick={openRoomOptions} tooltip="Options" src={VerticalMenuIC} />
+      /> */}
+      {/* <IconButton onClick={openRoomOptions} tooltip="Options" src={VerticalMenuIC} /> */}
     </Header>
   );
 }
 RoomViewHeader.propTypes = {
-  roomId: PropTypes.string.isRequired,
+  roomId: PropTypes.string.isRequired
 };
 
 export default RoomViewHeader;

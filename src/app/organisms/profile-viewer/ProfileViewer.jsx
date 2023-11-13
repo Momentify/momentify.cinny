@@ -399,30 +399,30 @@ function ProfileViewer() {
         ),
       );
     };
-
+    // TODO: momentify profile viewer
     return (
       <div className="profile-viewer">
         <div className="profile-viewer__user">
           <Avatar imageSrc={avatarUrl} text={username} bgColor={colorMXID(userId)} size="large" />
           <div className="profile-viewer__user__info">
             <Text variant="s1" weight="medium">{twemojify(username)}</Text>
-            <Text variant="b2">{twemojify(userId)}</Text>
-          </div>
-          <div className="profile-viewer__user__role">
+            <Text variant="b1">
+              <></>
+            </Text>
             <Text variant="b3">Role</Text>
-            <Button
-              onClick={canChangeRole ? handlePowerSelector : null}
-              iconSrc={canChangeRole ? ChevronBottomIC : null}
-            >
-              {`${getPowerLabel(powerLevel) || 'Member'} - ${powerLevel}`}
-            </Button>
+            <Text variant="b1">{`${getPowerLabel(powerLevel) || 'Member'} - ${powerLevel}`}</Text>
+            {/* <Text variant="b2">{twemojify(userId)}</Text> */}
           </div>
+          {/* <div className="profile-viewer__user__role">
+            <Text variant="b3">Role</Text>
+            <Text variant="b1">{`${getPowerLabel(powerLevel) || 'Member'} - ${powerLevel}`}</Text>
+          </div> */}
         </div>
-        <ModerationTools roomId={roomId} userId={userId} />
-        <SessionInfo userId={userId} />
-        { userId !== mx.getUserId() && (
+        {/* <ModerationTools roomId={roomId} userId={userId} /> */}
+        {/* <SessionInfo userId={userId} /> */}
+        {/* { userId !== mx.getUserId() && (
           <ProfileFooter roomId={roomId} userId={userId} onRequestClose={closeDialog} />
-        )}
+        )} */}
       </div>
     );
   };

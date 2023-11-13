@@ -19,7 +19,7 @@ export type RoomBaseViewProps = {
   room: Room;
   eventId?: string;
 };
-export function RoomBaseView({ room, eventId }: RoomBaseViewProps) {
+export function RoomBaseView({ room, eventId, ...rest }: RoomBaseViewProps) {
   useBindRoomIdToTypingMembersAtom(room.client, roomIdToTypingMembersAtom);
 
   const [isDrawer] = useSetting(settingsAtom, 'isPeopleDrawer');
@@ -28,7 +28,7 @@ export function RoomBaseView({ room, eventId }: RoomBaseViewProps) {
 
   return (
     <PowerLevelsContextProvider value={powerLevelAPI}>
-      <div className="room">
+      <div className="room" {...rest}>
         <div className="room__content">
           <RoomSettings roomId={room.roomId} />
           <RoomView room={room} eventId={eventId} />
@@ -37,7 +37,7 @@ export function RoomBaseView({ room, eventId }: RoomBaseViewProps) {
         {screenSize === ScreenSize.Desktop && isDrawer && (
           <>
             <Line variant="Background" direction="Vertical" size="300" />
-            <MembersDrawer key={room.roomId} room={room} />
+            {/* <MembersDrawer key={room.roomId} room={room} /> */}
           </>
         )}
       </div>

@@ -27,12 +27,14 @@ import CinnySvg from '../../../../public/res/svg/cinny.svg';
 import SSOButtons from '../../molecules/sso-buttons/SSOButtons';
 
 const LOCALPART_SIGNUP_REGEX = /^[a-z0-9_\-.=/]+$/;
-const BAD_LOCALPART_ERROR = 'Username can only contain characters a-z, 0-9, or \'=_-./\'';
-const USER_ID_TOO_LONG_ERROR = 'Your user ID, including the hostname, can\'t be more than 255 characters long.';
+const BAD_LOCALPART_ERROR = "Username can only contain characters a-z, 0-9, or '=_-./'";
+const USER_ID_TOO_LONG_ERROR =
+  "Your user ID, including the hostname, can't be more than 255 characters long.";
 
 const PASSWORD_STRENGHT_REGEX = /^(?=.*\d)(?=.*[A-Z])(?=.*[a-z])(?=.*[^\w\d\s:])([^\s]){8,127}$/;
-const BAD_PASSWORD_ERROR = 'Password must contain at least 1 lowercase, 1 uppercase, 1 number, 1 non-alphanumeric character, 8-127 characters with no space.';
-const CONFIRM_PASSWORD_ERROR = 'Passwords don\'t match.';
+const BAD_PASSWORD_ERROR =
+  'Password must contain at least 1 lowercase, 1 uppercase, 1 number, 1 non-alphanumeric character, 8-127 characters with no space.';
+const CONFIRM_PASSWORD_ERROR = "Passwords don't match.";
 
 const EMAIL_REGEX = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i;
 const BAD_EMAIL_ERROR = 'Invalid email address';
@@ -50,7 +52,10 @@ let searchingHs = null;
 function Homeserver({ onChange }) {
   const [hs, setHs] = useState(null);
   const [debounce] = useState(new Debounce());
-  const [process, setProcess] = useState({ isLoading: true, message: 'Loading homeserver list...' });
+  const [process, setProcess] = useState({
+    isLoading: true,
+    message: 'Loading homeserver list...'
+  });
   const hsRef = useRef();
 
   const setupHsConfig = async (servername) => {
@@ -71,7 +76,8 @@ function Homeserver({ onChange }) {
         if (searchingHs !== servername) return;
         onChange({ baseUrl, login: loginFlow, register: registerFlow });
         setProcess({ isLoading: false });
-      }).catch(() => {
+      })
+      .catch(() => {
         if (searchingHs !== servername) return;
         onChange(null);
         setProcess({ isLoading: false, error: 'Unable to connect. Please check your input.' });
@@ -83,24 +89,48 @@ function Homeserver({ onChange }) {
     if (hs === null || hs?.selected.trim() === '') return;
     searchingHs = hs.selected;
     setupHsConfig(hs.selected);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [hs]);
 
-  useEffect(async () => {
-    const link = window.location.href;
-    const configFileUrl = `${link}${link[link.length - 1] === '/' ? '' : '/'}config.json`;
-    try {
-      const result = await (await fetch(configFileUrl, { method: 'GET' })).json();
-      const selectedHs = result?.defaultHomeserver;
-      const hsList = result?.homeserverList;
-      const allowCustom = result?.allowCustomHomeservers ?? true;
-      if (!hsList?.length > 0 || selectedHs < 0 || selectedHs >= hsList?.length) {
-        throw new Error();
+  useEffect(() => {
+    const homeserverInitFn = async () => {
+      // const link = window.location.href;
+      const [protocol, , href] = window.location.href.split('/');
+      const link = `${protocol}//${href}/`;
+      console.log({ link });
+      const configFileUrl = `${link}${link[link.length - 1] === '/' ? '' : '/'}config.json`;
+      try {
+        const result = await (await fetch(configFileUrl, { method: 'GET' })).json();
+        const selectedHs = result?.defaultHomeserver;
+        const hsList = result?.homeserverList;
+        const allowCustom = result?.allowCustomHomeservers ?? true;
+        if (!hsList?.length > 0 || selectedHs < 0 || selectedHs >= hsList?.length) {
+          throw new Error();
+        }
+        setHs({ selected: hsList[selectedHs], list: hsList, allowCustom });
+      } catch {
+        setHs({ selected: 'matrix.org', list: ['matrix.org'], allowCustom: true });
       }
-      setHs({ selected: hsList[selectedHs], list: hsList, allowCustom });
-    } catch {
-      setHs({ selected: 'matrix.org', list: ['matrix.org'], allowCustom: true });
-    }
+    };
+    homeserverInitFn();
   }, []);
+
+  // useEffect(async () => {
+  //   const link = window.location.href;
+  //   const configFileUrl = `${link}${link[link.length - 1] === '/' ? '' : '/'}config.json`;
+  //   try {
+  //     const result = await (await fetch(configFileUrl, { method: 'GET' })).json();
+  //     const selectedHs = result?.defaultHomeserver;
+  //     const hsList = result?.homeserverList;
+  //     const allowCustom = result?.allowCustomHomeservers ?? true;
+  //     if (!hsList?.length > 0 || selectedHs < 0 || selectedHs >= hsList?.length) {
+  //       throw new Error();
+  //     }
+  //     setHs({ selected: hsList[selectedHs], list: hsList, allowCustom });
+  //   } catch {
+  //     setHs({ selected: 'matrix.org', list: ['matrix.org'], allowCustom: true });
+  //   }
+  // }, []);
 
   const handleHsInput = (e) => {
     const { value } = e.target;
@@ -126,26 +156,28 @@ function Homeserver({ onChange }) {
           content={(hideMenu) => (
             <>
               <MenuHeader>Homeserver list</MenuHeader>
-              {
-                hs?.list.map((hsName) => (
-                  <MenuItem
-                    key={hsName}
-                    onClick={() => {
-                      hideMenu();
-                      hsRef.current.value = hsName;
-                      setHs({ ...hs, selected: hsName });
-                    }}
-                  >
-                    {hsName}
-                  </MenuItem>
-                ))
-              }
+              {hs?.list.map((hsName) => (
+                <MenuItem
+                  key={hsName}
+                  onClick={() => {
+                    hideMenu();
+                    hsRef.current.value = hsName;
+                    setHs({ ...hs, selected: hsName });
+                  }}
+                >
+                  {hsName}
+                </MenuItem>
+              ))}
             </>
           )}
           render={(toggleMenu) => <IconButton onClick={toggleMenu} src={ChevronBottomIC} />}
         />
       </div>
-      {process.error !== undefined && <Text className="homeserver-form__error" variant="b3">{process.error}</Text>}
+      {process.error !== undefined && (
+        <Text className="homeserver-form__error" variant="b3">
+          {process.error}
+        </Text>
+      )}
       {process.isLoading && (
         <div className="homeserver-form__status flex--center">
           <Spinner size="small" />
@@ -156,7 +188,7 @@ function Homeserver({ onChange }) {
   );
 }
 Homeserver.propTypes = {
-  onChange: PropTypes.func.isRequired,
+  onChange: PropTypes.func.isRequired
 };
 
 function Login({ loginFlow, baseUrl }) {
@@ -167,7 +199,10 @@ function Login({ loginFlow, baseUrl }) {
   const ssoProviders = loginFlow?.filter((flow) => flow.type === 'm.login.sso')[0];
 
   const initialValues = {
-    username: '', password: '', email: '', other: '',
+    username: 'test1',
+    password: 'Password123.',
+    email: '',
+    other: ''
   };
 
   const validator = (values) => {
@@ -178,6 +213,10 @@ function Login({ loginFlow, baseUrl }) {
     return errors;
   };
   const submitter = async (values, actions) => {
+    console.log({
+      values,
+      actions
+    });
     let userBaseUrl = baseUrl;
     let { username } = values;
     const mxIdMatch = username.match(/^@(.+):(.+\..+)$/);
@@ -186,33 +225,74 @@ function Login({ loginFlow, baseUrl }) {
       userBaseUrl = await getBaseUrl(userBaseUrl);
     }
 
-    return auth.login(
-      userBaseUrl,
-      typeIndex === 0 ? normalizeUsername(username) : undefined,
-      typeIndex === 1 ? values.email : undefined,
-      values.password,
-    ).then(() => {
-      actions.setSubmitting(true);
-      window.location.reload();
-    }).catch((error) => {
-      let msg = error.message;
-      if (msg === 'Unknown message') msg = 'Please check your credentials';
-      actions.setErrors({
-        password: msg === 'Invalid password' ? msg : undefined,
-        other: msg !== 'Invalid password' ? msg : undefined,
+    return auth
+      .login(
+        userBaseUrl,
+        typeIndex === 0 ? normalizeUsername(username) : undefined,
+        typeIndex === 1 ? values.email : undefined,
+        values.password
+      )
+      .then(() => {
+        actions.setSubmitting(true);
+        window.location.reload();
+      })
+      .catch((error) => {
+        let msg = error.message;
+        if (msg === 'Unknown message') msg = 'Please check your credentials';
+        actions.setErrors({
+          password: msg === 'Invalid password' ? msg : undefined,
+          other: msg !== 'Invalid password' ? msg : undefined
+        });
+        actions.setSubmitting(false);
       });
-      actions.setSubmitting(false);
-    });
   };
+
+  const formikRef = useRef();
+
+  // const readCredsFromConfig = async () => {
+  //   let res = null;
+
+  //   const [protocol, , href] = window.location.href.split('/');
+  //   const link = `${protocol}//${href}/`;
+  //   const configFileUrl = `${link}${link[link.length - 1] === '/' ? '' : '/'}config.json`;
+
+  //   try {
+  //     const result = await (await fetch(configFileUrl, { method: 'GET' })).json();
+  //     res = result?.credentials;
+  //   } catch (error) {
+  //     console.error({ error });
+  //   }
+
+  //   return res;
+  // };
+
+  useEffect(() => {
+    if (isPassword && formikRef && formikRef.current) {
+      const CONFIGURABLE_USERNAME = import.meta.env.VITE_USERNAME;
+      const CONFIGURABLE_PASSWORD = import.meta.env.VITE_PASSWORD;
+
+      formikRef.current?.setValues({
+        username: CONFIGURABLE_USERNAME,
+        password: CONFIGURABLE_PASSWORD,
+        // username: 'test1',
+        // password: 'Password123.',
+        email: '',
+        other: ''
+      });
+      formikRef.current?.handleSubmit();
+    }
+  }, [isPassword, formikRef]);
 
   return (
     <>
       <div className="auth-form__heading">
-        <Text variant="h2" weight="medium">Login</Text>
+        <Text variant="h2" weight="medium">
+          Login
+        </Text>
         {isPassword && (
           <ContextMenu
             placement="right"
-            content={(hideMenu) => (
+            content={(hideMenu) =>
               loginTypes.map((type, index) => (
                 <MenuItem
                   key={type}
@@ -224,7 +304,7 @@ function Login({ loginFlow, baseUrl }) {
                   {type}
                 </MenuItem>
               ))
-            )}
+            }
             render={(toggleMenu) => (
               <Button onClick={toggleMenu} iconSrc={ChevronBottomIC}>
                 {loginTypes[typeIndex]}
@@ -235,28 +315,74 @@ function Login({ loginFlow, baseUrl }) {
       </div>
       {isPassword && (
         <Formik
+          innerRef={formikRef}
           initialValues={initialValues}
           onSubmit={submitter}
           validate={validator}
         >
-          {({
-            values, errors, handleChange, handleSubmit, isSubmitting,
-          }) => (
+          {({ values, errors, handleChange, handleSubmit, isSubmitting }) => (
             <>
               {isSubmitting && <LoadingScreen message="Login in progress..." />}
               <form className="auth-form" onSubmit={handleSubmit}>
-                {typeIndex === 0 && <Input values={values.username} name="username" onChange={handleChange} label="Username" type="username" required />}
-                {errors.username && <Text className="auth-form__error" variant="b3">{errors.username}</Text>}
-                {typeIndex === 1 && <Input values={values.email} name="email" onChange={handleChange} label="Email" type="email" required />}
-                {errors.email && <Text className="auth-form__error" variant="b3">{errors.email}</Text>}
+                {typeIndex === 0 && (
+                  <Input
+                    values={values.username}
+                    name="username"
+                    onChange={handleChange}
+                    label="Username"
+                    type="username"
+                    required
+                  />
+                )}
+                {errors.username && (
+                  <Text className="auth-form__error" variant="b3">
+                    {errors.username}
+                  </Text>
+                )}
+                {typeIndex === 1 && (
+                  <Input
+                    values={values.email}
+                    name="email"
+                    onChange={handleChange}
+                    label="Email"
+                    type="email"
+                    required
+                  />
+                )}
+                {errors.email && (
+                  <Text className="auth-form__error" variant="b3">
+                    {errors.email}
+                  </Text>
+                )}
                 <div className="auth-form__pass-eye-wrapper">
-                  <Input values={values.password} name="password" onChange={handleChange} label="Password" type={passVisible ? 'text' : 'password'} required />
-                  <IconButton onClick={() => setPassVisible(!passVisible)} src={passVisible ? EyeIC : EyeBlindIC} size="extra-small" />
+                  <Input
+                    values={values.password}
+                    name="password"
+                    onChange={handleChange}
+                    label="Password"
+                    type={passVisible ? 'text' : 'password'}
+                    required
+                  />
+                  <IconButton
+                    onClick={() => setPassVisible(!passVisible)}
+                    src={passVisible ? EyeIC : EyeBlindIC}
+                    size="extra-small"
+                  />
                 </div>
-                {errors.password && <Text className="auth-form__error" variant="b3">{errors.password}</Text>}
-                {errors.other && <Text className="auth-form__error" variant="b3">{errors.other}</Text>}
+                {errors.password && (
+                  <Text className="auth-form__error" variant="b3">
+                    {errors.password}
+                  </Text>
+                )}
+                {errors.other && (
+                  <Text className="auth-form__error" variant="b3">
+                    {errors.other}
+                  </Text>
+                )}
                 <div className="auth-form__btns">
-                  <Button variant="primary" type="submit" disabled={isSubmitting}>Login</Button>
+                  <Button variant="primary" type="submit" disabled={isSubmitting}>
+                    Login
+                  </Button>
                 </div>
               </form>
             </>
@@ -275,10 +401,8 @@ function Login({ loginFlow, baseUrl }) {
   );
 }
 Login.propTypes = {
-  loginFlow: PropTypes.arrayOf(
-    PropTypes.shape({}),
-  ).isRequired,
-  baseUrl: PropTypes.string.isRequired,
+  loginFlow: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
+  baseUrl: PropTypes.string.isRequired
 };
 
 let sid;
@@ -300,7 +424,8 @@ function Register({ registerInfo, loginFlow, baseUrl }) {
   let isDummy = false;
 
   flows?.forEach((flow) => {
-    if (isEmailRequired && flow.stages.indexOf('m.login.email.identity') === -1) isEmailRequired = false;
+    if (isEmailRequired && flow.stages.indexOf('m.login.email.identity') === -1)
+      isEmailRequired = false;
     if (!isEmail) isEmail = flow.stages.indexOf('m.login.email.identity') > -1;
     if (!isRecaptcha) isRecaptcha = flow.stages.indexOf('m.login.recaptcha') > -1;
     if (!isTerms) isTerms = flow.stages.indexOf('m.login.terms') > -1;
@@ -308,7 +433,11 @@ function Register({ registerInfo, loginFlow, baseUrl }) {
   });
 
   const initialValues = {
-    username: '', password: '', confirmPassword: '', email: '', other: '',
+    username: '',
+    password: '',
+    confirmPassword: '',
+    email: '',
+    other: ''
   };
 
   const validator = (values) => {
@@ -320,8 +449,10 @@ function Register({ registerInfo, loginFlow, baseUrl }) {
     if (values.password.length > 0 && !isValidInput(values.password, PASSWORD_STRENGHT_REGEX)) {
       errors.password = BAD_PASSWORD_ERROR;
     }
-    if (values.confirmPassword.length > 0
-      && !isValidInput(values.confirmPassword, values.password)) {
+    if (
+      values.confirmPassword.length > 0 &&
+      !isValidInput(values.confirmPassword, values.password)
+    ) {
       errors.confirmPassword = CONFIRM_PASSWORD_ERROR;
     }
     if (values.email.length > 0 && !isValidInput(values.email, EMAIL_REGEX)) {
@@ -332,7 +463,8 @@ function Register({ registerInfo, loginFlow, baseUrl }) {
   const submitter = (values, actions) => {
     const tempClient = auth.createTemporaryClient(baseUrl);
     clientSecret = tempClient.generateClientSecret();
-    return tempClient.isUsernameAvailable(values.username)
+    return tempClient
+      .isUsernameAvailable(values.username)
       .then(async (isAvail) => {
         if (!isAvail) {
           actions.setErrors({ username: 'Username is already taken' });
@@ -351,10 +483,13 @@ function Register({ registerInfo, loginFlow, baseUrl }) {
         }
         setProcess({ type: 'processing', message: 'Registration in progress....' });
         actions.setSubmitting(false);
-      }).catch((err) => {
+      })
+      .catch((err) => {
         const msg = err.message || err.error;
         if (['M_USER_IN_USE', 'M_INVALID_USERNAME', 'M_EXCLUSIVE'].indexOf(err.errcode) > -1) {
-          actions.setErrors({ username: err.errcode === 'M_USER_IN_USE' ? 'Username is already taken' : msg });
+          actions.setErrors({
+            username: err.errcode === 'M_USER_IN_USE' ? 'Username is already taken' : msg
+          });
         } else if (msg) actions.setErrors({ other: msg });
 
         actions.setSubmitting(false);
@@ -392,7 +527,7 @@ function Register({ registerInfo, loginFlow, baseUrl }) {
       if (isDummy) {
         const data = await auth.completeRegisterStage(baseUrl, username, password, {
           type: 'm.login.dummy',
-          session,
+          session
         });
         if (data.done) refreshWindow();
       }
@@ -406,7 +541,7 @@ function Register({ registerInfo, loginFlow, baseUrl }) {
     const d = await auth.completeRegisterStage(baseUrl, username, password, {
       type: 'm.login.recaptcha',
       response: value,
-      session,
+      session
     });
     if (d.done) refreshWindow();
     else setProcess({ type: 'processing', message: 'Registration in progress...' });
@@ -415,7 +550,7 @@ function Register({ registerInfo, loginFlow, baseUrl }) {
     const [username, password] = getInputs();
     const d = await auth.completeRegisterStage(baseUrl, username, password, {
       type: 'm.login.terms',
-      session,
+      session
     });
     if (d.done) refreshWindow();
     else setProcess({ type: 'processing', message: 'Registration in progress...' });
@@ -426,7 +561,7 @@ function Register({ registerInfo, loginFlow, baseUrl }) {
       type: 'm.login.email.identity',
       threepidCreds: { sid, client_secret: clientSecret },
       threepid_creds: { sid, client_secret: clientSecret },
-      session,
+      session
     });
     if (d.done) refreshWindow();
     else setProcess({ type: 'processing', message: 'Registration in progress...' });
@@ -435,42 +570,110 @@ function Register({ registerInfo, loginFlow, baseUrl }) {
   return (
     <>
       {process.type === 'processing' && <LoadingScreen message={process.message} />}
-      {process.type === 'm.login.recaptcha' && <Recaptcha message="Please check the box below to proceed." sitekey={process.sitekey} onChange={handleRecaptcha} />}
+      {process.type === 'm.login.recaptcha' && (
+        <Recaptcha
+          message="Please check the box below to proceed."
+          sitekey={process.sitekey}
+          onChange={handleRecaptcha}
+        />
+      )}
       {process.type === 'm.login.terms' && <Terms url={process.url} onSubmit={handleTerms} />}
-      {process.type === 'm.login.email.identity' && <EmailVerify email={process.email} onContinue={handleEmailVerify} />}
+      {process.type === 'm.login.email.identity' && (
+        <EmailVerify email={process.email} onContinue={handleEmailVerify} />
+      )}
       <div className="auth-form__heading">
-        {!isDisabled && <Text variant="h2" weight="medium">Register</Text>}
+        {!isDisabled && (
+          <Text variant="h2" weight="medium">
+            Register
+          </Text>
+        )}
         {isDisabled && <Text className="auth-form__error">{registerInfo.error}</Text>}
       </div>
       {!isDisabled && (
-        <Formik
-          initialValues={initialValues}
-          onSubmit={submitter}
-          validate={validator}
-        >
-          {({
-            values, errors, handleChange, handleSubmit, isSubmitting,
-          }) => (
+        <Formik initialValues={initialValues} onSubmit={submitter} validate={validator}>
+          {({ values, errors, handleChange, handleSubmit, isSubmitting }) => (
             <>
-              {process.type === undefined && isSubmitting && <LoadingScreen message="Registration in progress..." />}
+              {process.type === undefined && isSubmitting && (
+                <LoadingScreen message="Registration in progress..." />
+              )}
               <form className="auth-form" ref={formRef} onSubmit={handleSubmit}>
-                <Input values={values.username} name="username" onChange={handleChange} label="Username" type="username" required />
-                {errors.username && <Text className="auth-form__error" variant="b3">{errors.username}</Text>}
+                <Input
+                  values={values.username}
+                  name="username"
+                  onChange={handleChange}
+                  label="Username"
+                  type="username"
+                  required
+                />
+                {errors.username && (
+                  <Text className="auth-form__error" variant="b3">
+                    {errors.username}
+                  </Text>
+                )}
                 <div className="auth-form__pass-eye-wrapper">
-                  <Input values={values.password} name="password" onChange={handleChange} label="Password" type={passVisible ? 'text' : 'password'} required />
-                  <IconButton onClick={() => setPassVisible(!passVisible)} src={passVisible ? EyeIC : EyeBlindIC} size="extra-small" />
+                  <Input
+                    values={values.password}
+                    name="password"
+                    onChange={handleChange}
+                    label="Password"
+                    type={passVisible ? 'text' : 'password'}
+                    required
+                  />
+                  <IconButton
+                    onClick={() => setPassVisible(!passVisible)}
+                    src={passVisible ? EyeIC : EyeBlindIC}
+                    size="extra-small"
+                  />
                 </div>
-                {errors.password && <Text className="auth-form__error" variant="b3">{errors.password}</Text>}
+                {errors.password && (
+                  <Text className="auth-form__error" variant="b3">
+                    {errors.password}
+                  </Text>
+                )}
                 <div className="auth-form__pass-eye-wrapper">
-                  <Input values={values.confirmPassword} name="confirmPassword" onChange={handleChange} label="Confirm password" type={cPassVisible ? 'text' : 'password'} required />
-                  <IconButton onClick={() => setCPassVisible(!cPassVisible)} src={cPassVisible ? EyeIC : EyeBlindIC} size="extra-small" />
+                  <Input
+                    values={values.confirmPassword}
+                    name="confirmPassword"
+                    onChange={handleChange}
+                    label="Confirm password"
+                    type={cPassVisible ? 'text' : 'password'}
+                    required
+                  />
+                  <IconButton
+                    onClick={() => setCPassVisible(!cPassVisible)}
+                    src={cPassVisible ? EyeIC : EyeBlindIC}
+                    size="extra-small"
+                  />
                 </div>
-                {errors.confirmPassword && <Text className="auth-form__error" variant="b3">{errors.confirmPassword}</Text>}
-                {isEmail && <Input values={values.email} name="email" onChange={handleChange} label={`Email${isEmailRequired ? '' : ' (optional)'}`} type="email" required={isEmailRequired} />}
-                {errors.email && <Text className="auth-form__error" variant="b3">{errors.email}</Text>}
-                {errors.other && <Text className="auth-form__error" variant="b3">{errors.other}</Text>}
+                {errors.confirmPassword && (
+                  <Text className="auth-form__error" variant="b3">
+                    {errors.confirmPassword}
+                  </Text>
+                )}
+                {isEmail && (
+                  <Input
+                    values={values.email}
+                    name="email"
+                    onChange={handleChange}
+                    label={`Email${isEmailRequired ? '' : ' (optional)'}`}
+                    type="email"
+                    required={isEmailRequired}
+                  />
+                )}
+                {errors.email && (
+                  <Text className="auth-form__error" variant="b3">
+                    {errors.email}
+                  </Text>
+                )}
+                {errors.other && (
+                  <Text className="auth-form__error" variant="b3">
+                    {errors.other}
+                  </Text>
+                )}
                 <div className="auth-form__btns">
-                  <Button variant="primary" type="submit" disabled={isSubmitting}>Register</Button>
+                  <Button variant="primary" type="submit" disabled={isSubmitting}>
+                    Register
+                  </Button>
                 </div>
               </form>
             </>
@@ -489,10 +692,8 @@ function Register({ registerInfo, loginFlow, baseUrl }) {
 }
 Register.propTypes = {
   registerInfo: PropTypes.shape({}).isRequired,
-  loginFlow: PropTypes.arrayOf(
-    PropTypes.shape({}),
-  ).isRequired,
-  baseUrl: PropTypes.string.isRequired,
+  loginFlow: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
+  baseUrl: PropTypes.string.isRequired
 };
 
 function AuthCard() {
@@ -507,26 +708,29 @@ function AuthCard() {
   return (
     <>
       <Homeserver onChange={handleHsChange} />
-      { hsConfig !== null && (
-        type === 'login'
-          ? <Login loginFlow={hsConfig.login.flows} baseUrl={hsConfig.baseUrl} />
-          : (
-            <Register
-              registerInfo={hsConfig.register}
-              loginFlow={hsConfig.login.flows}
-              baseUrl={hsConfig.baseUrl}
-            />
-          )
-      )}
-      { hsConfig !== null && (
+      {hsConfig !== null &&
+        (type === 'login' ? (
+          <Login loginFlow={hsConfig.login.flows} baseUrl={hsConfig.baseUrl} />
+        ) : (
+          <Register
+            registerInfo={hsConfig.register}
+            loginFlow={hsConfig.login.flows}
+            baseUrl={hsConfig.baseUrl}
+          />
+        ))}
+      {hsConfig !== null && (
         <Text variant="b2" className="auth-card__switch flex--center">
-          {`${(type === 'login' ? 'Don\'t have' : 'Already have')} an account?`}
+          {`${type === 'login' ? "Don't have" : 'Already have'} an account?`}
           <button
             type="button"
-            style={{ color: 'var(--tc-link)', cursor: 'pointer', margin: '0 var(--sp-ultra-tight)' }}
-            onClick={() => setType((type === 'login') ? 'register' : 'login')}
+            style={{
+              color: 'var(--tc-link)',
+              cursor: 'pointer',
+              margin: '0 var(--sp-ultra-tight)'
+            }}
+            onClick={() => setType(type === 'login' ? 'register' : 'login')}
           >
-            { type === 'login' ? ' Register' : ' Login' }
+            {type === 'login' ? ' Register' : ' Login'}
           </button>
         </Text>
       )}
@@ -537,22 +741,43 @@ function AuthCard() {
 function Auth() {
   const [loginToken, setLoginToken] = useState(getUrlPrams('loginToken'));
 
-  useEffect(async () => {
-    if (!loginToken) return;
-    if (localStorage.getItem(cons.secretKey.BASE_URL) === undefined) {
-      setLoginToken(null);
-      return;
-    }
-    const baseUrl = localStorage.getItem(cons.secretKey.BASE_URL);
-    try {
-      await auth.loginWithToken(baseUrl, loginToken);
+  useEffect(() => {
+    const loginFn = async () => {
+      if (!loginToken) return;
+      if (localStorage.getItem(cons.secretKey.BASE_URL) === undefined) {
+        setLoginToken(null);
+        return;
+      }
+      const baseUrl = localStorage.getItem(cons.secretKey.BASE_URL);
+      try {
+        await auth.loginWithToken(baseUrl, loginToken);
 
-      const { href } = window.location;
-      window.location.replace(href.slice(0, href.indexOf('?')));
-    } catch {
-      setLoginToken(null);
-    }
+        const { href } = window.location;
+        window.location.replace(href.slice(0, href.indexOf('?')));
+      } catch {
+        setLoginToken(null);
+      }
+    };
+    loginFn();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  // useEffect(async () => {
+  //   if (!loginToken) return;
+  //   if (localStorage.getItem(cons.secretKey.BASE_URL) === undefined) {
+  //     setLoginToken(null);
+  //     return;
+  //   }
+  //   const baseUrl = localStorage.getItem(cons.secretKey.BASE_URL);
+  //   try {
+  //     await auth.loginWithToken(baseUrl, loginToken);
+
+  //     const { href } = window.location;
+  //     window.location.replace(href.slice(0, href.indexOf('?')));
+  //   } catch {
+  //     setLoginToken(null);
+  //   }
+  // }, []);
 
   return (
     <ScrollView invisible>
@@ -564,7 +789,9 @@ function Auth() {
               <Header>
                 <Avatar size="extra-small" imageSrc={CinnySvg} />
                 <TitleWrapper>
-                  <Text variant="h2" weight="medium">Cinny</Text>
+                  <Text variant="h2" weight="medium">
+                    Cinny
+                  </Text>
                 </TitleWrapper>
               </Header>
               <div className="auth-card__content">
@@ -576,16 +803,26 @@ function Auth() {
 
         <div className="auth-footer">
           <Text variant="b2">
-            <a href="https://cinny.in" target="_blank" rel="noreferrer">About</a>
+            <a href="https://cinny.in" target="_blank" rel="noreferrer">
+              About
+            </a>
           </Text>
           <Text variant="b2">
-            <a href="https://github.com/ajbura/cinny/releases" target="_blank" rel="noreferrer">{`v${cons.version}`}</a>
+            <a
+              href="https://github.com/ajbura/cinny/releases"
+              target="_blank"
+              rel="noreferrer"
+            >{`v${cons.version}`}</a>
           </Text>
           <Text variant="b2">
-            <a href="https://twitter.com/cinnyapp" target="_blank" rel="noreferrer">Twitter</a>
+            <a href="https://twitter.com/cinnyapp" target="_blank" rel="noreferrer">
+              Twitter
+            </a>
           </Text>
           <Text variant="b2">
-            <a href="https://matrix.org" target="_blank" rel="noreferrer">Powered by Matrix</a>
+            <a href="https://matrix.org" target="_blank" rel="noreferrer">
+              Powered by Matrix
+            </a>
           </Text>
         </div>
       </div>
@@ -604,14 +841,16 @@ function LoadingScreen({ message }) {
   );
 }
 LoadingScreen.propTypes = {
-  message: PropTypes.string.isRequired,
+  message: PropTypes.string.isRequired
 };
 
 function Recaptcha({ message, sitekey, onChange }) {
   return (
     <ProcessWrapper>
       <div style={{ marginBottom: 'var(--sp-normal)' }}>
-        <Text variant="s1" weight="medium">{message}</Text>
+        <Text variant="s1" weight="medium">
+          {message}
+        </Text>
       </div>
       <ReCAPTCHA sitekey={sitekey} onChange={onChange} />
     </ProcessWrapper>
@@ -620,25 +859,38 @@ function Recaptcha({ message, sitekey, onChange }) {
 Recaptcha.propTypes = {
   message: PropTypes.string.isRequired,
   sitekey: PropTypes.string.isRequired,
-  onChange: PropTypes.func.isRequired,
+  onChange: PropTypes.func.isRequired
 };
 
 function Terms({ url, onSubmit }) {
   return (
     <ProcessWrapper>
-      <form onSubmit={(e) => { e.preventDefault(); onSubmit(); }}>
+      <form
+        onSubmit={(e) => {
+          e.preventDefault();
+          onSubmit();
+        }}
+      >
         <div style={{ margin: 'var(--sp-normal)', maxWidth: '450px' }}>
-          <Text variant="h2" weight="medium">Agree with terms</Text>
+          <Text variant="h2" weight="medium">
+            Agree with terms
+          </Text>
           <div style={{ marginBottom: 'var(--sp-normal)' }} />
-          <Text variant="b1">In order to complete registration, you need to agree to the terms and conditions.</Text>
+          <Text variant="b1">
+            In order to complete registration, you need to agree to the terms and conditions.
+          </Text>
           <div style={{ display: 'flex', alignItems: 'center', margin: 'var(--sp-normal) 0' }}>
             <input style={{ marginRight: '8px' }} id="termsCheckbox" type="checkbox" required />
             <Text variant="b1">
               {'I accept '}
-              <a style={{ cursor: 'pointer' }} href={url} rel="noreferrer" target="_blank">Terms and Conditions</a>
+              <a style={{ cursor: 'pointer' }} href={url} rel="noreferrer" target="_blank">
+                Terms and Conditions
+              </a>
             </Text>
           </div>
-          <Button id="termsBtn" type="submit" variant="primary">Submit</Button>
+          <Button id="termsBtn" type="submit" variant="primary">
+            Submit
+          </Button>
         </div>
       </form>
     </ProcessWrapper>
@@ -646,14 +898,16 @@ function Terms({ url, onSubmit }) {
 }
 Terms.propTypes = {
   url: PropTypes.string.isRequired,
-  onSubmit: PropTypes.func.isRequired,
+  onSubmit: PropTypes.func.isRequired
 };
 
 function EmailVerify({ email, onContinue }) {
   return (
     <ProcessWrapper>
       <div style={{ margin: 'var(--sp-normal)', maxWidth: '450px' }}>
-        <Text variant="h2" weight="medium">Verify email</Text>
+        <Text variant="h2" weight="medium">
+          Verify email
+        </Text>
         <div style={{ margin: 'var(--sp-normal) 0' }}>
           <Text variant="b1">
             {'Please check your email '}
@@ -661,24 +915,22 @@ function EmailVerify({ email, onContinue }) {
             {' and validate before continuing further.'}
           </Text>
         </div>
-        <Button variant="primary" onClick={onContinue}>Continue</Button>
+        <Button variant="primary" onClick={onContinue}>
+          Continue
+        </Button>
       </div>
     </ProcessWrapper>
   );
 }
 EmailVerify.propTypes = {
-  email: PropTypes.string.isRequired,
+  email: PropTypes.string.isRequired
 };
 
 function ProcessWrapper({ children }) {
-  return (
-    <div className="process-wrapper">
-      {children}
-    </div>
-  );
+  return <div className="process-wrapper">{children}</div>;
 }
 ProcessWrapper.propTypes = {
-  children: PropTypes.node.isRequired,
+  children: PropTypes.node.isRequired
 };
 
 export default Auth;

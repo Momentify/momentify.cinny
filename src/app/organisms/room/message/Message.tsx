@@ -637,7 +637,7 @@ export const Message = as<'div', MessageProps>(
           </Text>
         </Username>
         <Box shrink="No" gap="100">
-          {messageLayout !== 1 && hover && (
+          {/* {messageLayout !== 1 && hover && (
             <>
               <Text as="span" size="T200" priority="300">
                 {senderId}
@@ -646,20 +646,21 @@ export const Message = as<'div', MessageProps>(
                 |
               </Text>
             </>
-          )}
+          )} */}
           <Time ts={mEvent.getTs()} compact={messageLayout === 1} />
         </Box>
       </Box>
     );
 
     const avatarJSX = !collapse && messageLayout !== 1 && (
+      // TODO: uate user avatar to use momentify avatar
       <AvatarBase>
         <Avatar
           className={css.MessageAvatar}
           as="button"
           size="300"
           data-user-id={senderId}
-          onClick={onUserClick}
+          // onClick={onUserClick}
         >
           {senderAvatarMxc ? (
             <AvatarImage
@@ -722,7 +723,7 @@ export const Message = as<'div', MessageProps>(
         highlight={highlight}
         selected={menu || emojiBoard}
         {...props}
-        {...hoverProps}
+        {...hoverProps} // TODO: momentify disable hover props
         {...focusWithinProps}
         ref={ref}
       >
@@ -730,7 +731,7 @@ export const Message = as<'div', MessageProps>(
           <div className={css.MessageOptionsBase}>
             <Menu className={css.MessageOptionsBar} variant="SurfaceVariant">
               <Box gap="100">
-                {canSendReaction && (
+                {/* {canSendReaction && (
                   <PopOut
                     alignOffset={-65}
                     position="Bottom"
@@ -768,7 +769,7 @@ export const Message = as<'div', MessageProps>(
                       </IconButton>
                     )}
                   </PopOut>
-                )}
+                )} */}
                 <IconButton
                   onClick={onReplyClick}
                   data-event-id={mEvent.getId()}
@@ -788,7 +789,7 @@ export const Message = as<'div', MessageProps>(
                     <Icon src={Icons.Pencil} size="100" />
                   </IconButton>
                 )}
-                <PopOut
+                {/* <PopOut
                   open={menu}
                   alignOffset={-5}
                   position="Bottom"
@@ -927,7 +928,7 @@ export const Message = as<'div', MessageProps>(
                       <Icon src={Icons.VerticalDots} size="100" />
                     </IconButton>
                   )}
-                </PopOut>
+                </PopOut> */}
               </Box>
             </Menu>
           </div>
@@ -995,7 +996,7 @@ export const Event = as<'div', EventProps>(
         {...focusWithinProps}
         ref={ref}
       >
-        {(hover || menu) && (
+        {/* {(hover || menu) && (
           <div className={css.MessageOptionsBase}>
             <Menu className={css.MessageOptionsBar} variant="SurfaceVariant">
               <Box gap="100">
@@ -1065,7 +1066,7 @@ export const Event = as<'div', EventProps>(
               </Box>
             </Menu>
           </div>
-        )}
+        )} */}
         <div onContextMenu={handleContextMenu}>{children}</div>
       </MessageBase>
     );

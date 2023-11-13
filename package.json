@@ -9,11 +9,14 @@
   "scripts": {
     "start": "vite",
     "build": "vite build",
+    "preview": "vite preview --port 5001 --strictPort",
     "lint": "yarn check:eslint && yarn check:prettier",
     "check:eslint": "eslint src/*",
     "check:prettier": "prettier --check .",
     "fix:prettier": "prettier --write .",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "aws:deploy:staging": "aws s3 sync dist/ s3://staging-chat.momentify.xyz --delete && aws cloudfront create-invalidation --distribution-id E3QE0AZ8DO2N3M --paths \"/*\"",
+    "aws:deploy:wasm:staging": "aws s3 cp dist/olm.wasm s3://staging-app.momentify.xyz && aws cloudfront create-invalidation --distribution-id E2P8XJTGIQ3R5R --paths \"/*\""
   },
   "keywords": [],
   "author": "Ajay Bura",
@@ -76,6 +79,7 @@
   },
   "devDependencies": {
     "@esbuild-plugins/node-globals-polyfill": "0.2.3",
+    "@originjs/vite-plugin-federation": "1.3.2",
     "@rollup/plugin-inject": "5.0.3",
     "@rollup/plugin-wasm": "6.1.1",
     "@types/file-saver": "2.0.5",

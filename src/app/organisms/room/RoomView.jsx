@@ -100,7 +100,7 @@ function RoomView({ room, eventId }) {
               </>
             )}
           </div>
-          <RoomViewFollowing room={room} />
+          {/* <RoomViewFollowing room={room} /> */}
         </div>
       </div>
     </div>

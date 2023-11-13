@@ -1,13 +1,5 @@
 {
-  "defaultHomeserver": 3,
-  "homeserverList": [
-    "0wnz.at",
-    "converser.eu",
-    "envs.net",
-    "matrix.org",
-    "monero.social",
-    "mozilla.org",
-    "xmr.se"
-  ],
+  "defaultHomeserver": 0,
+  "homeserverList": ["matrix.momentify.xyz"],
   "allowCustomHomeservers": true
 }
