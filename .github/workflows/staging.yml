@@ -19,6 +19,7 @@ env:
 jobs:
     Deploy-Staging:
         runs-on: ubuntu-latest
+        environment: staging
         steps:
             - name: Checkout
               id: checkout
