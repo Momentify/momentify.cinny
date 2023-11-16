@@ -71,6 +71,10 @@ class InitMatrix extends EventEmitter {
     this.matrixClient.setGlobalErrorOnUnknownDevices(false);
   }
 
+  isClientRunning() {
+    return !!this.matrixClient;
+  }
+
   setupSync() {
     const sync = {
       NULL: () => {
