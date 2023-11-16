@@ -79,12 +79,12 @@ function RoomViewHeader({ roomId }) {
 
   return (
     <Header>
-      {/* <IconButton
+      <IconButton
         src={BackArrowIC}
         className="room-header__back-btn"
         tooltip="Return to navigation"
-        onClick={() => openNavigation()}
-      /> */}
+        onClick={() => window.history.back()}
+      />
       <button
         ref={roomHeaderBtnRef}
         className="room-header__btn"
