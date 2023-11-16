@@ -129,6 +129,9 @@ export const RoomInput = forwardRef<HTMLDivElement, RoomInputProps>(
       selectedFiles.map((f) => f.file)
     );
     const uploadBoardHandlers = useRef<UploadBoardImperativeHandlers>();
+    // @TO-DO: update type for the ref below
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const customEditorRef = useRef<any>();
 
     const imagePackRooms: Room[] = useMemo(() => {
       const allParentSpaces = [roomId, ...(initMatrix.roomList?.getAllParentSpaces(roomId) ?? [])];
@@ -309,7 +312,20 @@ export const RoomInput = forwardRef<HTMLDivElement, RoomInputProps>(
       resetEditorHistory(editor);
       setReplyDraft();
       sendTypingStatus(false);
-    }, [mx, roomId, editor, replyDraft, sendTypingStatus, setReplyDraft, isMarkdown, commands]);
+
+      const textbox = customEditorRef?.current.querySelector('div[role="textbox"]');
+      textbox.focus(); // bring back focus to textbox after clicking send icon btn
+    }, [
+      mx,
+      roomId,
+      editor,
+      replyDraft,
+      sendTypingStatus,
+      setReplyDraft,
+      isMarkdown,
+      commands,
+      customEditorRef,
+    ]);
 
     const handleKeyDown: KeyboardEventHandler = useCallback(
       (evt) => {
@@ -460,6 +476,7 @@ export const RoomInput = forwardRef<HTMLDivElement, RoomInputProps>(
           />
         )}
         <CustomEditor
+          ref={customEditorRef}
           editableName="RoomInput"
           editor={editor}
           placeholder="Send a message..."

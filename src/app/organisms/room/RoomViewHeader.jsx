@@ -79,12 +79,15 @@ function RoomViewHeader({ roomId }) {
 
   return (
     <Header>
-      {/* <IconButton
+      <IconButton
         src={BackArrowIC}
         className="room-header__back-btn"
-        tooltip="Return to navigation"
-        onClick={() => openNavigation()}
-      /> */}
+        tooltip="Return to previous page"
+        onClick={() => {
+          initMatrix.stopClient();
+          window.history.back();
+        }}
+      />
       <button
         ref={roomHeaderBtnRef}
         className="room-header__btn"
@@ -95,7 +98,7 @@ function RoomViewHeader({ roomId }) {
         {/* <Avatar imageSrc={avatarSrc} text={roomName} bgColor={colorMXID(roomId)} size="small" /> */}
         <TitleWrapper>
           <Text variant="h2" weight="medium" primary>
-            Room name: {twemojify(roomName)}
+            {twemojify(roomName)}
           </Text>
         </TitleWrapper>
         {/* <RawIcon src={ChevronBottomIC} /> */}
