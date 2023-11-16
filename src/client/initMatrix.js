@@ -26,10 +26,13 @@ class InitMatrix extends EventEmitter {
   async init() {
     if (this.matrixClient) {
       console.warn('Client is already initialized!');
-      return;
+      this.matrixClient.stopClient();
+      console.warn('Client stopped');
+      // return;
     }
 
     await this.startClient();
+    console.warn('Client started');
     this.setupSync();
     this.listenEvents();
   }
@@ -69,6 +72,10 @@ class InitMatrix extends EventEmitter {
       lazyLoadMembers: true,
     });
     this.matrixClient.setGlobalErrorOnUnknownDevices(false);
+  }
+
+  isClientRunning() {
+    return !!this.matrixClient;
   }
 
   setupSync() {
@@ -121,6 +128,10 @@ class InitMatrix extends EventEmitter {
         }
       );
     });
+  }
+
+  stopClient() {
+    if (this.matrixClient) this.matrixClient.stopClient();
   }
 
   async logout({ reloadOnLogout = true, clearCinnyKeysOnly = false }) {
