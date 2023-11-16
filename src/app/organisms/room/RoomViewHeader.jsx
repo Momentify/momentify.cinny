@@ -98,7 +98,7 @@ function RoomViewHeader({ roomId }) {
         {/* <Avatar imageSrc={avatarSrc} text={roomName} bgColor={colorMXID(roomId)} size="small" /> */}
         <TitleWrapper>
           <Text variant="h2" weight="medium" primary>
-            Room name: {twemojify(roomName)}
+            {twemojify(roomName)}
           </Text>
         </TitleWrapper>
         {/* <RawIcon src={ChevronBottomIC} /> */}
