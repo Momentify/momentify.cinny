@@ -88,7 +88,7 @@ function Client() {
     initMatrix.init();
   }, []);
 
-  if (isLoading) {
+  if (!isLoading) {
     return (
       <div className="loading-display">
         <div className="loading__menu">
@@ -112,11 +112,11 @@ function Client() {
           {loadingMsg}
         </Text>
 
-        <div className="loading__appname">
+        {/* <div className="loading__appname">
           <Text variant="h2" weight="medium">
             Momentify
           </Text>
-        </div>
+        </div> */}
       </div>
     );
   }
