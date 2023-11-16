@@ -210,7 +210,8 @@
 .dark-theme,
 .butter-theme {
   /* background color | --bg-[background type]: value */
-  --bg-surface: #1f2326;
+  // --bg-surface: #1f2326;
+  --bg-surface: #11111f;
   --bg-surface-transparent: #1f232600;
   --bg-surface-low: #15171a;
   --bg-surface-low-transparent: #15171a00;
@@ -475,8 +476,4 @@ audio:not([controls]) {
   display: flex;
   justify-content: center;
   align-items: center;
-}
-
-.client-container {
-  flex: 1;
 }
