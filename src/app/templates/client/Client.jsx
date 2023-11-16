@@ -102,9 +102,10 @@ function Client() {
                 <MenuItem onClick={() => initMatrix.logout()}>Logout</MenuItem>
               </>
             }
-            render={(toggle) => (
-              <IconButton size="extra-small" onClick={toggle} src={VerticalMenuIC} />
-            )}
+            // render={(toggle) => (
+            //   <IconButton size="extra-small" onClick={toggle} src={VerticalMenuIC} />
+            // )}
+            render={() => {}}
           />
         </div>
         <Spinner />
