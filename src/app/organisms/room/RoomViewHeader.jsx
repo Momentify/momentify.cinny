@@ -82,8 +82,11 @@ function RoomViewHeader({ roomId }) {
       <IconButton
         src={BackArrowIC}
         className="room-header__back-btn"
-        tooltip="Return to navigation"
-        onClick={() => window.history.back()}
+        tooltip="Return to previous page"
+        onClick={() => {
+          initMatrix.stopClient();
+          window.history.back();
+        }}
       />
       <button
         ref={roomHeaderBtnRef}
