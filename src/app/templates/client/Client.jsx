@@ -88,7 +88,7 @@ function Client() {
     initMatrix.init();
   }, []);
 
-  if (!isLoading) {
+  if (isLoading) {
     return (
       <div className="loading-display">
         <div className="loading__menu">
