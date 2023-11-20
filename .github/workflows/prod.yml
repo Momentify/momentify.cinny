@@ -1,136 +1,140 @@
-# name: Cinny Client Production
+name: Cinny Client Production
 
-# on:
-#     push:
-#         branches:
-#             - main
+on:
+    push:
+        branches:
+            - main
 
-# env:
-#     AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-#     AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-#     AWS_DEFAULT_REGION: ${{ secrets.AWS_REGION }}
-#     VITE_API_URL: ${{ secrets.VITE_API_URL}}
-#     VITE_PRIVY_APP_ID: ${{ secrets.PRIVY_ID }}
-# jobs:
-#     Deploy-Prod:
-#         runs-on: ubuntu-latest
-#         steps:
-#             - name: Checkout
-#               id: checkout
-#               uses: actions/checkout@v2
+env:
+    AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+    AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+    AWS_DEFAULT_REGION: ${{ secrets.AWS_REGION }}
+    VITE_USERNAME: ${{ secrets.VITE_USERNAME }}
+    VITE_PASSWORD: ${{ secrets.VITE_PASSWORD }}
+    VITE_TEST_ROOM: ${{ secrets.VITE_TEST_ROOM }}
+    VITE_SUPPORT_SPACE: ${{ secrets.VITE_SUPPORT_SPACE }}
+    VITE_SUPPORT_ROOM_ID: ${{ secrets.VITE_SUPPORT_ROOM_ID }}
+jobs:
+    Deploy-Prod:
+        runs-on: ubuntu-latest
+        environment: production
+        steps:
+            - name: Checkout
+              id: checkout
+              uses: actions/checkout@v2
 
-#             - name: Install Node
-#               id: setup-node
-#               uses: actions/setup-node@v3
-#               with:
-#                   node-version: 18.12.1
+            - name: Install Node
+              id: setup-node
+              uses: actions/setup-node@v3
+              with:
+                  node-version: 18.12.1
 
-#             - name: Install Dependencies
-#               id: install-deps
-#               run: npm install
+            - name: Install Dependencies
+              id: install-deps
+              run: npm install
 
-#             - name: Build
-#               id: build
-#               run: npm run build
+            - name: Build
+              id: build
+              run: npm run build
 
-#             - name: Deploy Staging
-#               id: deploy
-#               run: npm run aws:deploy:prod
+            - name: Deploy Prod
+              id: deploy
+              run: npm run aws:deploy:prod
 
-#             - name: Post to Slack Success
-#               id: slack_success
-#               if: ${{ steps.deploy.outcome == 'success' }}
-#               uses: slackapi/slack-github-action@v1.24.0
-#               env:
-#                   SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
-#               with:
-#                   channel-id: ${{ secrets.SLACK_CHANNEL_ID }}
-#                   payload: |
-#                       {
-#                           "blocks": [
-#                               {
-#                                   "type": "header",
-#                                   "text": {
-#                                       "type": "plain_text",
-#                                       "text": ":gear: Prod Deploy Success",
-#                                       "emoji": true
-#                                   }
-#                               },
-#                               {
-#                                   "type": "divider"
-#                               },
-#                               {
-#                                   "type": "section",
-#                                   "text": {
-#                                       "type": "mrkdwn",
-#                                       "text": " :memo: *Summary:*"
-#                                   }
-#                               },
-#                               {
-#                                   "type": "section",
-#                                   "text": {
-#                                       "type": "mrkdwn",
-#                                       "text": "Triggered by: ${{ github.actor }}\nrun link: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
-#                                   }
-#                               },
-#                               {
-#                                   "type": "divider"
-#                               },
-#                               {
-#                                   "type": "section",
-#                                   "text": {
-#                                       "type": "mrkdwn",
-#                                       "text": ":book: momentify-web-app"
-#                                   }
-#                               }
-#                           ]
-#                       }
+            - name: Post to Slack Success
+              id: slack_success
+              if: ${{ steps.deploy.outcome == 'success' }}
+              uses: slackapi/slack-github-action@v1.24.0
+              env:
+                  SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
+              with:
+                  channel-id: ${{ secrets.SLACK_CHANNEL_ID }}
+                  payload: |
+                      {
+                          "blocks": [
+                              {
+                                  "type": "header",
+                                  "text": {
+                                      "type": "plain_text",
+                                      "text": ":gear: Prod Deploy Success",
+                                      "emoji": true
+                                  }
+                              },
+                              {
+                                  "type": "divider"
+                              },
+                              {
+                                  "type": "section",
+                                  "text": {
+                                      "type": "mrkdwn",
+                                      "text": " :memo: *Summary:*"
+                                  }
+                              },
+                              {
+                                  "type": "section",
+                                  "text": {
+                                      "type": "mrkdwn",
+                                      "text": "Triggered by: ${{ github.actor }}\nrun link: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+                                  }
+                              },
+                              {
+                                  "type": "divider"
+                              },
+                              {
+                                  "type": "section",
+                                  "text": {
+                                      "type": "mrkdwn",
+                                      "text": ":book: forked-cinny-client"
+                                  }
+                              }
+                          ]
+                      }
 
-#             - name: Post to Slack Fail
-#               id: slack_fail
-#               if: ${{ steps.deploy.outcome != 'success'}}
-#               uses: slackapi/slack-github-action@v1.24.0
-#               env:
-#                   SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
-#               with:
-#                   channel-id: ${{ secrets.SLACK_CHANNEL_ID }}
-#                   payload: |
-#                       {
-#                           "blocks": [
-#                               {
-#                                   "type": "header",
-#                                   "text": {
-#                                       "type": "plain_text",
-#                                       "text": ":rotating_light: Staging Deploy Failed",
-#                                       "emoji": true
-#                                   }
-#                               },
-#                               {
-#                                   "type": "divider"
-#                               },
-#                               {
-#                                   "type": "section",
-#                                   "text": {
-#                                       "type": "mrkdwn",
-#                                       "text": " :memo: *Summary:*"
-#                                   }
-#                               },
-#                               {
-#                                   "type": "section",
-#                                   "text": {
-#                                       "type": "mrkdwn",
-#                                       "text": "Triggered by: ${{ github.actor }}\nVisit the run: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
-#                                   }
-#                               },
-#                               {
-#                                   "type": "divider"
-#                               },
-#                               {
-#                                   "type": "section",
-#                                   "text": {
-#                                       "type": "mrkdwn",
-#                                       "text": ":book: momentify-web-app"
-#                                   }
-#                               }
-#                           ]
-#                       }
+            - name: Post to Slack Fail
+              id: slack_fail
+              if: ${{ steps.deploy.outcome != 'success'}}
+              uses: slackapi/slack-github-action@v1.24.0
+              env:
+                  SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
+              with:
+                  channel-id: ${{ secrets.SLACK_CHANNEL_ID }}
+                  payload: |
+                      {
+                          "blocks": [
+                              {
+                                  "type": "header",
+                                  "text": {
+                                      "type": "plain_text",
+                                      "text": ":rotating_light: Prod Deploy Failed",
+                                      "emoji": true
+                                  }
+                              },
+                              {
+                                  "type": "divider"
+                              },
+                              {
+                                  "type": "section",
+                                  "text": {
+                                      "type": "mrkdwn",
+                                      "text": " :memo: *Summary:*"
+                                  }
+                              },
+                              {
+                                  "type": "section",
+                                  "text": {
+                                      "type": "mrkdwn",
+                                      "text": "Triggered by: ${{ github.actor }}\nVisit the run: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+                                  }
+                              },
+                              {
+                                  "type": "divider"
+                              },
+                              {
+                                  "type": "section",
+                                  "text": {
+                                      "type": "mrkdwn",
+                                      "text": ":book: forked-cinny-client"
+                                  }
+                              }
+                          ]
+                      }
