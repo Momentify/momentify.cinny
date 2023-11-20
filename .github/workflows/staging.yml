@@ -43,10 +43,6 @@ jobs:
               id: deploy
               run: npm run aws:deploy:staging
 
-            - name: Deploy Wasm Staging
-              id: deploy-wasm
-              run: npm run aws:deploy:wasm:staging
-
             - name: Post to Slack Success
               id: slack_success
               if: ${{ steps.deploy.outcome == 'success' }}

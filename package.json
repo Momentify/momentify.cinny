@@ -16,7 +16,7 @@
     "fix:prettier": "prettier --write .",
     "typecheck": "tsc --noEmit",
     "aws:deploy:staging": "aws s3 sync dist/ s3://staging-chat.momentify.xyz --delete && aws cloudfront create-invalidation --distribution-id E3QE0AZ8DO2N3M --paths \"/*\"",
-    "aws:deploy:wasm:staging": "aws s3 cp dist/olm.wasm s3://staging-app.momentify.xyz && aws cloudfront create-invalidation --distribution-id E2P8XJTGIQ3R5R --paths \"/*\""
+    "aws:deploy:prod": "aws s3 sync dist/ s3://chat.momentify.xyz --delete && aws cloudfront create-invalidation --distribution-id E2PD3TLQCRGLLZ --paths \"/*\""
   },
   "keywords": [],
   "author": "Ajay Bura",
