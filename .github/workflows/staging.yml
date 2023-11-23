@@ -39,7 +39,7 @@ jobs:
               with:
                 file: config.json
                 field: homeserverList
-                value: ["staging-matrix.momentify.xyz"]
+                value: '["staging-matrix.momentify.xyz"]'
 
             - name: Build
               id: build
