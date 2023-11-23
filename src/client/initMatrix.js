@@ -165,5 +165,5 @@ class InitMatrix extends EventEmitter {
 }
 
 const initMatrix = new InitMatrix();
-
+// const initMatrix = {initMatrix: _initMatrix, start: initMatrix.init}
 export default initMatrix;

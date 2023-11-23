@@ -2,6 +2,7 @@ import initMatrix from '../initMatrix';
 import appDispatcher from '../dispatcher';
 import cons from '../state/cons';
 import { getIdServer } from '../../util/matrixUtil';
+// import { _joinRoom } from '../../app/utils/momentify';
 
 /**
  * https://github.com/matrix-org/matrix-react-sdk/blob/1e6c6e9d800890c732d60429449bc280de01a647/src/Rooms.js#L73
@@ -102,7 +103,9 @@ async function join(roomIdOrAlias, isDM = false, via = undefined) {
 
   try {
     const resultRoom = await mx.joinRoom(roomIdOrAlias, { viaServers });
-
+    // console.log('mx', mx)
+    // const resultRoom = await _joinRoom(roomIdOrAlias, localStorage.getItem('cinny_access_token'));
+    console.log({resultRoom})
     if (isDM) {
       const targetUserId = guessDMRoomTargetId(mx.getRoom(resultRoom.roomId), mx.getUserId());
       await addRoomToMDirect(resultRoom.roomId, targetUserId);
@@ -355,3 +358,4 @@ export {
   setPowerLevel,
   setMyRoomNick, setMyRoomAvatar,
 };
+// export default join;

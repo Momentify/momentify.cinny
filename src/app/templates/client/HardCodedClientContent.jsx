@@ -12,11 +12,16 @@ export default function ClientContent() {
     room: null,
     eventId: null
   });
-
-  const mx = initMatrix.matrixClient;
-
+  // let currentRoomIdfromLocalStorage = localStorage.getItem("current_room_address") ?? CONFIGURABLE_TEST_ROOM
+  const [currentRoomID, setCurrentRoomID] = useState(localStorage.getItem("current_room_address") ?? CONFIGURABLE_TEST_ROOM)
+  // const mx = initMatrix.matrixClient;  
+  
   useEffect(() => {
+    // console.log({roomId})
+    // const r = mx.getRoom(currentRoomID);
+    console.log({currentRoomID})
     const r = mx.getRoom(CONFIGURABLE_TEST_ROOM ?? HARDCODED_ROOM_ID);
+    // const r = mx.getRoom(roomId)
     if (r) {
       setRoomInfo({
         room: r,
