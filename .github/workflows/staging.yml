@@ -12,6 +12,7 @@ env:
     VITE_USERNAME: ${{ secrets.VITE_USERNAME }}
     VITE_PASSWORD: ${{ secrets.VITE_PASSWORD }}
     VITE_SUPPORT_ROOM_ID: ${{ secrets.VITE_SUPPORT_ROOM_ID }}
+    VITE_MATRIX_DEFAULT_SERVER: ${{ secrets.VITE_MATRIX_DEFAULT_SERVER }}
     
 jobs:
     Deploy-Staging:
