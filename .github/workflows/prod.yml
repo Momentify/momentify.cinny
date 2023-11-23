@@ -15,7 +15,7 @@ env:
 jobs:
     Deploy-Prod:
         runs-on: ubuntu-latest
-        environment: staging
+        environment: main
         steps:
             - name: Checkout
               id: checkout
@@ -30,6 +30,16 @@ jobs:
             - name: Install Dependencies
               id: install-deps
               run: npm install
+
+
+            - name: Set up config.json
+              id: setup-config
+              run: |
+                echo '{
+                "defaultHomeserver": 0,
+                "homeserverList": ["matrix.momentify.xyz"],
+                "allowCustomHomeservers": true
+                }' > config.json
 
             - name: Build
               id: build
