@@ -36,12 +36,11 @@ jobs:
 
             - name: Set up config.json
               id: setup-config
-              run: |
-                echo "{
-                \"defaultHomeserver\": 0,
-                \"homeserverList\": [\"staging-matrix.momentify.xyz\"],
-                \"allowCustomHomeservers\": true
-                }" > config.json
+              uses: jossef/action-set-json-field@v2.1
+              with:
+                file: config.json
+                field: homeserverList
+                value: \["staging-matrix.momentify.xyz"\]
 
             - name: Build
               id: build
