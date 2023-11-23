@@ -94,23 +94,9 @@ function Homeserver({ onChange }) {
 
   useEffect(() => {
     const homeserverInitFn = async () => {
-      // const link = window.location.href;
-      const [protocol, , href] = window.location.href.split('/');
-      const link = `${protocol}//${href}/`;
-      console.log({ link });
-      const configFileUrl = `${link}${link[link.length - 1] === '/' ? '' : '/'}config.json`;
-      try {
-        const result = await (await fetch(configFileUrl, { method: 'GET' })).json();
-        const selectedHs = result?.defaultHomeserver;
-        const hsList = result?.homeserverList;
-        const allowCustom = result?.allowCustomHomeservers ?? true;
-        if (!hsList?.length > 0 || selectedHs < 0 || selectedHs >= hsList?.length) {
-          throw new Error();
-        }
-        setHs({ selected: hsList[selectedHs], list: hsList, allowCustom });
-      } catch {
-        setHs({ selected: 'matrix.org', list: ['matrix.org'], allowCustom: true });
-      }
+      // eslint-disable-next-line prefer-destructuring
+      const VITE_MATRIX_DEFAULT_SERVER = import.meta.env.VITE_MATRIX_DEFAULT_SERVER;
+      setHs({ selected: VITE_MATRIX_DEFAULT_SERVER, list: [VITE_MATRIX_DEFAULT_SERVER], allowCustom: true });
     };
     homeserverInitFn();
   }, []);

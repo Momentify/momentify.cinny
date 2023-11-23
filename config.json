@@ -1,5 +1,5 @@
 {
   "defaultHomeserver": 0,
-  "homeserverList": ["matrix.momentify.xyz"],
+  "homeserverList": ["staging-matrix.momentify.xyz"],
   "allowCustomHomeservers": true
 }
