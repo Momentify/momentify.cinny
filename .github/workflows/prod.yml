@@ -38,7 +38,7 @@ jobs:
               with:
                 file: config.json
                 field: homeserverList
-                value: "[\"matrix.momentify.xyz\"]"
+                value: ["matrix.momentify.xyz"]
 
             - name: Build
               id: build
