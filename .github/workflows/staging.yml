@@ -33,6 +33,16 @@ jobs:
               id: install-deps
               run: npm install
 
+
+            - name: Set up config.json
+              id: setup-config
+              run: |
+                echo '{
+                "defaultHomeserver": 0,
+                "homeserverList": ["staging-matrix.momentify.xyz"],
+                "allowCustomHomeservers": true
+                }' > config.json
+
             - name: Build
               id: build
               run: npm run build
