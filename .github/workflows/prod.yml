@@ -35,11 +35,11 @@ jobs:
             - name: Set up config.json
               id: setup-config
               run: |
-                echo '{
-                "defaultHomeserver": 0,
-                "homeserverList": ["matrix.momentify.xyz"],
-                "allowCustomHomeservers": true
-                }' > config.json
+                echo "{
+                \"defaultHomeserver\": 0,
+                \"homeserverList\": [\"matrix.momentify.xyz\"],
+                \"allowCustomHomeservers\": true
+                }" > config.json
 
             - name: Build
               id: build
