@@ -33,14 +33,13 @@ jobs:
               id: install-deps
               run: npm install
 
-
             - name: Set up config.json
               id: setup-config
               uses: jossef/action-set-json-field@v2.1
               with:
                 file: config.json
                 field: homeserverList
-                value: \["staging-matrix.momentify.xyz"\]
+                value: "[\"staging-matrix.momentify.xyz\"]"
 
             - name: Build
               id: build
