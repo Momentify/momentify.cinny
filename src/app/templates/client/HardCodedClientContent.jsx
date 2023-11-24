@@ -11,9 +11,9 @@ export default function ClientContent() {
     eventId: null
   });
 
-  const mx = initMatrix.matrixClient;
-
-  useEffect(() => {
+  const mx = initMatrix.matrixClient;  
+  useEffect(() => { 
+    window.location.reload()   
     const roomID = extractRoomIDFromURL(window.location.href);
     const r = mx.getRoom(roomID);
     if (r) {
