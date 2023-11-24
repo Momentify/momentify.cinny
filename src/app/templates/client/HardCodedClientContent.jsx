@@ -12,8 +12,7 @@ export default function ClientContent() {
   });
 
   const mx = initMatrix.matrixClient;  
-  useEffect(() => { 
-    window.location.reload()   
+  useEffect(() => {
     const roomID = extractRoomIDFromURL(window.location.href);
     const r = mx.getRoom(roomID);
     if (r) {
