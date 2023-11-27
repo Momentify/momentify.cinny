@@ -9,37 +9,21 @@ import initMatrix from '../../../client/initMatrix';
 import cons from '../../../client/state/cons';
 import navigation from '../../../client/state/navigation';
 import {
-  toggleRoomSettings,
-  openReusableContextMenu,
-  openNavigation
 } from '../../../client/action/navigation';
-import colorMXID from '../../../util/colorMXID';
-import { getEventCords } from '../../../util/common';
 
-import { tabText } from './RoomSettings';
 import Text from '../../atoms/text/Text';
-import RawIcon from '../../atoms/system-icons/RawIcon';
 import IconButton from '../../atoms/button/IconButton';
 import Header, { TitleWrapper } from '../../atoms/header/Header';
-import Avatar from '../../atoms/avatar/Avatar';
-import RoomOptions from '../../molecules/room-options/RoomOptions';
 
-import ChevronBottomIC from '../../../../public/res/ic/outlined/chevron-bottom.svg';
-import SearchIC from '../../../../public/res/ic/outlined/search.svg';
-import UserIC from '../../../../public/res/ic/outlined/user.svg';
-import VerticalMenuIC from '../../../../public/res/ic/outlined/vertical-menu.svg';
 import BackArrowIC from '../../../../public/res/ic/outlined/chevron-left.svg';
 
 import { useForceUpdate } from '../../hooks/useForceUpdate';
-import { useSetSetting } from '../../state/hooks/settings';
-import { settingsAtom } from '../../state/settings';
 
 function RoomViewHeader({ roomId }) {
   const [, forceUpdate] = useForceUpdate();
   const mx = initMatrix.matrixClient;
   const isDM = initMatrix.roomList.directs.has(roomId);
   const room = mx.getRoom(roomId);
-  const setPeopleDrawer = useSetSetting(settingsAtom, 'isPeopleDrawer');
   let avatarSrc = room.getAvatarUrl(mx.baseUrl, 36, 36, 'crop');
   avatarSrc = isDM
     ? room.getAvatarFallbackMember()?.getAvatarUrl(mx.baseUrl, 36, 36, 'crop')
@@ -71,12 +55,6 @@ function RoomViewHeader({ roomId }) {
     };
   }, [roomId]);
 
-  const openRoomOptions = (e) => {
-    openReusableContextMenu('bottom', getEventCords(e, '.ic-btn'), (closeMenu) => (
-      <RoomOptions roomId={roomId} afterOptionSelect={closeMenu} />
-    ));
-  };
-
   return (
     <Header>
       <IconButton
@@ -84,8 +62,8 @@ function RoomViewHeader({ roomId }) {
         className="room-header__back-btn"
         tooltip="Return to previous page"
         onClick={() => {
+          window.history.go(-1);
           initMatrix.stopClient();
-          window.history.back();
         }}
       />
       <button
