@@ -182,3 +182,11 @@ export function openEmojiVerification(request, targetDevice) {
     targetDevice,
   });
 }
+
+const cinnyEventTriggers = Object.assign({}, {
+  openPublicRooms,
+  openCreateRoom,
+  openJoinAlias
+});
+
+export default cinnyEventTriggers;

@@ -103,10 +103,10 @@ async function join(roomIdOrAlias, isDM = false, via = undefined) {
   try {
     const resultRoom = await mx.joinRoom(roomIdOrAlias, { viaServers });
 
-    if (isDM) {
-      const targetUserId = guessDMRoomTargetId(mx.getRoom(resultRoom.roomId), mx.getUserId());
-      await addRoomToMDirect(resultRoom.roomId, targetUserId);
-    }
+    // if (isDM) {
+    //   const targetUserId = guessDMRoomTargetId(mx.getRoom(resultRoom.roomId), mx.getUserId());
+    //   await addRoomToMDirect(resultRoom.roomId, targetUserId);
+    // }
     appDispatcher.dispatch({
       type: cons.actions.room.JOIN,
       roomId: resultRoom.roomId,
@@ -142,9 +142,9 @@ async function create(options, isDM = false) {
   const mx = initMatrix.matrixClient;
   try {
     const result = await mx.createRoom(options);
-    if (isDM && typeof options.invite?.[0] === 'string') {
-      await addRoomToMDirect(result.room_id, options.invite[0]);
-    }
+    // if (isDM && typeof options.invite?.[0] === 'string') {
+    //   await addRoomToMDirect(result.room_id, options.invite[0]);
+    // }
     appDispatcher.dispatch({
       type: cons.actions.room.CREATE,
       roomId: result.room_id,
@@ -355,3 +355,11 @@ export {
   setPowerLevel,
   setMyRoomNick, setMyRoomAvatar,
 };
+
+const CinnyRoomActions = Object.assign({}, {
+  createRoom,
+  create,
+  join
+})
+
+export default CinnyRoomActions
