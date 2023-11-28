@@ -2,8 +2,8 @@ import React, { useState, useEffect } from 'react';
 
 import initMatrix from '../../../client/initMatrix';
 import { RoomBaseView } from '../../organisms/room/Room';
-import Welcome from '../../organisms/welcome/Welcome';
 import { extractRoomIDFromURL } from '../../utils/RoomGetter';
+import LoadingRoom from '../../organisms/loading-room/LoadingRoom';
 
 export default function ClientContent() {
   const [roomInfo, setRoomInfo] = useState({
@@ -31,7 +31,7 @@ export default function ClientContent() {
   const { room, eventId } = roomInfo;
 
   if (!room) {
-    return <Welcome />;
+    return <LoadingRoom />;
   }
 
   return <RoomBaseView room={room} eventId={eventId} data-testid="room-base-view.component" />;
