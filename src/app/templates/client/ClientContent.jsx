@@ -5,7 +5,7 @@ import cons from '../../../client/state/cons';
 import navigation from '../../../client/state/navigation';
 import { openNavigation } from '../../../client/action/navigation';
 
-import Welcome from '../../organisms/welcome/Welcome';
+import Welcome from '../../organisms/loading-room/LoadingRoom';
 import { RoomBaseView } from '../../organisms/room/Room';
 
 export function ClientContent() {
