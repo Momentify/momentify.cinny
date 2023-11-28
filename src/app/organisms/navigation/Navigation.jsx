@@ -8,7 +8,7 @@ function Navigation() {
   return (
     <div className="navigation">
       {/* <SideBar /> */}
-      <Drawer />
+      {/* <Drawer /> */}
     </div>
   );
 }
