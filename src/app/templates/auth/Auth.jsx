@@ -816,7 +816,7 @@ function Auth() {
   );
 }
 
-function LoadingScreen({ message }) {
+export function LoadingScreen({ message }) {
   return (
     <ProcessWrapper>
       <Spinner />
