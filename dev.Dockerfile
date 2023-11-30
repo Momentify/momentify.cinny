@@ -12,4 +12,4 @@ RUN npm run build
 
 EXPOSE 5001
 
-CMD [ "npm", "rebuild", "esbuild", "&&", "npm", "run", "preview"]
+CMD ["bash", "-c", "npm rebuild esbuild && npm run preview"]
