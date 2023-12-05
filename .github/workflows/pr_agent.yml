@@ -1,0 +1,23 @@
+name: AI Reviewer
+
+on:
+    pull_request:
+        branches:
+            - staging
+    issue_comment:
+
+jobs:
+    pr_agent_job:
+        runs-on: ubuntu-latest
+        permissions:
+            issues: write
+            pull-requests: write
+            contents: write
+        name: Run PR Agent, responds to user comments
+        steps:
+            - name: PR Agent action step
+              id: pragent
+              uses: Codium-ai/pr-agent@main
+              env:
+                OPENAI_KEY: ${{ secrets.OPENAI_KEY }}
+                GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
