@@ -51,7 +51,7 @@ class Notifications extends EventEmitter {
     this._listenEvents();
 
     // Ask for permission by default after loading
-    window.Notification?.requestPermission();
+    // window.Notification?.requestPermission();
   }
 
   async _initNoti() {
