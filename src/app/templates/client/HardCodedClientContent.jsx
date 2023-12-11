@@ -4,6 +4,10 @@ import initMatrix from '../../../client/initMatrix';
 import { RoomBaseView } from '../../organisms/room/Room';
 import { extractRoomIDFromURL } from '../../utils/RoomGetter';
 import LoadingRoom from '../../organisms/loading-room/LoadingRoom';
+import cons from '../../../client/state/cons';
+import { getSecret } from '../../../client/state/auth';
+import { GoBackScreen } from '../auth/Auth';
+import { getRoomByRoomAddress } from '../../../util/matrixUtil';
 
 export default function ClientContent() {
   const [roomInfo, setRoomInfo] = useState({
@@ -11,12 +15,40 @@ export default function ClientContent() {
     eventId: null
   });
 
+  const [roomName, setRoomName] = useState(null);
+  const [hasDbRecord, setHasDbRecord] = useState(false);
+
+  const { ACCESS_TOKEN } = cons.secretKey;
+  const currentAccessToken = getSecret(ACCESS_TOKEN)
+
   const mx = initMatrix.matrixClient;  
   useEffect(() => {
-    const roomID = extractRoomIDFromURL(window.location.href);
-    const r = mx.getRoom(roomID);
-    if (r) {
-      setRoomInfo({
+    const roomIDParam = extractRoomIDFromURL(window.location.href);    
+    // const roomIDParam = "!kcfwHVpVfyQIzXGYiu:staging-matrix.momentify.xyz"
+    // const roomIDParam = "!dECNrroBrwilpPGWFr:staging-matrix.momentify.xyz"    
+    const r = mx.getRoom(roomIDParam);
+    getRoomByRoomAddress(currentAccessToken, r?.roomId ?? '').then(res => {
+      if (r && res.room_name) {
+        setRoomName(res.room_name)
+        // setRoomName('tetetest')
+        setHasDbRecord(true)      
+      } else if (r && !res.room_name) {
+        setRoomName(r.name)
+        // setRoomName('tetetest2')
+        setHasDbRecord(false)      
+      } else {
+        setRoomName(false)      
+      }
+    })
+  }, [mx]);
+
+
+  useEffect(() => {
+    const roomIDParam = extractRoomIDFromURL(window.location.href);    
+    const r = mx.getRoom(roomIDParam); //storeRoom
+    if (r && roomName) {
+      r.name = roomName
+      setRoomInfo({        
         room: r,
         eventId: null
       });
@@ -26,12 +58,16 @@ export default function ClientContent() {
         eventId: null
       });
     }
-  }, [mx]);
+  }, [mx, roomName]);
 
   const { room, eventId } = roomInfo;
 
   if (!room) {
     return <LoadingRoom />;
+  }
+
+  if (!hasDbRecord) {
+    return <GoBackScreen message='Something went wrong. Please go back and try again'/>;
   }
 
   return <RoomBaseView room={room} eventId={eventId} data-testid="room-base-view.component" />;

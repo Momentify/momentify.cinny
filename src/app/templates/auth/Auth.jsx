@@ -25,6 +25,7 @@ import EyeIC from '../../../../public/res/ic/outlined/eye.svg';
 import EyeBlindIC from '../../../../public/res/ic/outlined/eye-blind.svg';
 import CinnySvg from '../../../../public/res/svg/cinny.svg';
 import SSOButtons from '../../molecules/sso-buttons/SSOButtons';
+import BackArrowIC from '../../../../public/res/ic/outlined/chevron-left.svg';
 
 const LOCALPART_SIGNUP_REGEX = /^[a-z0-9_\-.=/]+$/;
 const BAD_LOCALPART_ERROR = "Username can only contain characters a-z, 0-9, or '=_-./'";
@@ -86,6 +87,7 @@ function Homeserver({ onChange }) {
 
   useEffect(() => {
     onChange(null);
+    // if (hs === null || hs?.selected?.trim() === '') return;
     if (hs === null || hs?.selected.trim() === '') return;
     searchingHs = hs.selected;
     setupHsConfig(hs.selected);
@@ -185,7 +187,7 @@ function Login({ loginFlow, baseUrl }) {
   const ssoProviders = loginFlow?.filter((flow) => flow.type === 'm.login.sso')[0];
 
   const initialValues = {
-    username: 'test1',
+    username: 'admin',
     password: 'Password123.',
     email: '',
     other: ''
@@ -827,6 +829,27 @@ export function LoadingScreen({ message }) {
   );
 }
 LoadingScreen.propTypes = {
+  message: PropTypes.string.isRequired
+};
+export function GoBackScreen({ message }) {
+  return (
+    <ProcessWrapper>      
+      <div style={{ marginTop: 'var(--sp-normal)', display: 'flex', alignItems: 'center', gap: '10px' }}>
+      <IconButton
+        src={BackArrowIC}        
+        tooltip="Return to previous page"
+        onClick={() => {
+          window.history.go(-1);
+          initMatrix.stopClient();
+        }}
+        style
+      />
+      <Text variant="b1">{message}</Text>
+      </div>
+    </ProcessWrapper>
+  );
+}
+GoBackScreen.propTypes = {
   message: PropTypes.string.isRequired
 };
 
