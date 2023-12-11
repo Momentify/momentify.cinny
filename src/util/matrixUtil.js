@@ -221,3 +221,34 @@ export async function hasDevices(userId) {
     return false;
   }
 }
+
+export async function fetchJoinedRooms(userId) {  
+  const mx = initMatrix.matrixClient;
+  try {
+		const result = await fetch(`${mx.baseUrl}/_matrix/client/v3/joined_rooms`, {
+			method: 'GET',
+			headers: {
+				Authorization: `Bearer ${userId}`,
+				"Content-Type": 'application/json'
+			}
+		}).then(res => res.json())
+    return new Set(result?.joined_rooms) ?? initMatrix?.roomList?.rooms ?? []
+  } catch (error) {
+    console.error('fetchJoinedRoomsErr', error)
+  }
+}
+
+export async function getRoomByRoomAddress(accessToken, roomAddress) {
+  try {
+      const result = await fetch(`${import.meta.env.VITE_API_URL}/matrix/rooms/${roomAddress}?matrixAuthToken=${accessToken}`, {
+          method: "GET",
+          headers: {
+          "Content-Type": "application/json",
+          }
+      });
+
+      return result.json();
+  } catch (err) {
+      console.error({ getRoomByRoomAddressError: err });
+  }
+}
