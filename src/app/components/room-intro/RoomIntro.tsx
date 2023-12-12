@@ -48,17 +48,17 @@ export const RoomIntro = as<'div', RoomIntroProps>(({ room, ...props }, ref) => 
       </Box>
       <Box direction="Column" gap="300">
         <Box direction="Column" gap="100">
-          <Text size="H3" priority="500">
+          {/* <Text size="H3" priority="500">
             {name}
-          </Text>
+          </Text> */}
           <Text size="T400" priority="400">
             {typeof topic === 'string' ? topic : 'This is the beginning of conversation.'}
           </Text>
           {creatorName && ts && (
             <Text size="T200" priority="300">
-              {'Created by '}
-              <b>@{creatorName}</b>
-              {` on ${timeDayMonthYear(ts)} ${timeHourMinute(ts)}`}
+              {/* {'Created by '}
+              <b>@{creatorName}</b> */}
+              {`Created on ${timeDayMonthYear(ts)} ${timeHourMinute(ts)}`}
             </Text>
           )}
         </Box>
