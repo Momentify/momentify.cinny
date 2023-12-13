@@ -30,7 +30,7 @@ export default function ClientContent() {
       if (r && res?.room_name) {
         setRoomName(res.room_name)
         setHasDbRecord(true)      
-      } else if (r && !res.room_name) {
+      } else if (r && !res?.room_name) {
         setRoomName(r.name)
         setHasDbRecord(false)      
       } else {
