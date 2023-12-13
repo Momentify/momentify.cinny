@@ -239,7 +239,8 @@ export async function fetchJoinedRooms(userId) {
 }
 
 export async function getRoomByRoomAddress(accessToken, roomAddress) {
-  try {
+  if(!roomAddress) return false
+  try {      
       const result = await fetch(`${import.meta.env.VITE_API_URL}/matrix/rooms/${roomAddress}?matrixAuthToken=${accessToken}`, {
           method: "GET",
           headers: {

@@ -25,16 +25,13 @@ export default function ClientContent() {
   useEffect(() => {
     const roomIDParam = extractRoomIDFromURL(window.location.href);    
     // const roomIDParam = "!kcfwHVpVfyQIzXGYiu:staging-matrix.momentify.xyz"
-    // const roomIDParam = "!dECNrroBrwilpPGWFr:staging-matrix.momentify.xyz"    
     const r = mx.getRoom(roomIDParam);
-    getRoomByRoomAddress(currentAccessToken, r?.roomId ?? '').then(res => {
-      if (r && res.room_name) {
+    getRoomByRoomAddress(currentAccessToken, r?.roomId ?? null).then(res => {
+      if (r && res?.room_name) {
         setRoomName(res.room_name)
-        // setRoomName('tetetest')
         setHasDbRecord(true)      
-      } else if (r && !res.room_name) {
+      } else if (r && !res?.room_name) {
         setRoomName(r.name)
-        // setRoomName('tetetest2')
         setHasDbRecord(false)      
       } else {
         setRoomName(false)      
