@@ -5,16 +5,16 @@ import { LoadingScreen } from '../../templates/auth/Auth';
 
 function LoadingRoom() {
 
-  React.useEffect(() => {
+  // React.useEffect(() => {
     // Set Timeout to show reload button after 3 seconds
-    const timeout = setTimeout(() => window.location.reload(), 3000);
-    return () => clearTimeout(timeout);
-  }
-  , []);
+    // const timeout = setTimeout(() => window.location.reload(), 3000);
+    // return () => clearTimeout(timeout);
+  // }
+  // , []);
 
   return (
     <div className="app-welcome flex--center">
-      <LoadingScreen message='Please wait while we set up the pre-event chat room!' />
+      <LoadingScreen message='Please wait while we set up the chat room...' />
     </div>
   );
 }

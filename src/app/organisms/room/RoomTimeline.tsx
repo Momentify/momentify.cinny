@@ -885,7 +885,8 @@ export function RoomTimeline({ room, eventId, roomInputRef, editor }: RoomTimeli
         console.warn('Button should have "data-user-id" attribute!');
         return;
       }
-      openProfileViewer(userId, room.roomId);
+      // TODO: replace with navigate to user profile
+      openProfileViewer(userId, room.roomId);      
     },
     [room]
   );

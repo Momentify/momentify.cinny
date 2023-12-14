@@ -305,7 +305,8 @@ export const getMemberSearchStr = (
 
 export const getMemberAvatarMxc = (room: Room, userId: string): string | undefined => {
   const member = room.getMember(userId);
-  return member?.getMxcAvatarUrl();
+  // return member?.getMxcAvatarUrl();
+  return member?.getAvatarUrl(room.client.baseUrl, 48, 48, 'scale', true, true) ?? '';
 };
 
 export const isMembershipChanged = (mEvent: MatrixEvent): boolean =>
