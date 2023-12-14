@@ -201,10 +201,6 @@ function Login({ loginFlow, baseUrl }) {
     return errors;
   };
   const submitter = async (values, actions) => {
-    console.log({
-      values,
-      actions
-    });
     let userBaseUrl = baseUrl;
     let { username } = values;
     const mxIdMatch = username.match(/^@(.+):(.+\..+)$/);

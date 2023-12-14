@@ -18,6 +18,7 @@ import Header, { TitleWrapper } from '../../atoms/header/Header';
 import BackArrowIC from '../../../../public/res/ic/outlined/chevron-left.svg';
 
 import { useForceUpdate } from '../../hooks/useForceUpdate';
+import BackButton from '../../../momentify/BackButton';
 
 function RoomViewHeader({ roomId }) {
   const [, forceUpdate] = useForceUpdate();
@@ -29,7 +30,6 @@ function RoomViewHeader({ roomId }) {
     ? room.getAvatarFallbackMember()?.getAvatarUrl(mx.baseUrl, 36, 36, 'crop')
     : avatarSrc;
   const roomName = room.name;
-
   const roomHeaderBtnRef = useRef(null);
   useEffect(() => {
     const settingsToggle = (isVisibile) => {
@@ -57,7 +57,7 @@ function RoomViewHeader({ roomId }) {
 
   return (
     <Header>
-      <IconButton
+      {/* <IconButton
         src={BackArrowIC}
         className="room-header__back-btn"
         tooltip="Return to previous page"
@@ -65,7 +65,8 @@ function RoomViewHeader({ roomId }) {
           window.history.go(-1);
           initMatrix.stopClient();
         }}
-      />
+      /> */}
+      <BackButton className="room-header__back-btn" style={{marginRight: "15px"}}/>
       <button
         ref={roomHeaderBtnRef}
         className="room-header__btn"
