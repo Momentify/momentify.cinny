@@ -29,9 +29,9 @@ export function ClientContent() {
     const handleRoomSelected = (rId, pRoomId, eId) => {
       roomInfo.roomTimeline?.removeInternalListeners();
       const r = mx.getRoom(rId);
-      getRoomByRoomAddress(getSecret(cons.secretKey.ACCESS_TOKEN), r?.roomId ?? null).then(res => {
-        r.room_avatar = res?.event_image ?? null
+      getRoomByRoomAddress(getSecret(cons.secretKey.ACCESS_TOKEN), r?.roomId ?? null).then(res => {        
         if (r && !!res?.room_name) {
+          r.room_avatar = res?.event_image ?? null
           r.name = res?.room_event_name ?? res.room_name
           setRoomInfo({
             room: r,
@@ -39,6 +39,7 @@ export function ClientContent() {
           });
           setHasDbRecord(true)      
         } else if (r && !res?.room_name) {
+          r.room_avatar = res?.event_image ?? null
           setRoomInfo({
             room: r,
             eventId: eId ?? null,
