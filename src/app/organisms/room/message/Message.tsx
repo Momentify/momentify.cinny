@@ -613,6 +613,7 @@ export const Message = as<'div', MessageProps>(
     const [menu, setMenu] = useState(false);
     const [emojiBoard, setEmojiBoard] = useState(false);
 
+    // TODO: handler missing profile import ImageBrokenSVG from '../../../../public/res/svg/image-broken.svg';
     const senderDisplayName =
       getMemberDisplayName(room, senderId) ?? getMxIdLocalPart(senderId) ?? senderId;
     const senderAvatarMxc = getMemberAvatarMxc(room, senderId);
@@ -664,7 +665,7 @@ export const Message = as<'div', MessageProps>(
         >
           {senderAvatarMxc ? (
             <AvatarImage
-              src={mx.mxcUrlToHttp(senderAvatarMxc, 48, 48, 'crop') ?? senderAvatarMxc}
+              src={senderAvatarMxc}
             />
           ) : (
             <AvatarFallback
