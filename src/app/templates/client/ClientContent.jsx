@@ -23,62 +23,75 @@ export function ClientContent() {
   });
 
   const [hasDbRecord, setHasDbRecord] = useState(true);
+  const [hasRoomInCache, setHasRoomInCache] = useState(true);
   const mx = initMatrix.matrixClient;
-  
+
+  useEffect(() => {
+    const roomIDParam = extractRoomIDFromURL(window.location.href) ?? '';
+    return () => {
+      getRoomByRoomAddress(getSecret(cons.secretKey.ACCESS_TOKEN), roomIDParam ?? null)
+        .then(dbRoom => {
+          if(!dbRoom?.room_address || !dbRoom?.room_name) {
+            setHasDbRecord(false)
+            return
+          }        
+          roomActions.join(dbRoom.room_address)
+            .then(res => {              
+              selectRoom(res);
+            })
+            .catch(err => {
+              setHasDbRecord(false)
+              console.error('roomActions.join.error', err)
+            })
+        })
+        .catch(err => {
+          setHasDbRecord(false)
+          console.error('getRoomByRoomAddress.error', err)
+        })
+    }
+  }, [hasRoomInCache])
+
+
   useEffect(() => {
     const handleRoomSelected = (rId, pRoomId, eId) => {
       roomInfo.roomTimeline?.removeInternalListeners();
       const r = mx.getRoom(rId);
-      getRoomByRoomAddress(getSecret(cons.secretKey.ACCESS_TOKEN), r?.roomId ?? null).then(res => {        
-        if (r && !!res?.room_name) {
-          r.room_avatar = res?.event_image ?? null
-          r.name = res?.room_event_name ?? res.room_name
-          setRoomInfo({
-            room: r,
-            eventId: eId ?? null,
-          });
-          setHasDbRecord(true)      
-        } else if (r && !res?.room_name) {
-          r.room_avatar = res?.event_image ?? null
-          setRoomInfo({
-            room: r,
-            eventId: eId ?? null,
-          });
-          setHasDbRecord(false)      
-        } else {
-          setRoomInfo({
-            room: null,
-            eventId: null,
-          });
-          setHasDbRecord(false) 
-        }      
-      })
+      if(!r) {
+        setHasRoomInCache(false)
+      }
+      getRoomByRoomAddress(getSecret(cons.secretKey.ACCESS_TOKEN), r?.roomId ?? null)
+        .then(res => {
+          // console.log('trigger', res) // Reminder: don't remove this console.log
+          if (r && !!res?.room_name) {
+            r.room_avatar = res?.event_image ?? null
+            r.name = res?.room_event_name ?? res.room_name ?? r.name
+            setRoomInfo({
+              room: r,
+              eventId: eId ?? null,
+            });                
+          } else if (r && !res?.room_name) {
+            r.room_avatar = res?.event_image ?? null
+            setRoomInfo({
+              room: r,
+              eventId: eId ?? null,
+            });          
+          } else {
+            setRoomInfo({
+              room: null,
+              eventId: null,
+            });
+          }      
+        })
+        .catch(err => {
+          setHasDbRecord(false)
+          console.error('getRoomByRoomAddress.error', err)
+        })
     };
-
     navigation.on(cons.events.navigation.ROOM_SELECTED, handleRoomSelected);
     return () => {
       navigation.removeListener(cons.events.navigation.ROOM_SELECTED, handleRoomSelected);
     };
   }, [roomInfo, mx]);
-
-  useEffect(() => {
-    const roomIDParam = extractRoomIDFromURL(window.location.href) ?? '!kcfwHVpVfyQIzXGYiu:staging-matrix.momentify.xyz';
-    setTimeout(() => {
-      getRoomByRoomAddress(getSecret(cons.secretKey.ACCESS_TOKEN), roomIDParam ?? null).then(dbRoom => {
-       if(!!dbRoom.room_address) {
-        setHasDbRecord(true)
-        roomActions.join(dbRoom.room_address).then(res => {
-          selectRoom(res);
-        }).catch(err => {
-          setHasDbRecord(false)
-          console.error('roomActions.join.error', err)
-        })
-       } else {
-        setHasDbRecord(false)
-       }
-      })
-    })
-  }, [])
 
   const { room, eventId } = roomInfo;
 
