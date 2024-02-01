@@ -19,13 +19,15 @@ import BackArrowIC from '../../../../public/res/ic/outlined/chevron-left.svg';
 
 import { useForceUpdate } from '../../hooks/useForceUpdate';
 import BackButton from '../../../momentify/BackButton';
+import Avatar from '../../atoms/avatar/Avatar';
+import colorMXID from '../../../util/colorMXID';
 
 function RoomViewHeader({ roomId }) {
   const [, forceUpdate] = useForceUpdate();
   const mx = initMatrix.matrixClient;
   const isDM = initMatrix.roomList.directs.has(roomId);
   const room = mx.getRoom(roomId);
-  let avatarSrc = room.getAvatarUrl(mx.baseUrl, 36, 36, 'crop');
+  let avatarSrc = room.getAvatarUrl(mx.baseUrl, 50, 50, 'crop') ??  room.room_avatar
   avatarSrc = isDM
     ? room.getAvatarFallbackMember()?.getAvatarUrl(mx.baseUrl, 36, 36, 'crop')
     : avatarSrc;

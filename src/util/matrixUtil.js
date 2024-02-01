@@ -253,3 +253,23 @@ export async function getRoomByRoomAddress(accessToken, roomAddress) {
       console.error({ getRoomByRoomAddressError: err });
   }
 }
+
+export async function setJoinedRoom(roomId, userMxId) {
+  if(!roomId || !userMxId) return false
+  try {      
+      const result = await fetch(`${import.meta.env.VITE_API_URL}/matrix/room/join`, {
+          method: "POST",
+          headers: {
+          "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            room_id: roomId,
+            user_mx_id: userMxId
+          })
+      });
+
+      return result.json();
+  } catch (err) {
+      console.error({ setJoinedRoomError: err });
+  }
+}
