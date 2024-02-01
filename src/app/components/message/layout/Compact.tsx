@@ -8,7 +8,7 @@ type CompactLayoutProps = {
 
 export const CompactLayout = as<'div', CompactLayoutProps>(
   ({ before, children, ...props }, ref) => (
-    <Box gap="200" {...props} ref={ref}>
+    <Box gap="200" {...props} ref={ref} className={'room_message_zed'}>
       <Box className={css.CompactHeader} gap="200" shrink="No">
         {before}
       </Box>
