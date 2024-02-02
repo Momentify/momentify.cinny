@@ -11,7 +11,7 @@ import { RoomBaseView } from '../../organisms/room/Room';
 import * as roomActions from '../../../client/action/room';
 import { extractRoomIDFromURL, extractRoomIDFromURLWithoutParam } from '../../utils/RoomGetter';
 import ErrorPage from '../../../momentify/ErrorPage';
-import { getRoomByRoomAddress } from '../../../util/matrixUtil';
+import { getRoomByRoomAddress, setJoinedRoom } from '../../../util/matrixUtil';
 import { getSecret } from '../../../client/state/auth';
 import { getStateEvent } from '../../utils/room';
 import { StateEvent } from '../../../types/matrix/room';
@@ -102,6 +102,14 @@ export function ClientContent() {
   if (!room) {
     setTimeout(() => openNavigation());
     return <Welcome />;    
+  }
+
+  if(extractRoomIDFromURL(window.location.href) == room.roomId) {
+    setJoinedRoom(room.roomId, room.myUserId).then(res => {
+      console.log('setJoinedRoomSuccess', res)
+    }).catch(err => {
+      console.error('setJoinedRoomError', err)
+    })
   }
 
   return <RoomBaseView room={room} eventId={eventId} />;
