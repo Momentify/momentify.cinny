@@ -29,7 +29,7 @@ export default function BackButton({className, ...props}) {
     //  style={{...Button}}
     // />
 
-    <IconButton variant="Surface" size="300" onClick={handleOnClick} style={{...Button}} {...props}>
+    <IconButton className={className} variant="Surface" size="300" onClick={handleOnClick} style={{...Button}} {...props}>
       <Icon src={Icons.ArrowLeft} />
     </IconButton>
   )

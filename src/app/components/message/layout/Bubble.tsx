@@ -7,11 +7,11 @@ type BubbleLayoutProps = {
 };
 
 export const BubbleLayout = as<'div', BubbleLayoutProps>(({ before, children, ...props }, ref) => (
-  <Box gap="300" {...props} ref={ref}>
+  <Box gap="300" {...props} ref={ref} className={'room_message_zed'}>
     <Box className={css.BubbleBefore} shrink="No">
       {before}
     </Box>
-    <Box className={css.BubbleContent} direction="Column">
+    <Box className={`${css.BubbleContent} room_message_den`} direction="Column">
       {children}
     </Box>
   </Box>

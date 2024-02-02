@@ -386,7 +386,7 @@ export const RoomInput = forwardRef<HTMLDivElement, RoomInputProps>(
     };
 
     return (
-      <div ref={ref}>
+      <div ref={ref} className='app_roomInput'>
         {selectedFiles.length > 0 && (
           <UploadBoard
             header={

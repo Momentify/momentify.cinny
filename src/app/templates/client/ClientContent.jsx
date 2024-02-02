@@ -9,7 +9,7 @@ import Welcome from '../../organisms/loading-room/LoadingRoom';
 // import Welcome from '../../organisms/welcome/Welcome';
 import { RoomBaseView } from '../../organisms/room/Room';
 import * as roomActions from '../../../client/action/room';
-import { extractRoomIDFromURL } from '../../utils/RoomGetter';
+import { extractRoomIDFromURL, extractRoomIDFromURLWithoutParam } from '../../utils/RoomGetter';
 import ErrorPage from '../../../momentify/ErrorPage';
 import { getRoomByRoomAddress } from '../../../util/matrixUtil';
 import { getSecret } from '../../../client/state/auth';
@@ -27,7 +27,7 @@ export function ClientContent() {
   const mx = initMatrix.matrixClient;
 
   useEffect(() => {
-    const roomIDParam = extractRoomIDFromURL(window.location.href) ?? '';
+    const roomIDParam = extractRoomIDFromURL(window.location.href) ?? extractRoomIDFromURLWithoutParam(window.location.href) ?? '';
     return () => {
       getRoomByRoomAddress(getSecret(cons.secretKey.ACCESS_TOKEN), roomIDParam ?? null)
         .then(dbRoom => {
