@@ -254,8 +254,8 @@ export async function getRoomByRoomAddress(accessToken, roomAddress) {
   }
 }
 
-export async function setJoinedRoom(roomId, userMxId) {
-  if(!roomId || !userMxId) return false
+export async function setJoinedRoom(room_address, user_mx_id) {
+  if(!room_address || !user_mx_id) return false
   try {      
       const result = await fetch(`${import.meta.env.VITE_API_URL}/matrix/room/join`, {
           method: "POST",
@@ -263,8 +263,8 @@ export async function setJoinedRoom(roomId, userMxId) {
           "Content-Type": "application/json",
           },
           body: JSON.stringify({
-            room_id: roomId,
-            user_mx_id: userMxId
+            room_address: room_address,
+            user_mx_id: user_mx_id
           })
       });
 
