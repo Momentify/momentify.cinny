@@ -13,8 +13,6 @@ import { extractRoomIDFromURL, extractRoomIDFromURLWithoutParam } from '../../ut
 import ErrorPage from '../../../momentify/ErrorPage';
 import { getRoomByRoomAddress, setJoinedRoom } from '../../../util/matrixUtil';
 import { getSecret } from '../../../client/state/auth';
-import { getStateEvent } from '../../utils/room';
-import { StateEvent } from '../../../types/matrix/room';
 
 export function ClientContent() {
   const [roomInfo, setRoomInfo] = useState({
@@ -29,12 +27,26 @@ export function ClientContent() {
   useEffect(() => {
     const roomIDParam = extractRoomIDFromURL(window.location.href) ?? extractRoomIDFromURLWithoutParam(window.location.href) ?? '';
     return () => {
+      if(!roomIDParam) {
+        setHasDbRecord(false)
+        return
+      }
+
+      if(!hasRoomInCache) {
+        return
+      }
+
       getRoomByRoomAddress(getSecret(cons.secretKey.ACCESS_TOKEN), roomIDParam ?? null)
         .then(dbRoom => {
           if(!dbRoom?.room_address || !dbRoom?.room_name) {
             setHasDbRecord(false)
             return
           }        
+          setJoinedRoom(dbRoom.room_address, localStorage.getItem(cons.secretKey.USER_ID)).then(res => {
+            console.log('setJoinedRoomSuccess', res)
+          }).catch(err => {
+            console.error('setJoinedRoomError', err)
+          })  
           roomActions.join(dbRoom.room_address)
             .then(res => {              
               selectRoom(res);
@@ -42,7 +54,7 @@ export function ClientContent() {
             .catch(err => {
               setHasDbRecord(false)
               console.error('roomActions.join.error', err)
-            })
+            })          
         })
         .catch(err => {
           setHasDbRecord(false)
@@ -58,6 +70,11 @@ export function ClientContent() {
       const r = mx.getRoom(rId);
       if(!r) {
         setHasRoomInCache(false)
+        setRoomInfo({
+          room: null,
+          eventId: null,
+        });
+        return;
       }
       getRoomByRoomAddress(getSecret(cons.secretKey.ACCESS_TOKEN), r?.roomId ?? null)
         .then(res => {
@@ -102,14 +119,6 @@ export function ClientContent() {
   if (!room) {
     setTimeout(() => openNavigation());
     return <Welcome />;    
-  }
-
-  if(extractRoomIDFromURL(window.location.href) == room.roomId) {
-    setJoinedRoom(room.roomId, room.myUserId).then(res => {
-      console.log('setJoinedRoomSuccess', res)
-    }).catch(err => {
-      console.error('setJoinedRoomError', err)
-    })
   }
 
   return <RoomBaseView room={room} eventId={eventId} />;
