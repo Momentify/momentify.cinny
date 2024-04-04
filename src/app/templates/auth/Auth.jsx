@@ -818,22 +818,13 @@ function Auth() {
 export function LoadingScreen({ message }) {
   return (
     <ProcessWrapper>
+      <div style={{ position: "absolute", top: "16px", left: "16px" }}>
+        <BackButton />
+      </div>
       <Spinner />
       <div style={{ marginTop: 'var(--sp-normal)' }}>
         <Text variant="b1">{message}</Text>
       </div>
-      <IconButton
-        src={BackArrowIC}        
-        tooltip="Return to previous page"
-        onClick={() => {
-          window.history.go(-1);
-          initMatrix.stopClient();
-        }}
-        style
-      />
-      {/* <div style={{ marginTop: '25px' }}>
-        <BackButton />
-      </div> */}
     </ProcessWrapper>
   );
 }
