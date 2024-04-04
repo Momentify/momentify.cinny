@@ -26,6 +26,7 @@ import EyeBlindIC from '../../../../public/res/ic/outlined/eye-blind.svg';
 import CinnySvg from '../../../../public/res/svg/cinny.svg';
 import SSOButtons from '../../molecules/sso-buttons/SSOButtons';
 import BackArrowIC from '../../../../public/res/ic/outlined/chevron-left.svg';
+import BackButton from '../../../momentify/BackButton';
 
 const LOCALPART_SIGNUP_REGEX = /^[a-z0-9_\-.=/]+$/;
 const BAD_LOCALPART_ERROR = "Username can only contain characters a-z, 0-9, or '=_-./'";
@@ -821,6 +822,18 @@ export function LoadingScreen({ message }) {
       <div style={{ marginTop: 'var(--sp-normal)' }}>
         <Text variant="b1">{message}</Text>
       </div>
+      <IconButton
+        src={BackArrowIC}        
+        tooltip="Return to previous page"
+        onClick={() => {
+          window.history.go(-1);
+          initMatrix.stopClient();
+        }}
+        style
+      />
+      {/* <div style={{ marginTop: '25px' }}>
+        <BackButton />
+      </div> */}
     </ProcessWrapper>
   );
 }
