@@ -26,6 +26,7 @@ import EyeBlindIC from '../../../../public/res/ic/outlined/eye-blind.svg';
 import CinnySvg from '../../../../public/res/svg/cinny.svg';
 import SSOButtons from '../../molecules/sso-buttons/SSOButtons';
 import BackArrowIC from '../../../../public/res/ic/outlined/chevron-left.svg';
+import BackButton from '../../../momentify/BackButton';
 
 const LOCALPART_SIGNUP_REGEX = /^[a-z0-9_\-.=/]+$/;
 const BAD_LOCALPART_ERROR = "Username can only contain characters a-z, 0-9, or '=_-./'";
@@ -817,6 +818,9 @@ function Auth() {
 export function LoadingScreen({ message }) {
   return (
     <ProcessWrapper>
+      <div style={{ position: "absolute", top: "16px", left: "16px" }}>
+        <BackButton />
+      </div>
       <Spinner />
       <div style={{ marginTop: 'var(--sp-normal)' }}>
         <Text variant="b1">{message}</Text>
