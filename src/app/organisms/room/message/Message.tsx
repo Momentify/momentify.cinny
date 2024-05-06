@@ -664,9 +664,7 @@ export const Message = as<'div', MessageProps>(
           // onClick={onUserClick}
         >
           {senderAvatarMxc ? (
-            <AvatarImage
-              src={senderAvatarMxc}
-            />
+            <AvatarImage src={senderAvatarMxc} />
           ) : (
             <AvatarFallback
               style={{
@@ -786,7 +784,7 @@ export const Message = as<'div', MessageProps>(
                     variant="SurfaceVariant"
                     size="300"
                     radii="300"
-                    className='room_message_edit_btn'
+                    className="room_message_edit_btn"
                   >
                     <Icon src={Icons.Pencil} size="100" />
                   </IconButton>
@@ -936,18 +934,30 @@ export const Message = as<'div', MessageProps>(
           </div>
         )}
         {messageLayout === 1 && (
-          <CompactLayout before={headerJSX} onContextMenu={handleContextMenu} className={'room_message_block_compact'}>
+          <CompactLayout
+            before={headerJSX}
+            onContextMenu={handleContextMenu}
+            className="room_message_block_compact"
+          >
             {msgContentJSX}
           </CompactLayout>
         )}
         {messageLayout === 2 && (
-          <BubbleLayout before={avatarJSX} onContextMenu={handleContextMenu} className={'room_message_block_bubble'}>
+          <BubbleLayout
+            before={avatarJSX}
+            onContextMenu={handleContextMenu}
+            className="room_message_block_bubble"
+          >
             {headerJSX}
             {msgContentJSX}
           </BubbleLayout>
         )}
         {messageLayout !== 1 && messageLayout !== 2 && (
-          <ModernLayout before={avatarJSX} onContextMenu={handleContextMenu} className={'room_message_block_modern'}>
+          <ModernLayout
+            before={avatarJSX}
+            onContextMenu={handleContextMenu}
+            className="room_message_block_modern"
+          >
             {headerJSX}
             {msgContentJSX}
           </ModernLayout>

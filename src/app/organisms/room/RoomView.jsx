@@ -70,7 +70,7 @@ function RoomView({ room, eventId }) {
           <RoomViewTyping room={room} />
         </div>
         <div className="room-view__sticky">
-          <div className="room-view__editor">
+          <div className="room-view__editor" data-testid="room-view-editor">
             {tombstoneEvent ? (
               <RoomTombstone
                 roomId={roomId}

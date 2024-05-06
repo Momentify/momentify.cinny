@@ -31,5 +31,9 @@ export const AutocompleteMenu = style([
 
 export const AutocompleteMenuHeader = style([
   DefaultReset,
-  { padding: `0 ${config.space.S300}`, flexShrink: 0 },
+  {
+    padding: `0 ${config.space.S300}`,
+    flexShrink: 0,
+    justifyContent: 'space-between',
+  },
 ]);
