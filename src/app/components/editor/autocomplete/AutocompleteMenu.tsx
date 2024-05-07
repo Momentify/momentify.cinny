@@ -35,7 +35,7 @@ export function AutocompleteMenu({ headerContent, requestClose, children }: Auto
             isKeyBackward: (evt: KeyboardEvent) => isKeyHotkey('arrowup', evt),
           }}
         >
-          <Menu className={css.AutocompleteMenu} style={{ justifyContent: 'space-between' }}>
+          <Menu className={css.AutocompleteMenu}>
             <Header className={css.AutocompleteMenuHeader} size="400">
               {headerContent}
               <IconButton onClick={requestClose}>

@@ -9,6 +9,7 @@ import React, {
   useMemo,
   useRef,
   useState,
+  useLayoutEffect,
 } from 'react';
 import { useAtom } from 'jotai';
 import { isKeyHotkey } from 'is-hotkey';
@@ -389,7 +390,7 @@ export const RoomInput = forwardRef<HTMLDivElement, RoomInputProps>(
       });
     };
 
-    React.useLayoutEffect(() => {
+    useLayoutEffect(() => {
       // @ts-ignore
       if (ref?.current && autocompleteQuery) {
         const elementHeights =
