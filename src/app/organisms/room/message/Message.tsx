@@ -30,7 +30,10 @@ import React, {
   ReactNode,
   useCallback,
   useState,
+  useLayoutEffect,
+  KeyboardEventHandler,
 } from 'react';
+import { isKeyHotkey } from 'is-hotkey';
 import FocusTrap from 'focus-trap-react';
 import { useHover, useFocusWithin } from 'react-aria';
 import { MatrixEvent, Room } from 'matrix-js-sdk';
@@ -713,6 +716,31 @@ export const Message = as<'div', MessageProps>(
       setMenu(false);
     };
 
+    const handleKeyUp: KeyboardEventHandler = useCallback(
+      (evt) => {
+        if (isKeyHotkey('escape', evt)) {
+          setEmojiBoard(false);
+          setHover(false);
+          closeMenu();
+          evt.preventDefault();
+        }
+      },
+      [setEmojiBoard, setHover]
+    );
+
+    useLayoutEffect(() => {
+      if (emojiBoard) {
+        document.addEventListener('keyup', (e) => {
+          handleKeyUp(e);
+        });
+      }
+      return () => {
+        document.removeEventListener('keyup', (e) => {
+          handleKeyUp(e);
+        });
+      };
+    }, [emojiBoard, handleKeyUp]);
+
     return (
       <MessageBase
         className={classNames(css.MessageBase, className)}
@@ -730,12 +758,16 @@ export const Message = as<'div', MessageProps>(
           <div className={css.MessageOptionsBase}>
             <Menu className={css.MessageOptionsBar} variant="SurfaceVariant">
               <Box gap="100">
-                {/* {canSendReaction && (
+                {canSendReaction && (
                   <PopOut
                     alignOffset={-65}
                     position="Bottom"
                     align="End"
                     open={emojiBoard}
+                    onClick={() => {
+                      setEmojiBoard(false);
+                      closeMenu();
+                    }}
                     content={
                       <EmojiBoard
                         imagePackRooms={imagePackRooms ?? []}
@@ -768,7 +800,7 @@ export const Message = as<'div', MessageProps>(
                       </IconButton>
                     )}
                   </PopOut>
-                )} */}
+                )}
                 <IconButton
                   onClick={onReplyClick}
                   data-event-id={mEvent.getId()}
