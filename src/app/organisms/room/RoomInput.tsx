@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/ban-ts-comment */
+/* eslint-disable no-unsafe-optional-chaining */
 import React, {
   KeyboardEventHandler,
   RefObject,
@@ -7,6 +9,7 @@ import React, {
   useMemo,
   useRef,
   useState,
+  useLayoutEffect,
 } from 'react';
 import { useAtom } from 'jotai';
 import { isKeyHotkey } from 'is-hotkey';
@@ -119,6 +122,8 @@ export const RoomInput = forwardRef<HTMLDivElement, RoomInputProps>(
     const [enterForNewline] = useSetting(settingsAtom, 'enterForNewline');
     const [isMarkdown] = useSetting(settingsAtom, 'isMarkdown');
     const commands = useCommands(mx, room);
+
+    const [clickOutsideHeight, setClickOutsideHeight] = useState<number>(0);
 
     const [msgDraft, setMsgDraft] = useAtom(roomIdToMsgDraftAtomFamily(roomId));
     const [replyDraft, setReplyDraft] = useAtom(roomIdToReplyDraftAtomFamily(roomId));
@@ -327,6 +332,11 @@ export const RoomInput = forwardRef<HTMLDivElement, RoomInputProps>(
       customEditorRef,
     ]);
 
+    const handleCloseAutocomplete = useCallback(() => {
+      setAutocompleteQuery(undefined);
+      ReactEditor.focus(editor);
+    }, [editor]);
+
     const handleKeyDown: KeyboardEventHandler = useCallback(
       (evt) => {
         if (isKeyHotkey('mod+enter', evt) || (!enterForNewline && isKeyHotkey('enter', evt))) {
@@ -344,6 +354,7 @@ export const RoomInput = forwardRef<HTMLDivElement, RoomInputProps>(
     const handleKeyUp: KeyboardEventHandler = useCallback(
       (evt) => {
         if (isKeyHotkey('escape', evt)) {
+          handleCloseAutocomplete();
           evt.preventDefault();
           return;
         }
@@ -356,14 +367,8 @@ export const RoomInput = forwardRef<HTMLDivElement, RoomInputProps>(
           : undefined;
         setAutocompleteQuery(query);
       },
-      [editor, sendTypingStatus]
+      [editor, handleCloseAutocomplete, sendTypingStatus]
     );
-
-    const handleCloseAutocomplete = useCallback(() => {
-      setAutocompleteQuery(undefined);
-      ReactEditor.focus(editor);
-    }, [editor]);
-
     const handleEmoticonSelect = (key: string, shortcode: string) => {
       editor.insertNode(createEmoticonElement(key, shortcode));
       moveCursor(editor);
@@ -385,8 +390,37 @@ export const RoomInput = forwardRef<HTMLDivElement, RoomInputProps>(
       });
     };
 
+    useLayoutEffect(() => {
+      // @ts-ignore
+      if (ref?.current && autocompleteQuery) {
+        const elementHeights =
+          document.querySelector(
+            'div[data-testid="user-mention-autocomplete_inner-div-focus-trap"]'
+            // @ts-ignore
+          )?.offsetHeight +
+            // @ts-ignore
+            document.querySelector('div[data-testid="room-view-editor"]')?.offsetHeight || 0;
+        setClickOutsideHeight(elementHeights + 20);
+      }
+    }, [ref, autocompleteQuery]);
+
     return (
-      <div ref={ref} className='app_roomInput'>
+      <div ref={ref} className="app_roomInput">
+        {autocompleteQuery && (
+          <div
+            data-testid="custom-click-outside-backdrop"
+            style={{
+              background: 'transparent',
+              position: 'absolute',
+              left: 0,
+              width: '100vw',
+              height: `calc(100vh - ${clickOutsideHeight}px)`,
+              bottom: `calc(100vh - (100vh - ${clickOutsideHeight}px))`,
+            }}
+            aria-hidden="true"
+            onClick={handleCloseAutocomplete}
+          />
+        )}
         {selectedFiles.length > 0 && (
           <UploadBoard
             header={

@@ -768,7 +768,6 @@ export function EmojiBoard({
       focusTrapOptions={{
         returnFocusOnDeactivate,
         initialFocus: false,
-        onDeactivate: requestClose,
         clickOutsideDeactivates: true,
         allowOutsideClick: true,
         isKeyForward: (evt: KeyboardEvent) =>
