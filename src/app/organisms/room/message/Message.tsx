@@ -33,6 +33,7 @@ import React, {
   useLayoutEffect,
   KeyboardEventHandler,
 } from 'react';
+import { createPortal } from 'react-dom';
 import { isKeyHotkey } from 'is-hotkey';
 import FocusTrap from 'focus-trap-react';
 import { useHover, useFocusWithin } from 'react-aria';
@@ -615,6 +616,7 @@ export const Message = as<'div', MessageProps>(
     const { focusWithinProps } = useFocusWithin({ onFocusWithinChange: setHover });
     const [menu, setMenu] = useState(false);
     const [emojiBoard, setEmojiBoard] = useState(false);
+    const [backdropEl, setBackdropEl] = useState<React.ReactNode | null>(null);
 
     // TODO: handler missing profile import ImageBrokenSVG from '../../../../public/res/svg/image-broken.svg';
     const senderDisplayName =
@@ -741,6 +743,42 @@ export const Message = as<'div', MessageProps>(
       };
     }, [emojiBoard, handleKeyUp]);
 
+    useLayoutEffect(() => {
+      if (canSendReaction && emojiBoard) {
+        const emojiBoardPopoutComponent = document.getElementById('message_emoji-board_popout');
+        if (emojiBoardPopoutComponent) {
+          setBackdropEl(
+            createPortal(
+              <div
+                data-testid="custom-click-outside-backdrop"
+                style={{
+                  background: 'transparent',
+                  position: 'absolute',
+                  left: 0,
+                  zIndex: -1,
+                  width: '100vw',
+                  height: '100vh',
+                }}
+                aria-hidden="true"
+                onClick={() => {
+                  setEmojiBoard(false);
+                  closeMenu();
+                }}
+              />,
+              emojiBoardPopoutComponent
+            )
+          );
+        } else {
+          setBackdropEl(null);
+        }
+      } else {
+        setBackdropEl(null);
+      }
+      return () => {
+        setBackdropEl(null);
+      };
+    }, [emojiBoard, canSendReaction]);
+
     return (
       <MessageBase
         className={classNames(css.MessageBase, className)}
@@ -754,6 +792,7 @@ export const Message = as<'div', MessageProps>(
         {...focusWithinProps}
         ref={ref}
       >
+        {backdropEl}
         {!edit && (hover || menu || emojiBoard) && (
           <div className={css.MessageOptionsBase}>
             <Menu className={css.MessageOptionsBar} variant="SurfaceVariant">
@@ -764,10 +803,7 @@ export const Message = as<'div', MessageProps>(
                     position="Bottom"
                     align="End"
                     open={emojiBoard}
-                    onClick={() => {
-                      setEmojiBoard(false);
-                      closeMenu();
-                    }}
+                    id="message_emoji-board_popout"
                     content={
                       <EmojiBoard
                         imagePackRooms={imagePackRooms ?? []}
