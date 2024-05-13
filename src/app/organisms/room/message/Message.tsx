@@ -774,7 +774,9 @@ export const Message = as<'div', MessageProps>(
       } else {
         setBackdropEl(null);
       }
-      return () => setBackdropEl(null);
+      return () => {
+        setBackdropEl(null);
+      };
     }, [emojiBoard, canSendReaction]);
 
     return (
