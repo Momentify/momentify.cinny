@@ -161,7 +161,7 @@ export function UserMentionAutocomplete({
               }
               onClick={() => handleAutocomplete(roomMember.userId, getName(roomMember))}
               after={
-                <Text size="T200" priority="300" truncate>
+                <Text size="T200" priority="300" truncate style={{ display: 'none' }}>
                   {roomMember.userId}
                 </Text>
               }

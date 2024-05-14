@@ -30,7 +30,11 @@ import React, {
   ReactNode,
   useCallback,
   useState,
+  useLayoutEffect,
+  KeyboardEventHandler,
 } from 'react';
+import { createPortal } from 'react-dom';
+import { isKeyHotkey } from 'is-hotkey';
 import FocusTrap from 'focus-trap-react';
 import { useHover, useFocusWithin } from 'react-aria';
 import { MatrixEvent, Room } from 'matrix-js-sdk';
@@ -612,6 +616,7 @@ export const Message = as<'div', MessageProps>(
     const { focusWithinProps } = useFocusWithin({ onFocusWithinChange: setHover });
     const [menu, setMenu] = useState(false);
     const [emojiBoard, setEmojiBoard] = useState(false);
+    const [backdropEl, setBackdropEl] = useState<React.ReactNode | null>(null);
 
     // TODO: handler missing profile import ImageBrokenSVG from '../../../../public/res/svg/image-broken.svg';
     const senderDisplayName =
@@ -664,9 +669,7 @@ export const Message = as<'div', MessageProps>(
           // onClick={onUserClick}
         >
           {senderAvatarMxc ? (
-            <AvatarImage
-              src={senderAvatarMxc}
-            />
+            <AvatarImage src={senderAvatarMxc} />
           ) : (
             <AvatarFallback
               style={{
@@ -715,6 +718,67 @@ export const Message = as<'div', MessageProps>(
       setMenu(false);
     };
 
+    const handleKeyUp: KeyboardEventHandler = useCallback(
+      (evt) => {
+        if (isKeyHotkey('escape', evt)) {
+          setEmojiBoard(false);
+          setHover(false);
+          closeMenu();
+          evt.preventDefault();
+        }
+      },
+      [setEmojiBoard, setHover]
+    );
+
+    useLayoutEffect(() => {
+      if (emojiBoard) {
+        document.addEventListener('keyup', (e) => {
+          handleKeyUp(e);
+        });
+      }
+      return () => {
+        document.removeEventListener('keyup', (e) => {
+          handleKeyUp(e);
+        });
+      };
+    }, [emojiBoard, handleKeyUp]);
+
+    useLayoutEffect(() => {
+      if (canSendReaction && emojiBoard) {
+        const emojiBoardPopoutComponent = document.getElementById('message_emoji-board_popout');
+        if (emojiBoardPopoutComponent) {
+          setBackdropEl(
+            createPortal(
+              <div
+                data-testid="custom-click-outside-backdrop"
+                style={{
+                  background: 'transparent',
+                  position: 'absolute',
+                  left: 0,
+                  zIndex: -1,
+                  width: '100vw',
+                  height: '100vh',
+                }}
+                aria-hidden="true"
+                onClick={() => {
+                  setEmojiBoard(false);
+                  closeMenu();
+                }}
+              />,
+              emojiBoardPopoutComponent
+            )
+          );
+        } else {
+          setBackdropEl(null);
+        }
+      } else {
+        setBackdropEl(null);
+      }
+      return () => {
+        setBackdropEl(null);
+      };
+    }, [emojiBoard, canSendReaction]);
+
     return (
       <MessageBase
         className={classNames(css.MessageBase, className)}
@@ -728,16 +792,18 @@ export const Message = as<'div', MessageProps>(
         {...focusWithinProps}
         ref={ref}
       >
+        {backdropEl}
         {!edit && (hover || menu || emojiBoard) && (
           <div className={css.MessageOptionsBase}>
             <Menu className={css.MessageOptionsBar} variant="SurfaceVariant">
               <Box gap="100">
-                {/* {canSendReaction && (
+                {canSendReaction && (
                   <PopOut
                     alignOffset={-65}
                     position="Bottom"
                     align="End"
                     open={emojiBoard}
+                    id="message_emoji-board_popout"
                     content={
                       <EmojiBoard
                         imagePackRooms={imagePackRooms ?? []}
@@ -770,7 +836,7 @@ export const Message = as<'div', MessageProps>(
                       </IconButton>
                     )}
                   </PopOut>
-                )} */}
+                )}
                 <IconButton
                   onClick={onReplyClick}
                   data-event-id={mEvent.getId()}
@@ -786,7 +852,7 @@ export const Message = as<'div', MessageProps>(
                     variant="SurfaceVariant"
                     size="300"
                     radii="300"
-                    className='room_message_edit_btn'
+                    className="room_message_edit_btn"
                   >
                     <Icon src={Icons.Pencil} size="100" />
                   </IconButton>
@@ -936,18 +1002,30 @@ export const Message = as<'div', MessageProps>(
           </div>
         )}
         {messageLayout === 1 && (
-          <CompactLayout before={headerJSX} onContextMenu={handleContextMenu} className={'room_message_block_compact'}>
+          <CompactLayout
+            before={headerJSX}
+            onContextMenu={handleContextMenu}
+            className="room_message_block_compact"
+          >
             {msgContentJSX}
           </CompactLayout>
         )}
         {messageLayout === 2 && (
-          <BubbleLayout before={avatarJSX} onContextMenu={handleContextMenu} className={'room_message_block_bubble'}>
+          <BubbleLayout
+            before={avatarJSX}
+            onContextMenu={handleContextMenu}
+            className="room_message_block_bubble"
+          >
             {headerJSX}
             {msgContentJSX}
           </BubbleLayout>
         )}
         {messageLayout !== 1 && messageLayout !== 2 && (
-          <ModernLayout before={avatarJSX} onContextMenu={handleContextMenu} className={'room_message_block_modern'}>
+          <ModernLayout
+            before={avatarJSX}
+            onContextMenu={handleContextMenu}
+            className="room_message_block_modern"
+          >
             {headerJSX}
             {msgContentJSX}
           </ModernLayout>
