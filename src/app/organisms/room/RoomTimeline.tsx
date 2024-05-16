@@ -886,7 +886,7 @@ export function RoomTimeline({ room, eventId, roomInputRef, editor }: RoomTimeli
         return;
       }
       // TODO: replace with navigate to user profile
-      openProfileViewer(userId, room.roomId);      
+      openProfileViewer(userId, room.roomId);
     },
     [room]
   );
@@ -1216,6 +1216,13 @@ export function RoomTimeline({ room, eventId, roomInputRef, editor }: RoomTimeli
       const hasReactions = reactions && reactions.length > 0;
       const { replyEventId } = mEvent;
       const highlighted = focusItem.current?.index === item && focusItem.current.highlight;
+      const messageText = (() => {
+        const editedEvent = getEditedEvent(mEventId, mEvent, timelineSet);
+        const { body }: Record<string, unknown> =
+          editedEvent?.getContent()['m.new_content'] ?? mEvent.getContent();
+        if (typeof body !== 'string') return '';
+        return body ?? '';
+      })();
 
       return (
         <Message
@@ -1238,6 +1245,7 @@ export function RoomTimeline({ room, eventId, roomInputRef, editor }: RoomTimeli
           onReplyClick={handleReplyClick}
           onReactionToggle={handleReactionToggle}
           onEditId={handleEdit}
+          messageText={messageText}
           reply={
             replyEventId && (
               <Reply
