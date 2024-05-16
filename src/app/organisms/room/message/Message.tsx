@@ -39,7 +39,9 @@ import FocusTrap from 'focus-trap-react';
 import { useHover, useFocusWithin } from 'react-aria';
 import { MatrixEvent, Room } from 'matrix-js-sdk';
 import { Relations } from 'matrix-js-sdk/lib/models/relations';
+import Microlink from '@microlink/react';
 import classNames from 'classnames';
+import styled from 'styled-components';
 import {
   AvatarBase,
   BubbleLayout,
@@ -66,7 +68,20 @@ import { TextViewer } from '../../../components/text-viewer';
 import { AsyncStatus, useAsyncCallback } from '../../../hooks/useAsyncCallback';
 import { EmojiBoard } from '../../../components/emoji-board';
 import { ReactionViewer } from '../reaction-viewer';
+import { getUrlLinksInText } from './util';
 import { MessageEditor } from './MessageEditor';
+
+const UrlPreviewWrapper = styled.div`
+  max-width: 75vw;
+  min-width: 75vw;
+  width: 100%;
+  margin-top: 0.5rem;
+  margin-bottom: 0.5rem;
+
+  & p {
+    color: #181919 !important;
+  }
+`;
 
 export type ReactionHandler = (keyOrMxc: string, shortcode: string) => void;
 
@@ -581,6 +596,7 @@ export type MessageProps = {
   onReactionToggle: (targetEventId: string, key: string, shortcode?: string) => void;
   reply?: ReactNode;
   reactions?: ReactNode;
+  messageText: string;
 };
 export const Message = as<'div', MessageProps>(
   (
@@ -604,6 +620,7 @@ export const Message = as<'div', MessageProps>(
       onEditId,
       reply,
       reactions,
+      messageText,
       children,
       ...props
     },
@@ -703,6 +720,11 @@ export const Message = as<'div', MessageProps>(
           children
         )}
         {reactions}
+        {getUrlLinksInText(messageText).map((url) => (
+          <UrlPreviewWrapper>
+            <Microlink url={url} lazy={{ threshold: 0.5 }} size="small" />
+          </UrlPreviewWrapper>
+        ))}
       </Box>
     );
 
