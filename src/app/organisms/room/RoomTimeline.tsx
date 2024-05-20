@@ -135,6 +135,7 @@ import initMatrix from '../../../client/initMatrix';
 import { useKeyDown } from '../../hooks/useKeyDown';
 import cons from '../../../client/state/cons';
 import { useDocumentFocusChange } from '../../hooks/useDocumentFocusChange';
+import { getUrlLinksInText } from './message/util';
 
 const TimelineFloat = as<'div', css.TimelineFloatVariants>(
   ({ position, className, ...props }, ref) => (
@@ -988,6 +989,16 @@ export function RoomTimeline({ room, eventId, roomInputRef, editor }: RoomTimeli
       const { body, formatted_body: customBody }: Record<string, unknown> =
         editedEvent?.getContent()['m.new_content'] ?? mEvent.getContent();
 
+      const bodyTextWithShortenedUrls = getUrlLinksInText(body as string).reduce<string>(
+        (acc, curr) => {
+          const { origin } = new URL(curr);
+          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+          // @ts-ignore
+          return acc.replaceAll(curr, origin);
+        },
+        body as string
+      );
+
       if (typeof body !== 'string') return null;
       return (
         <Text
@@ -998,7 +1009,10 @@ export function RoomTimeline({ room, eventId, roomInputRef, editor }: RoomTimeli
           }}
           priority="400"
         >
-          {renderBody(body, typeof customBody === 'string' ? customBody : undefined)}
+          {renderBody(
+            bodyTextWithShortenedUrls,
+            typeof customBody === 'string' ? customBody : undefined
+          )}
           {!!editedEvent && <MessageEditedContent />}
         </Text>
       );

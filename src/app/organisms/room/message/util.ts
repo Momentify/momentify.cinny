@@ -26,7 +26,7 @@ export const getSrcFile = async (src: string): Promise<Blob> => {
   return blob;
 };
 
-export const getUrlLinksInText = (textBody: string): (string | null)[] =>
+export const getUrlLinksInText = (textBody: string): (string | URL)[] =>
   textBody
     .split(' ')
     .map((t) => t.match(URL_REGEX))
