@@ -128,7 +128,7 @@ export const CustomEditor = forwardRef<HTMLDivElement, CustomEditorProps>(
     // fix from https://www.codemzy.com/blog/sticky-fixed-header-ios-keyboard-fix
     useLayoutEffect(() => {
       let fixPosition = 0; // the fix
-      const toolbarWrap = document.querySelector('.room-view'); // the toolbar wrap
+      const toolbarWrap = document.querySelector('.header-wrap'); // the toolbar wrap
       const toolbar = document.querySelector('.header'); // the toolbar
       const editorTextArea = Array.from(document.getElementsByClassName(css.EditorTextarea))[0]; // the editor
 
@@ -161,6 +161,7 @@ export const CustomEditor = forwardRef<HTMLDivElement, CustomEditorProps>(
           if (fixPosition > 0) {
             toolbar.classList.remove('down');
             fixPosition = 0;
+            // setPos(0);
             // eslint-disable-next-line @typescript-eslint/ban-ts-comment
             // @ts-ignore
             toolbar.style['margin-top'] = 0;
