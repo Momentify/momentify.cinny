@@ -161,7 +161,6 @@ export const CustomEditor = forwardRef<HTMLDivElement, CustomEditorProps>(
           if (fixPosition > 0) {
             toolbar.classList.remove('down');
             fixPosition = 0;
-            // setPos(0);
             // eslint-disable-next-line @typescript-eslint/ban-ts-comment
             // @ts-ignore
             toolbar.style['margin-top'] = 0;
