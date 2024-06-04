@@ -543,14 +543,15 @@ export const RoomInput = forwardRef<HTMLDivElement, RoomInputProps>(
             )
           }
           before={
-            <IconButton
-              onClick={() => pickFile('*')}
-              variant="SurfaceVariant"
-              size="300"
-              radii="300"
-            >
-              <Icon src={Icons.PlusCircle} />
-            </IconButton>
+            <></>
+            // <IconButton
+            //   onClick={() => pickFile('*')}
+            //   variant="SurfaceVariant"
+            //   size="300"
+            //   radii="300"
+            // >
+            //   <Icon src={Icons.PlusCircle} />
+            // </IconButton>
           }
           after={
             <>
