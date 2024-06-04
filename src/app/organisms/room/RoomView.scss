@@ -14,6 +14,15 @@
 
   transition: transform 200ms var(--fluid-slide-down);
 
+  & > .header-wrap {
+    position: sticky;
+    top: 0px;
+    height: 60px;
+    width: 100%;
+    z-index: 1;
+    background: inherit;
+  }
+
   &--dropped {
     transform: translateY(calc(100% - var(--header-height)));
     border-radius: var(--bo-radius) var(--bo-radius) 0 0;

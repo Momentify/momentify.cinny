@@ -6,9 +6,11 @@ import React, {
   forwardRef,
   useCallback,
   useState,
+  useLayoutEffect,
 } from 'react';
 import { Box, Scroll, Text } from 'folds';
 import { Descendant, Editor, createEditor } from 'slate';
+import { debounce } from 'lodash';
 import {
   Slate,
   Editable,
@@ -121,6 +123,59 @@ export const CustomEditor = forwardRef<HTMLDivElement, CustomEditorProps>(
           {children}
         </Text>
       );
+    }, []);
+
+    // fix from https://www.codemzy.com/blog/sticky-fixed-header-ios-keyboard-fix
+    useLayoutEffect(() => {
+      let fixPosition = 0; // the fix
+      const toolbarWrap = document.querySelector('.header-wrap'); // the toolbar wrap
+      const toolbar = document.querySelector('.header'); // the toolbar
+      const editorTextArea = Array.from(document.getElementsByClassName(css.EditorTextarea))[0]; // the editor
+
+      if (toolbarWrap && toolbar && editorTextArea) {
+        // function to set the margin to show the toolbar if hidden
+        const setMargin = () => {
+          // if toolbar wrap is hidden
+          const newPosition = toolbarWrap.getBoundingClientRect().top;
+          if (newPosition < -1) {
+            // add a margin to show the toolbar
+            toolbar.classList.add('down'); // add class so toolbar can be animated
+            fixPosition = Math.abs(newPosition); // this is new position we need to fix the toolbar in the display
+            // if at the bottom of the page take a couple of pixels off due to gap
+            if (window.innerHeight + window.scrollY >= document.body.offsetHeight) {
+              fixPosition -= 2;
+            }
+            // set the margin to the new fixed position
+            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+            // @ts-ignore
+            toolbar.style['margin-top'] = `${fixPosition}px`;
+          }
+        };
+
+        // use lodash debounce to stop flicker
+        const debounceMargin = debounce(setMargin, 150);
+
+        // function to run on scroll and blur
+        const showToolbar = () => {
+          // remove animation and put toolbar back in default position
+          if (fixPosition > 0) {
+            toolbar.classList.remove('down');
+            fixPosition = 0;
+            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+            // @ts-ignore
+            toolbar.style['margin-top'] = 0;
+          }
+          // will check if toolbar needs to be fixed
+          debounceMargin();
+        };
+
+        // add an event listener to scroll to check if
+        // toolbar position has moved off the page
+        window.addEventListener('scroll', showToolbar);
+        // add an event listener to blur as iOS keyboard may have closed
+        // and toolbar postition needs to be checked again
+        editorTextArea.addEventListener('blur', showToolbar);
+      }
     }, []);
 
     return (

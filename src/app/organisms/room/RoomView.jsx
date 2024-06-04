@@ -57,7 +57,9 @@ function RoomView({ room, eventId }) {
 
   return (
     <div className="room-view" ref={roomViewRef}>
-      <RoomViewHeader roomId={roomId} />
+      <div className="header-wrap">
+        <RoomViewHeader roomId={roomId} />
+      </div>
       <div className="room-view__content-wrapper">
         <div className="room-view__scrollable">
           <RoomTimeline
