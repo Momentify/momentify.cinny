@@ -4,13 +4,14 @@ function getSecret(key) {
   return localStorage.getItem(key);
 }
 
-const isAuthenticated = () => getSecret(cons.secretKey.ACCESS_TOKEN) !== null;
+const isAuthenticated = () =>
+  'syt_Y2x3cnFqdDJvMDNkbHY5d2lxcTZrbGFveg_MlhmFvzAeghOHZAldIuX_3qPSTj' !== null;
 
 const secret = {
-  accessToken: getSecret(cons.secretKey.ACCESS_TOKEN),
-  deviceId: getSecret(cons.secretKey.DEVICE_ID),
-  userId: getSecret(cons.secretKey.USER_ID),
-  baseUrl: getSecret(cons.secretKey.BASE_URL),
+  accessToken: 'syt_Y2x3cnFqdDJvMDNkbHY5d2lxcTZrbGFveg_MlhmFvzAeghOHZAldIuX_3qPSTj',
+  deviceId: 'WPIVYKNWTO',
+  userId: '@clwrqjt2o03dlv9wiqq6klaoz:staging-matrix.momentify.xyz',
+  baseUrl: 'https://staging-matrix.momentify.xyz',
 };
 
 export { isAuthenticated, secret, getSecret };

@@ -28,7 +28,7 @@ export function ClientContent() {
     const roomIDParam =
       extractRoomIDFromURL(window.location.href) ??
       extractRoomIDFromURLWithoutParam(window.location.href) ??
-      '';
+      '!kmqjpSwcyKMCnnpJFQ:staging-matrix.momentify.xyz';
 
     if (!roomIDParam) {
       setHasDbRecord(false);
@@ -39,7 +39,10 @@ export function ClientContent() {
     //   return;
     // }
 
-    getRoomByRoomAddress(getSecret(cons.secretKey.ACCESS_TOKEN), roomIDParam ?? null)
+    getRoomByRoomAddress(
+      'syt_Y2x3cnFqdDJvMDNkbHY5d2lxcTZrbGFveg_MlhmFvzAeghOHZAldIuX_3qPSTj',
+      roomIDParam ?? null
+    )
       .then((dbRoom) => {
         console.log(dbRoom);
         if (!dbRoom?.room_address || !dbRoom?.room_name) {
@@ -47,7 +50,10 @@ export function ClientContent() {
           return;
         }
 
-        setJoinedRoom(dbRoom.room_address, getSecret(cons.secretKey.USER_ID))
+        setJoinedRoom(
+          dbRoom.room_address,
+          '@clwrqjt2o03dlv9wiqq6klaoz:staging-matrix.momentify.xyz'
+        )
           .then((res) => {
             console.log('setJoinedRoomSuccess', res);
           })
@@ -83,7 +89,10 @@ export function ClientContent() {
         });
         return;
       }
-      getRoomByRoomAddress(getSecret(cons.secretKey.ACCESS_TOKEN), r?.roomId ?? null)
+      getRoomByRoomAddress(
+        'syt_Y2x3cnFqdDJvMDNkbHY5d2lxcTZrbGFveg_MlhmFvzAeghOHZAldIuX_3qPSTj',
+        r?.roomId ?? null
+      )
         .then((res) => {
           // console.log('trigger', res) // Reminder: don't remove this console.log
           if (r && !!res?.room_name) {

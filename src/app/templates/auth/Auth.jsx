@@ -56,7 +56,7 @@ function Homeserver({ onChange }) {
   const [debounce] = useState(new Debounce());
   const [process, setProcess] = useState({
     isLoading: true,
-    message: 'Loading homeserver list...'
+    message: 'Loading homeserver list...',
   });
   const hsRef = useRef();
 
@@ -99,7 +99,11 @@ function Homeserver({ onChange }) {
     const homeserverInitFn = async () => {
       // eslint-disable-next-line prefer-destructuring
       const VITE_MATRIX_DEFAULT_SERVER = import.meta.env.VITE_MATRIX_DEFAULT_SERVER;
-      setHs({ selected: VITE_MATRIX_DEFAULT_SERVER, list: [VITE_MATRIX_DEFAULT_SERVER], allowCustom: true });
+      setHs({
+        selected: VITE_MATRIX_DEFAULT_SERVER,
+        list: [VITE_MATRIX_DEFAULT_SERVER],
+        allowCustom: true,
+      });
     };
     homeserverInitFn();
   }, []);
@@ -177,7 +181,7 @@ function Homeserver({ onChange }) {
   );
 }
 Homeserver.propTypes = {
-  onChange: PropTypes.func.isRequired
+  onChange: PropTypes.func.isRequired,
 };
 
 function Login({ loginFlow, baseUrl }) {
@@ -191,7 +195,7 @@ function Login({ loginFlow, baseUrl }) {
     username: 'admin',
     password: 'Password123.',
     email: '',
-    other: ''
+    other: '',
   };
 
   const validator = (values) => {
@@ -226,7 +230,7 @@ function Login({ loginFlow, baseUrl }) {
         if (msg === 'Unknown message') msg = 'Please check your credentials';
         actions.setErrors({
           password: msg === 'Invalid password' ? msg : undefined,
-          other: msg !== 'Invalid password' ? msg : undefined
+          other: msg !== 'Invalid password' ? msg : undefined,
         });
         actions.setSubmitting(false);
       });
@@ -262,7 +266,7 @@ function Login({ loginFlow, baseUrl }) {
         // username: 'test1',
         // password: 'Password123.',
         email: '',
-        other: ''
+        other: '',
       });
       formikRef.current?.handleSubmit();
     }
@@ -387,7 +391,7 @@ function Login({ loginFlow, baseUrl }) {
 }
 Login.propTypes = {
   loginFlow: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
-  baseUrl: PropTypes.string.isRequired
+  baseUrl: PropTypes.string.isRequired,
 };
 
 let sid;
@@ -422,7 +426,7 @@ function Register({ registerInfo, loginFlow, baseUrl }) {
     password: '',
     confirmPassword: '',
     email: '',
-    other: ''
+    other: '',
   };
 
   const validator = (values) => {
@@ -473,7 +477,7 @@ function Register({ registerInfo, loginFlow, baseUrl }) {
         const msg = err.message || err.error;
         if (['M_USER_IN_USE', 'M_INVALID_USERNAME', 'M_EXCLUSIVE'].indexOf(err.errcode) > -1) {
           actions.setErrors({
-            username: err.errcode === 'M_USER_IN_USE' ? 'Username is already taken' : msg
+            username: err.errcode === 'M_USER_IN_USE' ? 'Username is already taken' : msg,
           });
         } else if (msg) actions.setErrors({ other: msg });
 
@@ -512,7 +516,7 @@ function Register({ registerInfo, loginFlow, baseUrl }) {
       if (isDummy) {
         const data = await auth.completeRegisterStage(baseUrl, username, password, {
           type: 'm.login.dummy',
-          session
+          session,
         });
         if (data.done) refreshWindow();
       }
@@ -526,7 +530,7 @@ function Register({ registerInfo, loginFlow, baseUrl }) {
     const d = await auth.completeRegisterStage(baseUrl, username, password, {
       type: 'm.login.recaptcha',
       response: value,
-      session
+      session,
     });
     if (d.done) refreshWindow();
     else setProcess({ type: 'processing', message: 'Registration in progress...' });
@@ -535,7 +539,7 @@ function Register({ registerInfo, loginFlow, baseUrl }) {
     const [username, password] = getInputs();
     const d = await auth.completeRegisterStage(baseUrl, username, password, {
       type: 'm.login.terms',
-      session
+      session,
     });
     if (d.done) refreshWindow();
     else setProcess({ type: 'processing', message: 'Registration in progress...' });
@@ -546,7 +550,7 @@ function Register({ registerInfo, loginFlow, baseUrl }) {
       type: 'm.login.email.identity',
       threepidCreds: { sid, client_secret: clientSecret },
       threepid_creds: { sid, client_secret: clientSecret },
-      session
+      session,
     });
     if (d.done) refreshWindow();
     else setProcess({ type: 'processing', message: 'Registration in progress...' });
@@ -678,7 +682,7 @@ function Register({ registerInfo, loginFlow, baseUrl }) {
 Register.propTypes = {
   registerInfo: PropTypes.shape({}).isRequired,
   loginFlow: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
-  baseUrl: PropTypes.string.isRequired
+  baseUrl: PropTypes.string.isRequired,
 };
 
 function AuthCard() {
@@ -711,7 +715,7 @@ function AuthCard() {
             style={{
               color: 'var(--tc-link)',
               cursor: 'pointer',
-              margin: '0 var(--sp-ultra-tight)'
+              margin: '0 var(--sp-ultra-tight)',
             }}
             onClick={() => setType(type === 'login' ? 'register' : 'login')}
           >
@@ -818,7 +822,7 @@ function Auth() {
 export function LoadingScreen({ message }) {
   return (
     <ProcessWrapper>
-      <div style={{ position: "absolute", top: "16px", left: "16px" }}>
+      <div style={{ position: 'absolute', top: '16px', left: '16px' }}>
         <BackButton />
       </div>
       <Spinner />
@@ -829,28 +833,35 @@ export function LoadingScreen({ message }) {
   );
 }
 LoadingScreen.propTypes = {
-  message: PropTypes.string.isRequired
+  message: PropTypes.string.isRequired,
 };
 export function GoBackScreen({ message }) {
   return (
-    <ProcessWrapper>      
-      <div style={{ marginTop: 'var(--sp-normal)', display: 'flex', alignItems: 'center', gap: '10px' }}>
-      <IconButton
-        src={BackArrowIC}        
-        tooltip="Return to previous page"
-        onClick={() => {
-          window.history.go(-1);
-          initMatrix.stopClient();
+    <ProcessWrapper>
+      <div
+        style={{
+          marginTop: 'var(--sp-normal)',
+          display: 'flex',
+          alignItems: 'center',
+          gap: '10px',
         }}
-        style
-      />
-      <Text variant="b1">{message}</Text>
+      >
+        <IconButton
+          src={BackArrowIC}
+          tooltip="Return to previous page"
+          onClick={() => {
+            window.history.go(-1);
+            initMatrix.stopClient();
+          }}
+          style
+        />
+        <Text variant="b1">{message}</Text>
       </div>
     </ProcessWrapper>
   );
 }
 GoBackScreen.propTypes = {
-  message: PropTypes.string.isRequired
+  message: PropTypes.string.isRequired,
 };
 
 function Recaptcha({ message, sitekey, onChange }) {
@@ -868,7 +879,7 @@ function Recaptcha({ message, sitekey, onChange }) {
 Recaptcha.propTypes = {
   message: PropTypes.string.isRequired,
   sitekey: PropTypes.string.isRequired,
-  onChange: PropTypes.func.isRequired
+  onChange: PropTypes.func.isRequired,
 };
 
 function Terms({ url, onSubmit }) {
@@ -907,7 +918,7 @@ function Terms({ url, onSubmit }) {
 }
 Terms.propTypes = {
   url: PropTypes.string.isRequired,
-  onSubmit: PropTypes.func.isRequired
+  onSubmit: PropTypes.func.isRequired,
 };
 
 function EmailVerify({ email, onContinue }) {
@@ -932,14 +943,14 @@ function EmailVerify({ email, onContinue }) {
   );
 }
 EmailVerify.propTypes = {
-  email: PropTypes.string.isRequired
+  email: PropTypes.string.isRequired,
 };
 
 function ProcessWrapper({ children }) {
   return <div className="process-wrapper">{children}</div>;
 }
 ProcessWrapper.propTypes = {
-  children: PropTypes.node.isRequired
+  children: PropTypes.node.isRequired,
 };
 
 export default Auth;

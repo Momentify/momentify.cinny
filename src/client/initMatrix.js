@@ -48,10 +48,10 @@ class InitMatrix extends EventEmitter {
     const { ACCESS_TOKEN, DEVICE_ID, USER_ID, BASE_URL } = cons.secretKey;
 
     const theSecrets = {
-      accessToken: getSecret(ACCESS_TOKEN),
-      deviceId: getSecret(DEVICE_ID),
-      userId: getSecret(USER_ID),
-      baseUrl: getSecret(BASE_URL),
+      accessToken: 'syt_Y2x3cnFqdDJvMDNkbHY5d2lxcTZrbGFveg_MlhmFvzAeghOHZAldIuX_3qPSTj',
+      deviceId: 'WPIVYKNWTO',
+      userId: '@clwrqjt2o03dlv9wiqq6klaoz:staging-matrix.momentify.xyz',
+      baseUrl: 'https://staging-matrix.momentify.xyz',
     };
 
     this.matrixClient = sdk.createClient({
