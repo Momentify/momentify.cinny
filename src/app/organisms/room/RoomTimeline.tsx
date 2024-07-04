@@ -1290,6 +1290,7 @@ export function RoomTimeline({ room, eventId, roomInputRef, editor }: RoomTimeli
         </Message>
       );
     },
+
     renderRoomEncrypted: (mEventId, mEvent, item, timelineSet, collapse) => {
       const reactionRelations = getEventReactions(timelineSet, mEventId);
       const reactions = reactionRelations && reactionRelations.getSortedAnnotationsByKey();
@@ -1445,40 +1446,40 @@ export function RoomTimeline({ room, eventId, roomInputRef, editor }: RoomTimeli
         </Event>
       );
     },
-    renderRoomName: (mEventId, mEvent, item) => {
-      const highlighted = focusItem.current?.index === item && focusItem.current.highlight;
-      const senderId = mEvent.getSender() ?? '';
-      const senderName = getMemberDisplayName(room, senderId) || getMxIdLocalPart(senderId);
+    // renderRoomName: (mEventId, mEvent, item) => {
+    //   const highlighted = focusItem.current?.index === item && focusItem.current.highlight;
+    //   const senderId = mEvent.getSender() ?? '';
+    //   const senderName = getMemberDisplayName(room, senderId) || getMxIdLocalPart(senderId);
 
-      const timeJSX = <Time ts={mEvent.getTs()} compact={messageLayout === 1} />;
+    //   const timeJSX = <Time ts={mEvent.getTs()} compact={messageLayout === 1} />;
 
-      return (
-        <Event
-          key={mEvent.getId()}
-          data-message-item={item}
-          data-message-id={mEventId}
-          room={room}
-          mEvent={mEvent}
-          highlight={highlighted}
-          messageSpacing={messageSpacing}
-          canDelete={canRedact || mEvent.getSender() === mx.getUserId()}
-        >
-          <EventContent
-            messageLayout={messageLayout}
-            time={timeJSX}
-            iconSrc={Icons.Hash}
-            content={
-              <Box grow="Yes" direction="Column">
-                <Text size="T300" priority="300">
-                  <b>{senderName}</b>
-                  {' changed room name'}
-                </Text>
-              </Box>
-            }
-          />
-        </Event>
-      );
-    },
+    //   return (
+    //     <Event
+    //       key={mEvent.getId()}
+    //       data-message-item={item}
+    //       data-message-id={mEventId}
+    //       room={room}
+    //       mEvent={mEvent}
+    //       highlight={highlighted}
+    //       messageSpacing={messageSpacing}
+    //       canDelete={canRedact || mEvent.getSender() === mx.getUserId()}
+    //     >
+    //       <EventContent
+    //         messageLayout={messageLayout}
+    //         time={timeJSX}
+    //         iconSrc={Icons.Hash}
+    //         content={
+    //           <Box grow="Yes" direction="Column">
+    //             <Text size="T300" priority="300">
+    //               <b>{senderName}</b>
+    //               {' changed room name'}
+    //             </Text>
+    //           </Box>
+    //         }
+    //       />
+    //     </Event>
+    //   );
+    // },
     renderRoomTopic: (mEventId, mEvent, item) => {
       const highlighted = focusItem.current?.index === item && focusItem.current.highlight;
       const senderId = mEvent.getSender() ?? '';
@@ -1631,6 +1632,7 @@ export function RoomTimeline({ room, eventId, roomInputRef, editor }: RoomTimeli
   let isPrevRendered = false;
   let newDivider = false;
   let dayDivider = false;
+
   const eventRenderer = (item: number) => {
     const [eventTimeline, baseIndex] = getTimelineAndBaseIndex(timeline.linkedTimelines, item);
     if (!eventTimeline) return null;
@@ -1737,6 +1739,7 @@ export function RoomTimeline({ room, eventId, roomInputRef, editor }: RoomTimeli
           justifyContent="End"
           style={{ minHeight: '100%', padding: `${config.space.S600} 0` }}
         >
+          {/* This is the beginning blah blah */}
           {!canPaginateBack && rangeAtStart && getItems().length > 0 && (
             <div
               style={{
