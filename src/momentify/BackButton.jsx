@@ -44,6 +44,7 @@ export default function BackButton({ className, ...props }) {
         alt="back"
         style={{
           height: '14px',
+          background: 'none',
         }}
         src={BackIcon}
       />

@@ -40,6 +40,7 @@
 
 .room-header__back-btn {
   background-color: transparent;
+  background: none;
 
   @include dir.side(margin, 0, var(--sp-tight));
 

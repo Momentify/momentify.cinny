@@ -28,6 +28,7 @@ import colorMXID from '../../../util/colorMXID';
 import BookMark from '../../../../public/BookMark.svg';
 import Clock from '../../../../public/Clock.svg';
 import Share from '../../../../public/ShareIcon.svg';
+import Event from '../../../../public/EventIcon.svg';
 
 function RoomViewHeader({ roomId }) {
   const [, forceUpdate] = useForceUpdate();
@@ -74,8 +75,8 @@ function RoomViewHeader({ roomId }) {
 
       let diffInMs = givenDate.diff(now);
 
-      // Check if the difference is negative
-      if (diffInMs < 0) {
+      if (room.performance_id != null) {
+        givenDate = givenDate.endOf('day');
         // Add 48 hours to the given date
         givenDate = givenDate.add(48, 'hour');
         // Recalculate the difference
@@ -114,11 +115,16 @@ function RoomViewHeader({ roomId }) {
   }, [room?.artist?.date]);
 
   const handleClick = async () => {
-    const url = isPost ? `/venues/${room.event.id}-1` : `/events/${room.event.id}`;
+    const url =
+      room.performance_id != null
+        ? `/performances/${room.performance_id}`
+        : `/events/${room.event.id}`;
     const title = `${room.event.event_name}`;
-    const text = isPost
-      ? `Check these moments out - ${room.event.event_name}`
-      : `Check this event out - ${room.event.event_name}`;
+    const text =
+      room.performance_id != null
+        ? `Check these moments out - ${room.event.event_name}`
+        : `Check this event out - ${room.event.event_name}`;
+
     // Check if the browser has navigator
     if (!navigator) {
       return;
@@ -197,20 +203,40 @@ function RoomViewHeader({ roomId }) {
             >
               {room.artist.headline_artist}
             </text>
-            <text
+            <div
               style={{
-                fontSize: 10,
-                fontWeight: 400,
-                color: '#F7F7F7',
-                opacity: 0.6,
-                fontFamily: 'Suisse Intl',
-                textOverflow: 'ellipsis',
-                whiteSpace: 'nowrap',
-                overflow: 'hidden',
+                display: 'flex',
+                flexDirection: 'row',
+                gap: 8,
+                alignItems: 'center',
               }}
             >
-              {room.artist.venue_name}
-            </text>
+              <img
+                alt="event"
+                src={Event}
+                style={{
+                  background: 'none',
+                  width: 10,
+                  height: 10,
+                  position: 'relative',
+                  bottom: 2,
+                }}
+              />
+              <text
+                style={{
+                  fontSize: 10,
+                  fontWeight: 400,
+                  color: '#F7F7F7',
+                  opacity: 0.6,
+                  fontFamily: 'Suisse Intl',
+                  textOverflow: 'ellipsis',
+                  whiteSpace: 'nowrap',
+                  overflow: 'hidden',
+                }}
+              >
+                {room.artist.venue_name}
+              </text>
+            </div>
           </div>
           <div
             style={{
@@ -228,7 +254,7 @@ function RoomViewHeader({ roomId }) {
                 gap: 8,
               }}
             >
-              <img alt="bookmark" src={BookMark} />
+              <img alt="bookmark" src={BookMark} style={{ background: 'none' }} />
               <text
                 style={{
                   fontSize: 10,
@@ -241,28 +267,30 @@ function RoomViewHeader({ roomId }) {
                 {dayjs(room.artist.date).format('ddd D MMM')}
               </text>
             </div>
-            <div
-              style={{
-                display: 'flex',
-                flexDirection: 'row',
-                whiteSpace: 'nowrap',
-                alignContent: 'center',
-                gap: 8,
-              }}
-            >
-              <img alt="clock" src={Clock} />
-              <text
+            {room.performance_id == null && (
+              <div
                 style={{
-                  fontSize: 10,
-                  fontWeight: 400,
-                  color: '#F7F7F7',
-                  opacity: 0.6,
-                  fontFamily: 'Suisse Intl',
+                  display: 'flex',
+                  flexDirection: 'row',
+                  whiteSpace: 'nowrap',
+                  alignContent: 'center',
+                  gap: 8,
                 }}
               >
-                {formattedDifference}
-              </text>
-            </div>
+                <img alt="clock" src={Clock} style={{ background: 'none' }} />
+                <text
+                  style={{
+                    fontSize: 10,
+                    fontWeight: 400,
+                    color: '#F7F7F7',
+                    opacity: 0.6,
+                    fontFamily: 'Suisse Intl',
+                  }}
+                >
+                  {formattedDifference}
+                </text>
+              </div>
+            )}
           </div>
           <img
             style={{
