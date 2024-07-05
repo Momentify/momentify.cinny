@@ -8,7 +8,7 @@
   @include dir.side(margin, 0, auto);
   border-radius: var(--bo-radius);
   cursor: pointer;
-
+  overflow: hidden;
   & .ic-raw {
     @include dir.side(margin, 0, var(--sp-extra-tight));
     transition: transform 200ms ease-in-out;
