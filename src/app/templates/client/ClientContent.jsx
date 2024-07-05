@@ -28,7 +28,7 @@ export function ClientContent() {
     const roomIDParam =
       extractRoomIDFromURL(window.location.href) ??
       extractRoomIDFromURLWithoutParam(window.location.href) ??
-      '!kmqjpSwcyKMCnnpJFQ:staging-matrix.momentify.xyz';
+      '!FqoQPuCnBsfsFmkMnK:staging-matrix.momentify.xyz';
 
     if (!roomIDParam) {
       setHasDbRecord(false);
@@ -98,6 +98,8 @@ export function ClientContent() {
           if (r && !!res?.room_name) {
             r.room_avatar = res?.event_image ?? null;
             r.name = res?.room_event_name ?? res.room_name ?? r.name;
+            r.event = res.event ?? null;
+            r.artist = res.artist ?? null;
             setRoomInfo({
               room: r,
               eventId: eId ?? null,

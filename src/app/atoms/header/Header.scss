@@ -4,7 +4,7 @@
 .header {
   @include dir.side(padding, var(--sp-normal), var(--sp-extra-tight));
   width: 100%;
-  height: var(--header-height);
+  height: 72px;
   border-bottom: 1px solid var(--bg-surface-border);
   display: flex;
   align-items: center;
@@ -14,6 +14,7 @@
   right: 0px;
   top: 0px;
   background: inherit;
+  padding: 8px 24px;
 
   &.down {
     transition-property: all;
@@ -27,6 +28,7 @@
     display: flex;
     align-items: center;
     margin: 0 var(--sp-tight);
+    gap: 16px;
 
     &:first-child {
       @include dir.side(margin, 0, var(--sp-tight));
