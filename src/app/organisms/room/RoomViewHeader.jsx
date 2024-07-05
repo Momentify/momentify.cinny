@@ -267,30 +267,29 @@ function RoomViewHeader({ roomId }) {
                 {dayjs(room.artist.date).format('ddd D MMM')}
               </text>
             </div>
-            {room.performance_id == null && (
-              <div
+
+            <div
+              style={{
+                display: 'flex',
+                flexDirection: 'row',
+                whiteSpace: 'nowrap',
+                alignContent: 'center',
+                gap: 8,
+              }}
+            >
+              <img alt="clock" src={Clock} style={{ background: 'none' }} />
+              <text
                 style={{
-                  display: 'flex',
-                  flexDirection: 'row',
-                  whiteSpace: 'nowrap',
-                  alignContent: 'center',
-                  gap: 8,
+                  fontSize: 10,
+                  fontWeight: 400,
+                  color: '#F7F7F7',
+                  opacity: 0.6,
+                  fontFamily: 'Suisse Intl',
                 }}
               >
-                <img alt="clock" src={Clock} style={{ background: 'none' }} />
-                <text
-                  style={{
-                    fontSize: 10,
-                    fontWeight: 400,
-                    color: '#F7F7F7',
-                    opacity: 0.6,
-                    fontFamily: 'Suisse Intl',
-                  }}
-                >
-                  {formattedDifference}
-                </text>
-              </div>
-            )}
+                {formattedDifference}
+              </text>
+            </div>
           </div>
           <img
             style={{
