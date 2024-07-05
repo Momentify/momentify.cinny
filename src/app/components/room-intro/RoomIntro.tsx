@@ -27,19 +27,19 @@ export const RoomIntro = as<'div', RoomIntroProps>(({ room, ...props }, ref) => 
   const avatarHttpUrl = avatarMxc ? mx.mxcUrlToHttp(avatarMxc) : undefined;
   const name = (nameEvent?.getContent().name || room.name) as string;
   const topic = (topicEvent?.getContent().topic as string) || undefined;
-  
-  let roomAvatar = avatarHttpUrl
-  // @ts-ignore 
-  if(!!room?.room_avatar) {
-    // @ts-ignore 
-    roomAvatar = room.room_avatar
+
+  let roomAvatar = avatarHttpUrl;
+  // @ts-ignore
+  if (!!room?.room_avatar) {
+    // @ts-ignore
+    roomAvatar = room.room_avatar;
   }
+
   return (
     <Box direction="Column" grow="Yes" gap="500" {...props} ref={ref}>
       <Box>
         <Avatar size="500">
-          {
-          !!roomAvatar ? (
+          {!!roomAvatar ? (
             <AvatarImage src={roomAvatar} alt={name} />
           ) : (
             <AvatarFallback

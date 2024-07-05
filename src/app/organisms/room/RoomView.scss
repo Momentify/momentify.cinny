@@ -31,7 +31,7 @@
 
   & .header {
     @include screen.smallerThan(mobileBreakpoint) {
-      padding: 0 var(--sp-tight);
+      padding: 8px 24px;
     }
   }
 
@@ -48,6 +48,7 @@
   &__sticky {
     position: relative;
     background: var(--bg-surface);
+    padding-bottom: 20px;
   }
   &__editor {
     padding: 0 var(--sp-normal);
