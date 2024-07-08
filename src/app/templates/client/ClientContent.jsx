@@ -89,10 +89,8 @@ export function ClientContent() {
           if (r && !!res?.room_name) {
             r.room_avatar = res?.event_image ?? null;
             r.name = res?.room_event_name ?? res.room_name ?? r.name;
-            r.event = res.event ?? null;
-            r.artist = res.artist ?? null;
-            r.performance_id = res.performance_id ?? null;
-
+            r.event = res?.event ?? null;
+            r.artist = res?.artist ?? null;
             setRoomInfo({
               room: r,
               eventId: eId ?? null,
