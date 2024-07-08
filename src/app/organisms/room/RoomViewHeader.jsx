@@ -148,7 +148,6 @@ function RoomViewHeader({ roomId }) {
     // Share the data using the browser's share API
     await navigator.share(shareData).catch((err) => console.warn(err));
   };
-  room.artist.image = null;
   return (
     <Header>
       {/* <IconButton
