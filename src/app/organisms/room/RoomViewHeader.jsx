@@ -28,6 +28,7 @@ import colorMXID from '../../../util/colorMXID';
 import BookMark from '../../../../public/BookMark.svg';
 import Clock from '../../../../public/Clock.svg';
 import Share from '../../../../public/ShareIcon.svg';
+import Event from '../../../../public/EventIcon.svg';
 import Momentify from '../../../../public/favicon-32x32.png';
 
 function RoomViewHeader({ roomId }) {
