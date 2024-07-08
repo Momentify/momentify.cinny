@@ -28,7 +28,7 @@ import colorMXID from '../../../util/colorMXID';
 import BookMark from '../../../../public/BookMark.svg';
 import Clock from '../../../../public/Clock.svg';
 import Share from '../../../../public/ShareIcon.svg';
-import Event from '../../../../public/EventIcon.svg';
+import Momentify from '../../../../public/favicon-32x32.png';
 
 function RoomViewHeader({ roomId }) {
   const [, forceUpdate] = useForceUpdate();
@@ -148,7 +148,7 @@ function RoomViewHeader({ roomId }) {
     // Share the data using the browser's share API
     await navigator.share(shareData).catch((err) => console.warn(err));
   };
-
+  room.artist.image = null;
   return (
     <Header>
       {/* <IconButton
@@ -172,11 +172,11 @@ function RoomViewHeader({ roomId }) {
         <TitleWrapper style={{ gap: '16px !important' }}>
           <img
             alt="artist_image"
-            src={room.artist.image}
+            src={room?.artist?.image ?? Momentify}
             style={{
               width: 40,
               height: 40,
-              borderRadius: '50%',
+              borderRadius: room?.artist?.image ? `50%` : null,
               objectFit: 'cover',
             }}
           />
