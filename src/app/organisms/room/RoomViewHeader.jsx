@@ -29,6 +29,7 @@ import BookMark from '../../../../public/BookMark.svg';
 import Clock from '../../../../public/Clock.svg';
 import Share from '../../../../public/ShareIcon.svg';
 import Event from '../../../../public/EventIcon.svg';
+import Momentify from '../../../../public/favicon-32x32.png';
 
 function RoomViewHeader({ roomId }) {
   const [, forceUpdate] = useForceUpdate();
@@ -148,7 +149,6 @@ function RoomViewHeader({ roomId }) {
     // Share the data using the browser's share API
     await navigator.share(shareData).catch((err) => console.warn(err));
   };
-
   return (
     <Header>
       {/* <IconButton
@@ -172,11 +172,11 @@ function RoomViewHeader({ roomId }) {
         <TitleWrapper style={{ gap: '16px !important' }}>
           <img
             alt="artist_image"
-            src={room.artist.image}
+            src={room?.artist?.image ?? Momentify}
             style={{
               width: 40,
               height: 40,
-              borderRadius: '50%',
+              borderRadius: room?.artist?.image ? `50%` : null,
               objectFit: 'cover',
             }}
           />
@@ -201,106 +201,112 @@ function RoomViewHeader({ roomId }) {
                 paddingBottom: 6,
               }}
             >
-              {room.artist.headline_artist}
+              {room?.artist?.headline_artist ?? 'Momentify Support'}
             </text>
-            <div
-              style={{
-                display: 'flex',
-                flexDirection: 'row',
-                gap: 8,
-                alignItems: 'center',
-              }}
-            >
+            {room?.artist && (
+              <div
+                style={{
+                  display: 'flex',
+                  flexDirection: 'row',
+                  gap: 8,
+                  alignItems: 'center',
+                }}
+              >
+                <img
+                  alt="event"
+                  src={Event}
+                  style={{
+                    background: 'none',
+                    width: 10,
+                    height: 10,
+                    position: 'relative',
+                    bottom: 2,
+                  }}
+                />
+                <text
+                  style={{
+                    fontSize: 10,
+                    fontWeight: 400,
+                    color: '#F7F7F7',
+                    opacity: 0.6,
+                    fontFamily: 'Suisse Intl',
+                    textOverflow: 'ellipsis',
+                    whiteSpace: 'nowrap',
+                    overflow: 'hidden',
+                  }}
+                >
+                  {room.artist.venue_name}
+                </text>
+              </div>
+            )}
+          </div>
+          {room?.artist && (
+            <>
+              <div
+                style={{
+                  display: 'flex',
+                  flexDirection: 'column',
+                  gap: 8,
+                }}
+              >
+                <div
+                  style={{
+                    display: 'flex',
+                    flexDirection: 'row',
+
+                    alignContent: 'center',
+                    gap: 8,
+                  }}
+                >
+                  <img alt="bookmark" src={BookMark} style={{ background: 'none' }} />
+                  <text
+                    style={{
+                      fontSize: 10,
+                      fontWeight: 400,
+                      color: '#79D3BE',
+                      whiteSpace: 'nowrap',
+                      fontFamily: 'Suisse Intl',
+                    }}
+                  >
+                    {dayjs(room.artist.date).format('ddd D MMM')}
+                  </text>
+                </div>
+
+                <div
+                  style={{
+                    display: 'flex',
+                    flexDirection: 'row',
+                    whiteSpace: 'nowrap',
+                    alignContent: 'center',
+                    gap: 8,
+                  }}
+                >
+                  <img alt="clock" src={Clock} style={{ background: 'none' }} />
+                  <text
+                    style={{
+                      fontSize: 10,
+                      fontWeight: 400,
+                      color: '#F7F7F7',
+                      opacity: 0.6,
+                      fontFamily: 'Suisse Intl',
+                    }}
+                  >
+                    {formattedDifference}
+                  </text>
+                </div>
+              </div>
               <img
-                alt="event"
-                src={Event}
                 style={{
+                  width: '17.27px',
+                  height: '20px',
                   background: 'none',
-                  width: 10,
-                  height: 10,
-                  position: 'relative',
-                  bottom: 2,
                 }}
+                alt="share"
+                src={Share}
+                onClick={() => handleClick()}
               />
-              <text
-                style={{
-                  fontSize: 10,
-                  fontWeight: 400,
-                  color: '#F7F7F7',
-                  opacity: 0.6,
-                  fontFamily: 'Suisse Intl',
-                  textOverflow: 'ellipsis',
-                  whiteSpace: 'nowrap',
-                  overflow: 'hidden',
-                }}
-              >
-                {room.artist.venue_name}
-              </text>
-            </div>
-          </div>
-          <div
-            style={{
-              display: 'flex',
-              flexDirection: 'column',
-              gap: 8,
-            }}
-          >
-            <div
-              style={{
-                display: 'flex',
-                flexDirection: 'row',
-
-                alignContent: 'center',
-                gap: 8,
-              }}
-            >
-              <img alt="bookmark" src={BookMark} style={{ background: 'none' }} />
-              <text
-                style={{
-                  fontSize: 10,
-                  fontWeight: 400,
-                  color: '#79D3BE',
-                  whiteSpace: 'nowrap',
-                  fontFamily: 'Suisse Intl',
-                }}
-              >
-                {dayjs(room.artist.date).format('ddd D MMM')}
-              </text>
-            </div>
-
-            <div
-              style={{
-                display: 'flex',
-                flexDirection: 'row',
-                whiteSpace: 'nowrap',
-                alignContent: 'center',
-                gap: 8,
-              }}
-            >
-              <img alt="clock" src={Clock} style={{ background: 'none' }} />
-              <text
-                style={{
-                  fontSize: 10,
-                  fontWeight: 400,
-                  color: '#F7F7F7',
-                  opacity: 0.6,
-                  fontFamily: 'Suisse Intl',
-                }}
-              >
-                {formattedDifference}
-              </text>
-            </div>
-          </div>
-          <img
-            style={{
-              width: '17.27px',
-              height: '20px',
-              background: 'none',
-            }}
-            alt="share"
-            src={Share}
-            onClick={() => handleClick()}
-          />
+            </>
+          )}
         </TitleWrapper>
         {/* <RawIcon src={ChevronBottomIC} /> */}
       </button>
