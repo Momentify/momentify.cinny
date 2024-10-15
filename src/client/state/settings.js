@@ -1,6 +1,7 @@
 import { lightTheme } from 'folds';
 import EventEmitter from 'events';
 import appDispatcher from '../dispatcher';
+import { varsClass, configClass } from 'folds';
 
 import cons from './cons';
 import { darkTheme, butterTheme, silverTheme } from '../../colors.css';
@@ -78,6 +79,8 @@ class Settings extends EventEmitter {
       document.body.classList.remove(this.fontWeightClasses[index]);
       document.body.classList.remove('prism-light');
       document.body.classList.remove('prism-dark');
+      document.body.classList.remove(varsClass);
+      document.body.classList.remove(configClass);
     });
   }
 
@@ -90,7 +93,8 @@ class Settings extends EventEmitter {
     document.body.classList.add(this.themeClasses[themeIndex]);
     document.body.classList.add(this.fontWeightClasses[themeIndex]);
     // document.body.classList.add(themeIndex < 2 ? 'prism-light' : 'prism-dark');
-    document.body.classList.add('prism-dark');
+    document.body.classList.add(varsClass);
+    document.body.classList.add(configClass);
   }
 
   setTheme(themeIndex) {
